@@ -4,11 +4,15 @@
     fields:
       210:
         indicator1:
-          0: {}
-          1: {}
+          label: Title added entry 
+          codes:
+            0: {}
+            1: {}
         indicator2:
-          ' ': {}
-          0: {}
+          label: Type 
+          codes:
+            ' ': {}
+            0: {}
   tests:
   - description: known field indicator
     data:

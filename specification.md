@@ -143,8 +143,8 @@ The field definition MAY further contain:
 
 * key `url` with an URL link to documentation
 * key `occurrence` with the field occurrence
-* key `indicator1` with first [indicator]
-* key `indicator2` with second [indicator]
+* key `indicator1` with first [indicator], assumed as `null` by default
+* key `indicator2` with second [indicator], assumed as `null` by default
 * key `pica3` with corresponding Pica3 number
 * key `positions` with a specification of [positions] (for fixed fields)
 * key `subfields` with a [subfield schedule] (for variable fields)
@@ -321,6 +321,19 @@ The indicator MAY further contain:
 * key `codes` with a [codelist]
 * key `deprecated-codes` with a [codelist] of deprecated codes
 
+Indicator codelist values MUST consist of a single character not being `#`.
+
+##### Example
+
+~~~json
+{
+  "label": "Type",
+  "codes": {
+    " ": "Abbreviated key title",
+    "0": "Other abbreviated title"
+  }
+}
+~~~
 
 #### Codelist
 
