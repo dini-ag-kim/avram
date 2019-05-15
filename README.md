@@ -30,12 +30,12 @@ set of test cases. The structure can best be illustrated with an example:
       245:
         required: true
   tests:
-  - data:
+  - description: required field exists
+    data:
     - ['245', '1', '0', 'a', 'Who is it?']
-    description: required field exists
     valid: true
-  - data: []
-    description: required field is missing
+  - description: required field is missing
+    data: []
     valid: false
 ~~~
 

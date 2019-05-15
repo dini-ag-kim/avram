@@ -66,7 +66,7 @@ The schema SHOULD contain keys documenting the format defined by the schema:
 
 The schema MAY contain:
 
-* key `$schema` with an URL of an [Avram metaschema](#metaschema)
+* key `$schema` with an URL of the [Avram metaschema](#metaschema)
 * key `deprecated-fields` with a [field schedule](#field-schedule)
 * key `count` with a non-negative integer
 

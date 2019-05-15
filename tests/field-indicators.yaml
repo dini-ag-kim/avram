@@ -1,0 +1,25 @@
+---
+- description: Check allowed field indicators
+  schema:
+    fields:
+      210:
+        indicator1:
+          0: {}
+          1: {}
+        indicator2:
+          ' ': {}
+          0: {}
+  tests:
+  - description: known field indicator
+    data:
+    - ['210', '0', ' ', 'a', 'wtf.']
+    - ['210', '1', '0', 'a', 'wtf.']
+    valid: true
+  - description: unknown indicator1
+    data:
+    - ['210', '2', ' ', 'a', 'wtf.']
+    valid: false
+  - description: unknown indicator2
+    data:
+    - ['210', '0', '2', 'a', 'wtf.']
+    valid: false
