@@ -2,6 +2,7 @@
 title: Avram Schema Format
 description: JSON Schema of Avram Schema Format to validata Avram Schemas
 type: object
+additionalProperties: false
 properties:
   title:
     type: string
@@ -36,6 +37,7 @@ definitions:
     patternProperties:
       '^.+$':
         type: object
+        additionalProperties: false
         properties:
           tag:
             type: string
@@ -78,6 +80,7 @@ definitions:
         patternProperties:
           '^.*$':
             type: object
+            additionalProperties: false
             properties:
               positions:
                 $ref: '#/definitions/positions'
@@ -87,6 +90,7 @@ definitions:
         patternProperties:
           '^.*$':
             type: object
+            additionalProperties: false
             properties:
               subfields:
                 $ref: '#/definitions/subfield-schedule'
@@ -94,6 +98,7 @@ definitions:
              - subfields
   subfield-schedule:
     type: object
+    additionalProperties: false
     properties:
       code:
         type: string
@@ -119,6 +124,7 @@ definitions:
       - $ref: '#/definitions/codedvalue'
   codedvalue:
     type: object
+    additionalProperties: false
     properties:
       label:
         type: string
@@ -134,6 +140,7 @@ definitions:
     type: object
     patternProperties:
       '^.+$':
+        additionalProperties: false
         properties:
           label:
             type: string
