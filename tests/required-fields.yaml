@@ -1,0 +1,14 @@
+---
+- description: Check existence of required fields
+  schema:
+    fields:
+      245:
+        required: true
+  tests:
+  - data:
+    - ['245', '1', '0', 'a', 'Who is it?']
+    description: required field exists
+    valid: true
+  - data: []
+    description: required field is missing
+    valid: false

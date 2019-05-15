@@ -1,0 +1,21 @@
+{
+  "name": "avram-specification",
+  "description": "A schema language for MARC and related formats",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gbv/avram.git"
+  },  
+  "bugs": {
+    "url": "https://github.com/gbv/avram/issues"
+  },
+  "scripts": {
+    "test": "mocha check.js",
+    "schema.json": "js-yaml schema.yaml > schema.json"
+  },
+  "homepage": "https://github.com/gbv/avram#readme",
+  "devDependencies": {
+    "ajv": "^6.0.0",
+    "js-yaml": "^3.13.1",
+    "mocha": "^3.2.0"
+  }
+}

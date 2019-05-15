@@ -1,0 +1,4 @@
+node_modules/
+
+schema.json
+tests/*.json
