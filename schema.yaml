@@ -43,6 +43,8 @@ definitions:
             type: string
           label:
             type: string
+          description:
+            type: string
           repeatable:
             type: boolean
           required:
@@ -104,6 +106,8 @@ definitions:
         type: string
       label:
         type: string
+      description:
+        type: string
       repeatable:
         type: boolean
       required:
@@ -128,6 +132,8 @@ definitions:
     properties:
       label:
         type: string
+      description:
+        type: string
       url:
         $ref: '#/definitions/url'
       codes:
@@ -143,5 +149,7 @@ definitions:
         additionalProperties: false
         properties:
           label:
+            type: string
+          description:
             type: string
 $schema: http://json-schema.org/draft-06/schema#
