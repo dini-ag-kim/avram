@@ -11,6 +11,9 @@ properties:
   url:
     type: string
     format: uri
+  profile:
+    type: string
+    format: uri
   $schema:
     type: string
     format: uri

@@ -61,6 +61,7 @@ The schema SHOULD contain keys documenting the format defined by the schema:
 * key `title` with the name of the format
 * key `description` with a short description of the format
 * key `url` with a homepage URL of the format
+* key `profile` with an URI of the format
 * key `language` with the language values of keys `title`, `description`,
   and `label` used throughout the schema. Can be assumed as `und` by default.
 
@@ -69,6 +70,10 @@ The schema MAY contain:
 * key `$schema` with an URL of the [Avram metaschema](#metaschema)
 * key `deprecated-fields` with a [field schedule](#field-schedule)
 * key `count` with a non-negative integer
+
+Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY
+exist but all schemas with same `profile` URI MUST include same field definition
+for fields with same field identifier.
 
 ##### Example
 
@@ -411,6 +416,7 @@ match the number of records that have been analyzed.
 #### 0.5.0 (2020-08-XX)
 
 * Add option field `description` in addition to `label`
+* Add schema field `profile` to identify schemas
 
 #### 0.4.0 (2019-05-09)
 
