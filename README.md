@@ -15,6 +15,13 @@ The specification is published at <https://format.gbv.de/schema/avram/specificat
 * `case.yaml` - Avram test case JSON Schema (in YAML syntax)
 * `tests/*.yaml` - Test suite
 
+The repository further contains a test script to check well-formedness of JSON schema. Run with:
+
+~~~bash
+npm install
+npm test
+~~~ 
+
 ## Test Suite
 
 Subdirectory `tests` contains a set of example schemas and records that
