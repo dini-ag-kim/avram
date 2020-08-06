@@ -109,6 +109,9 @@ identifiers](#field-identifier) to [field definitons](#field-definition).
 
 #### Field identifier
 
+[field identifier]: #field-identifier
+[field identifiers]: #field-identifier
+
 A **field identifiers** is can be any non-empty string that uniquely identifies
 a field. The identifier consists of a **field tag**, optionally followed by a
 slash (`/`) and a **field occurrence**. Applications SHOULD add further
@@ -371,7 +374,7 @@ A [JSON Schema](http://json-schema.org/) to validate Avram Schemas is available
 at <https://format.gbv.de/schema/avram/schema.json>.
 
 Applications MAY extend the metaschema for particular formats, for instance the
-further restrict the allowed set of [field identifiers](#field-identifier).
+further restrict the allowed set of [field identifiers].
 
 ## Validation rules
 
