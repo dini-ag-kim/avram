@@ -8,8 +8,8 @@ language: en
 related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.5.0
-* date: 2020-08-04
+* version: 0.6.0
+* date: 2020-09-15
 
 ## Introduction
 
