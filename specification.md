@@ -13,46 +13,27 @@ related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 ## Introduction
 
-MARC and related formats are used since decades as the basis for library
-automation. Several variants, dialects and profiles exist for different
-applications. The Avram schema language shall allow to specify individual
-formats based on MARC, PICA and similar standards for documentation,
-validation, and requirements engineering.
+MARC and related formats are used since decades as the basis for library automation. Several variants, dialects and profiles exist for different applications. The Avram schema language allows to specify individual formats based on MARC, PICA and similar standards for documentation, validation, and requirements engineering. The schema language is named after [Henriette D. Avram (1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as the first automated cataloging system in the 1960s.
 
-The schema format is named after [Henriette D. Avram
-(1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as
-the first automated cataloging system in the 1960s.
-
-This document consists of specification of the [schema format](#schema-format)
-and [validation rules](#validation-rules).
+This document consists of specification of the [schema format](#schema-format) and [validation rules](#validation-rules). It is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
 
 ### Conformance requirements
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
-interpreted as described in [RFC 2119].
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119].
 
 ### Data types
 
-A **timestamp** is a date or datetime as defined with XML Schema datatype
-[datetime](https://www.w3.org/TR/xmlschema-2/#dateTime)
-(`-?YYYY-MM-DDThh:mm:ss(\.s+)?(Z|[+-]hh:mm)?`)
-[date](https://www.w3.org/TR/xmlschema-2/#date) (`-?YYYY-MM-DD(Z|[+-]hh:mm)?`),
-[gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth) (`-?YYYY-MM`),
-or [gYear](https://www.w3.org/TR/xmlschema-2/#gYear) (`-?YYYY`).
+A **timestamp** is a date or datetime as defined with XML Schema datatype [datetime](https://www.w3.org/TR/xmlschema-2/#dateTime) (`-?YYYY-MM-DDThh:mm:ss(\.s+)?(Z|[+-]hh:mm)?`) [date](https://www.w3.org/TR/xmlschema-2/#date) (`-?YYYY-MM-DD(Z|[+-]hh:mm)?`), [gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth) (`-?YYYY-MM`), or [gYear](https://www.w3.org/TR/xmlschema-2/#gYear) (`-?YYYY`).
 
-A **regular expression** is a string that conforms to the [ECMA 262 (2015)
-regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).
-The expression is interpreted as Unicode pattern.
+A **regular expression** is a string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern.
 
-A **language** is a natural language identifier as defined with XML Schema
-datatype [language](https://www.w3.org/TR/xmlschema-2/#language).
+A **language** is a natural language identifier as defined with XML Schema datatype [language](https://www.w3.org/TR/xmlschema-2/#language).
 
 ## Schema format
 
-An **Avram Schema** is a JSON object given as JSON document or any other format
-that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST
-be unique. The schema MUST contain:
+An **Avram Schema** is a JSON object given as JSON document or any other format that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST be unique. String values SHOULD NOT be the empty string.
+
+The schema MUST contain:
 
 * key `fields` with a [field schedule](#field-schedule)
 
@@ -62,41 +43,35 @@ The schema SHOULD contain keys documenting the format defined by the schema:
 * key `description` with a short description of the format
 * key `url` with a homepage URL of the format
 * key `profile` with an URI of the format
-* key `language` with the language values of keys `title`, `description`,
-  and `label` used throughout the schema. Can be assumed as `und` by default.
+* key `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
 The schema MAY contain:
 
 * key `$schema` with an URL of the [Avram metaschema](#metaschema)
-* key `deprecated-fields` with a [field schedule](#field-schedule)
+* key `deprecated-fields` with a [field schedule]
 * key `count` with a non-negative integer
 
-Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY
-exist but all schemas with same `profile` URI MUST include same field definition
-for fields with same field identifier.
+Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY exist but all schemas with same `profile` URI MUST include same [field definition] for fields with same [field identifier].
 
 ##### Example
 
 ~~~json
 {
-  "$schema": "https://format.gbv.de/schema/avram/schema.json",
+  "fields": { },
   "title": "MARC 21 Format for Classification Data",
   "description": "MARC format for classification numbers and captions associated with them",
-  "language": "en",
   "url": "https://www.loc.gov/marc/classification/",
-  "fields": { }
+  "profile": "http://format.gbv.de/marc/classification",
+  "language": "en",
+  "$schema": "https://format.gbv.de/schema/avram/schema.json",
 }
 ~~~
-
-String values such as values of key `title` and `description` SHOULD NOT be
-empty if the corresponding key is given.
 
 #### Field schedule
 
 [field schedule]: #field-schedule
 
-A **field schedule** is a JSON object that maps [field
-identifiers](#field-identifier) to [field definitons](#field-definition).
+A **field schedule** is a JSON object that maps [field identifiers](#field-identifier) to [field definitons](#field-definition).
 
 ##### Example
 
@@ -112,23 +87,12 @@ identifiers](#field-identifier) to [field definitons](#field-definition).
 [field identifier]: #field-identifier
 [field identifiers]: #field-identifier
 
-A **field identifiers** is can be any non-empty string that uniquely identifies
-a field. The identifier consists of a **field tag**, optionally followed by a
-slash (`/`) and a **field occurrence**. Applications SHOULD add further
-restrictions on field identifier syntax.
+A **field identifiers** is can be any non-empty string that uniquely identifies a field. The identifier consists of a **field tag**, optionally followed by
 
-For MARC-based formats a field identifier MUST consist of a plain field tag
-being
+* the slash (`/`) and a **field occurrence**,
+* or the small letter x (`x`)  and a **field counter**.
 
-* either the character sequence `LDR` for specification of the record leader,
-* or three digits (e.g. `001`).
-
-For PICA-based formats 
-
-* the field tag MUST be three digits, the first `0` to `2`, followed by an
-  uppercase letter (`A` to `Z`) or `@`, and
-* the field occurrences MUST be two digits and MUST NOT exist if the field
-  tag starts with a digit other than `0`.
+Applications SHOULD add further restrictions on field identifier syntax.
 
 ##### Examples
 
@@ -142,30 +106,42 @@ For PICA-based formats
 
 A **field definition** is a JSON object that SHOULD contain:
 
-* key `tag` with the field tag
+* key `tag` with the **field tag**
 * key `label` with the name of the field
 * key `repeatable` with a boolean value, assumed as `false` by default
 * key `required` with a boolean value, assumed as `false` by default
 
 The field definition MAY further contain:
 
+* key `occurrence` with the **field occurrence**
+* key `counter` with a **field counter**
 * key `url` with an URL link to documentation
 * key `description` with additional description of the field
-* key `occurrence` with the field occurrence
 * key `indicator1` with first [indicator], assumed as `null` by default
 * key `indicator2` with second [indicator], assumed as `null` by default
 * key `pica3` with corresponding Pica3 number
+* key `modified` with a timestamp
 * key `positions` with a specification of [positions] (for fixed fields)
 * key `subfields` with a [subfield schedule] (for variable fields)
+* key `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * key `types` with specification of [field types] (for alternatives)
-* key `modified` with a timestamp
 
-If a field definition is given in a [field schedule], the `tag` and
-`occurrence` MUST either both be missing or match the corresponding
-[field identifier].
+A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
 
-A field definition MUST NOT mix keys for fixed fields (`position`), variable
-fields (`subfields` and `deprecated-subfields`), and alternatives (`types`).
+If a field definition is given in a [field schedule], values of `tag`, `occurrence` and `counter` MUST either be missing or be used to automatically derive the corresponding [field identifier].
+
+#### Additional rules for MARC-based formats
+
+* field definitions MUST NOT include the keys `occurrence`, `counter`, `pica3`.
+* field tag MUST either be the character sequence `LDR` for specification of the record leader, or consist of three digits (e.g. `001`).
+
+#### Additional rules for PICA-based formats
+
+* field definitions MUST NOT include the keys `indicator1` and `indicator2`.
+* field tag MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
+* field occurrence MUST NOT be given if field tag starts digit `2`.
+* field counter MUST NOT be given if field tag starts with other digit than `2`.
+* field occurrences and field counters MUST consist of digits (e.g. `00`, `21`..) or two sequences of digits with same length combined with `-` (e.g. `09-10`).
 
 ##### Example
 
@@ -415,6 +391,11 @@ match the number of records that have been analyzed.
 * [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
 
 ### Changes
+
+#### 0.6.0 (2020-09-15)
+
+* Add `counter` for PICA-based formats
+* Modify allowed values in `occurrence`
 
 #### 0.5.0 (2020-08-04)
 

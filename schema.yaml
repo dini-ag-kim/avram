@@ -46,6 +46,12 @@ definitions:
             type: string
           label:
             type: string
+          occurrence:
+            type: string
+            pattern: '^[0-9]+(-[0-9]+)?$'
+          counter:
+            type: string
+            pattern: '^[0-9]+(-[0-9]+)?$'
           description:
             type: string
           repeatable:
@@ -56,8 +62,6 @@ definitions:
             type: string
           url:
             $ref: '#/definitions/url'
-          occurrence:
-            type: string
           indicator1:
             $ref: '#/definitions/indicator'
           indicator2:
