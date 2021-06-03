@@ -8,8 +8,8 @@ language: en
 related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.6.0
-* date: 2020-09-15
+* version: 0.7.0
+* date: 2021-06-03
 
 ## Introduction
 
@@ -28,6 +28,8 @@ A **timestamp** is a date or datetime as defined with XML Schema datatype [datet
 A **regular expression** is a string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern.
 
 A **language** is a natural language identifier as defined with XML Schema datatype [language](https://www.w3.org/TR/xmlschema-2/#language).
+
+A **non-negative integer** is a natural number (0, 1, 2...)
 
 ## Schema format
 
@@ -49,7 +51,9 @@ The schema MAY contain:
 
 * key `$schema` with an URL of the [Avram metaschema](#metaschema)
 * key `deprecated-fields` with a [field schedule]
-* key `count` with a non-negative integer
+* key `total` with a non-negative integer
+
+Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `total`. Applications MAY support `count` as fallback of `total` for backwards compatibility.
 
 Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY exist but all schemas with same `profile` URI MUST include same [field definition] for fields with same [field identifier].
 
@@ -125,6 +129,7 @@ The field definition MAY further contain:
 * key `subfields` with a [subfield schedule] (for variable fields)
 * key `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * key `types` with specification of [field types] (for alternatives)
+* key `total` with a non-negative integer to indicate a number of times
 
 A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
 
@@ -141,7 +146,7 @@ If a field definition is given in a [field schedule], values of `tag`, `occurren
 * field tag MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
 * field occurrence MUST NOT be given if field tag starts digit `2`.
 * field counter MUST NOT be given if field tag starts with other digit than `2`.
-* field occurrences and field counters MUST consist of digits (e.g. `00`, `21`..) or two sequences of digits with same length combined with `-` (e.g. `09-10`).
+* field occurrences and field counters MUST consist of digits (e.g. `00`, `21`..) or two sequences of digits with same length combined with `-` (e.g. `09-10` but not `9-10`).
 
 ##### Example
 
@@ -257,7 +262,7 @@ definition** is a JSON object that SHOULD contain:
 * key `repeatable` with a boolean value, assumed as `false` by default
 * key `required` with a boolean value, assumed `false` by default
 
-The subfield schedule MAY further contain:
+The subfield definition MAY further contain:
 
 * key `pattern` with a regular expression
 * key `positions` with a specification of [positions]
@@ -267,6 +272,7 @@ The subfield schedule MAY further contain:
   of subfields
 * key `pica3` with a corresponding Pica3 syntax definition
 * key `modified` with a timestamp
+* key `total` with a non-negative integer
 
 ##### Example
 
@@ -327,8 +333,11 @@ Indicator codelist values MUST consist of a single character not being `#`.
 
 [codelist]: #codelist
 
-A **codelist** is a JSON object that maps values to descriptions. Each
-description is a JSON object with optional keys `label` and/or `description`.
+A **codelist** is a JSON object that maps values to code definitions. A **code definition** is a JSON object with optional keys:
+
+* `label` with the name of the code
+* `description` with additional description of the code
+* `total` with a non-negative integer
 
 ##### Example
 
@@ -362,9 +371,6 @@ An Avram schema can be used to check:
 * whether all fields and subfields of a given record have been defined
 * whether defined fields and subfields of a given record conform the their definition
 
-The value of [schema key](#schema-format) `count` if used for validation MUST
-match the number of records that have been analyzed.
-
 ## References
 
 ### Normative references
@@ -391,6 +397,11 @@ match the number of records that have been analyzed.
 * [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
 
 ### Changes
+
+#### 0.7.0 (2021-06-03)
+
+* Rename `count` to `total`
+* Also allow `total` at field definitions, subfield definitions and code definitions.
 
 #### 0.6.0 (2020-09-15)
 
