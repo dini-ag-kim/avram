@@ -35,25 +35,25 @@ A **non-negative integer** is a natural number (0, 1, 2...)
 
 An **Avram Schema** is a JSON object given as JSON document or any other format that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST be unique. String values SHOULD NOT be the empty string.
 
-The schema MUST contain:
+The schema MUST contain key:
 
-* key `fields` with a [field schedule](#field-schedule)
+* `fields` with a [field schedule](#field-schedule)
 
 The schema SHOULD contain keys documenting the format defined by the schema:
 
-* key `title` with the name of the format
-* key `description` with a short description of the format
-* key `url` with a homepage URL of the format
-* key `profile` with an URI of the format
-* key `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
+* `title` with the name of the format
+* `description` with a short description of the format
+* `url` with a homepage URL of the format
+* `profile` with an URI of the format
+* `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
-The schema MAY contain:
+The schema MAY contain keys:
 
-* key `$schema` with an URL of the [Avram metaschema](#metaschema)
-* key `deprecated-fields` with a [field schedule]
-* key `records` with a non-negative integer
+* `$schema` with an URL of the [Avram metaschema](#metaschema)
+* `deprecated-fields` with a [field schedule]
+* `records` with a non-negative integer to indicate a number of records
 
-Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `records`. Applications MAY support `count` as fallback of `records` for backwards compatibility.
+Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `records`.
 
 Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY exist but all schemas with same `profile` URI MUST include same [field definition] for fields with same [field identifier].
 
@@ -108,29 +108,29 @@ Applications SHOULD add further restrictions on field identifier syntax.
 
 [field definition]: #field-definition
 
-A **field definition** is a JSON object that SHOULD contain:
+A **field definition** is a JSON object that SHOULD contain key:
 
-* key `tag` with the **field tag**
-* key `label` with the name of the field
-* key `repeatable` with a boolean value, assumed as `false` by default
-* key `required` with a boolean value, assumed as `false` by default
+* `tag` with the **field tag**
+* `label` with the name of the field
+* `repeatable` with a boolean value, assumed as `false` by default
+* `required` with a boolean value, assumed as `false` by default
 
-The field definition MAY further contain:
+The field definition MAY further contain keys:
 
-* key `occurrence` with the **field occurrence**
-* key `counter` with a **field counter**
-* key `url` with an URL link to documentation
-* key `description` with additional description of the field
-* key `indicator1` with first [indicator], assumed as `null` by default
-* key `indicator2` with second [indicator], assumed as `null` by default
-* key `pica3` with corresponding Pica3 number
-* key `modified` with a timestamp
-* key `positions` with a specification of [positions] (for fixed fields)
-* key `subfields` with a [subfield schedule] (for variable fields)
-* key `deprecated-subfields` with a [subfield schedule] (for variable fields)
-* key `types` with specification of [field types] (for alternatives)
-* key `total` with a non-negative integer to indicate the number of times this field has been found
-* key `records` with a non-negative integer to indicate the number of records this field has been found in
+* `occurrence` with the **field occurrence**
+* `counter` with a **field counter**
+* `url` with an URL link to documentation
+* `description` with additional description of the field
+* `indicator1` with first [indicator], assumed as `null` by default
+* `indicator2` with second [indicator], assumed as `null` by default
+* `pica3` with corresponding Pica3 number
+* `modified` with a timestamp
+* `positions` with a specification of [positions] (for fixed fields)
+* `subfields` with a [subfield schedule] (for variable fields)
+* `deprecated-subfields` with a [subfield schedule] (for variable fields)
+* `types` with specification of [field types] (for alternatives)
+* `total` with a non-negative integer to indicate the number of times this field has been found
+* `records` with a non-negative integer to indicate the number of records this field has been found in
 
 A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
 
@@ -145,8 +145,9 @@ If a field definition is given in a [field schedule], values of `tag`, `occurren
 
 * field definitions MUST NOT include the keys `indicator1` and `indicator2`.
 * field tag MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
+* field definitions of fields with identifier starting with digit `2`
 * field occurrence MUST NOT be given if field tag starts digit `2`.
-* field counter MUST NOT be given if field tag starts with other digit than `2`.
+* field counter MUST NOT be given unless field tag starts digit `2`.
 * field occurrences and field counters MUST consist of digits (e.g. `00`, `21`..) or two sequences of digits with same length combined with `-` (e.g. `09-10` but not `9-10`).
 
 ##### Example
@@ -219,17 +220,17 @@ digits (e.g.  `09`) or two sequences separated by `-` (e.g. `12-16`). A
 sequence of digit MUST NOT consists of zeroes only.  It is RECOMMENDED to use
 sequences of two digits. If two sequences are given, the second interpreted as
 number MUST NOT be smaller than the first interpreted as number. A **data
-element definition** is a JSON object that SHOULD contain:
+element definition** is a JSON object that SHOULD contain key:
 
-* key `label` with the name of the data element
+* `label` with the name of the data element
 
-The data element definition MAY further contain:
+The data element definition MAY further contain keys:
 
-* key `url` with an URL link to documentation
-* key `description` with additional description
-* key `codes` with a [codelist]
-* key `deprecated-codes` with a [codelist] of deprecated codes
-* key `pattern` with a regular expression
+* `url` with an URL link to documentation
+* `description` with additional description
+* `codes` with a [codelist]
+* `deprecated-codes` with a [codelist] of deprecated codes
+* `pattern` with a regular expression
 
 A data element definition MUST NOT contain more than one of the keys `codes`
 and `pattern`.
@@ -256,25 +257,25 @@ and `pattern`.
 
 A **subfield schedule** is a JSON object that maps subfield codes to subfield
 definitions.  A **subfield code** is a single character. A **subfield
-definition** is a JSON object that SHOULD contain:
+definition** is a JSON object that SHOULD contain keys:
 
-* key `code` with the subfield code
-* key `label` with the name of the subfield
-* key `repeatable` with a boolean value, assumed as `false` by default
-* key `required` with a boolean value, assumed `false` by default
+* `code` with the subfield code
+* `label` with the name of the subfield
+* `repeatable` with a boolean value, assumed as `false` by default
+* `required` with a boolean value, assumed `false` by default
 
-The subfield definition MAY further contain:
+The subfield definition MAY further contain keys:
 
-* key `pattern` with a regular expression
-* key `positions` with a specification of [positions]
-* key `url` with an URL link to documentation
-* key `description` with additional description of the subfield
-* key `order` with a non-negative integer used to specify a partial or complete order
+* `pattern` with a regular expression
+* `positions` with a specification of [positions]
+* `url` with an URL link to documentation
+* `description` with additional description of the subfield
+* `order` with a non-negative integer used to specify a partial or complete order
   of subfields
-* key `pica3` with a corresponding Pica3 syntax definition
-* key `modified` with a timestamp
-* key `total` with a non-negative integer to indicate the number of times this subfield has been found
-* key `records` with a non-negative integer to indicate the number of records this subfield has been found in
+* `pica3` with a corresponding Pica3 syntax definition
+* `modified` with a timestamp
+* `total` with a non-negative integer to indicate the number of times this subfield has been found
+* `records` with a non-negative integer to indicate the number of records this subfield has been found in
 
 ##### Example
 
@@ -306,16 +307,16 @@ The subfield definition MAY further contain:
 
 [indicator]: #indicators
 
-An **indicator** is either the value `null` or a JSON object that SHOULD contain:
+An **indicator** is either the value `null` or a JSON object that SHOULD contain key:
 
-* key `label` with the name of the indicator
+* `label` with the name of the indicator
 
-The indicator MAY further contain:
+The indicator MAY further contain key:
 
-* key `url` with an URL link to documentation
-* key `description` with additional description of the indicator
-* key `codes` with a [codelist]
-* key `deprecated-codes` with a [codelist] of deprecated codes
+* `url` with an URL link to documentation
+* `description` with additional description of the indicator
+* `codes` with a [codelist]
+* `deprecated-codes` with a [codelist] of deprecated codes
 
 Indicator codelist values MUST consist of a single character not being `#`.
 
@@ -366,8 +367,7 @@ further restrict the allowed set of [field identifiers].
 
 ## Validation rules
 
-*Rules how to validate records against Avram Schemas have not been specified
-explicitly yet.*
+*Rules how to validate records against Avram Schemas have not been specified explicitly yet.*
 
 An Avram schema can be used to check:
 
