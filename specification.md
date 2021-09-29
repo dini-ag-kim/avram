@@ -9,7 +9,7 @@ related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
 * version: 0.7.0
-* date: 2021-06-03
+* date: 2021-09-29
 
 ## Introduction
 
@@ -367,7 +367,7 @@ further restrict the allowed set of [field identifiers].
 
 ## Validation rules
 
-*This section (rules how to validate records against Avram Schemas) have not fully been specified yet!*
+*Rules how to validate records against Avram Schemas have not fully been specified yet!*
 
 ### Record validation
 
