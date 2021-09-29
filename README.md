@@ -58,10 +58,6 @@ The test suite itself is validated with `npm test`.
 
 ## Implementations
 
-Partial implementations so far:
-
-* [PICA::Schema](https://metacpan.org/pod/PICA::Schema)
-* [avram-js](https://github.com/gbv/avram-js) 
-* ...
+See <https://format.gbv.de/schema/avram/specification#informative-references>
 
 *Contribution is welcome!*

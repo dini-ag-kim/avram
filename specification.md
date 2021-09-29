@@ -429,8 +429,12 @@ Subfield validation can be configured:
 
 ### Informative references
 
-* <http://pkiraly.github.io/2018/01/28/marc21-in-json/>
+* [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
+* [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
+* [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
+* [discussion that lead to Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
 * [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
+* [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
 
 ### Changes
 
