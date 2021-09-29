@@ -23,8 +23,8 @@ properties:
     $ref: '#/definitions/field-schedule'
   count:
     $ref: '#/definitions/non-negative-integer'
-    description: 'deprecated, use "total" instead!'
-  total:
+    description: 'deprecated, use "records" instead!'
+  records:
     $ref: '#/definitions/non-negative-integer'
   language:
     type: string
@@ -85,6 +85,8 @@ definitions:
             $ref: '#/definitions/timestamp'
           total:
             $ref: '#/definitions/non-negative-integer'
+          records:
+            $ref: '#/definitions/non-negative-integer'
   positions:
     type: object
     patternProperties:
@@ -138,6 +140,8 @@ definitions:
         $ref: '#/definitions/timestamp'
       total:
         $ref: '#/definitions/non-negative-integer'
+      records:
+        $ref: '#/definitions/non-negative-integer'
   indicator:
     oneOf:
       - type: 'null'
@@ -169,5 +173,7 @@ definitions:
           description:
             type: string
           total:
+            $ref: '#/definitions/non-negative-integer'
+          records:
             $ref: '#/definitions/non-negative-integer'
 $schema: http://json-schema.org/draft-06/schema#

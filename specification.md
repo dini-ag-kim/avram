@@ -51,9 +51,9 @@ The schema MAY contain:
 
 * key `$schema` with an URL of the [Avram metaschema](#metaschema)
 * key `deprecated-fields` with a [field schedule]
-* key `total` with a non-negative integer
+* key `records` with a non-negative integer
 
-Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `total`. Applications MAY support `count` as fallback of `total` for backwards compatibility.
+Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `records`. Applications MAY support `count` as fallback of `records` for backwards compatibility.
 
 Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY exist but all schemas with same `profile` URI MUST include same [field definition] for fields with same [field identifier].
 
@@ -129,7 +129,8 @@ The field definition MAY further contain:
 * key `subfields` with a [subfield schedule] (for variable fields)
 * key `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * key `types` with specification of [field types] (for alternatives)
-* key `total` with a non-negative integer to indicate a number of times
+* key `total` with a non-negative integer to indicate the number of times this field has been found
+* key `records` with a non-negative integer to indicate the number of records this field has been found in
 
 A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
 
@@ -272,7 +273,8 @@ The subfield definition MAY further contain:
   of subfields
 * key `pica3` with a corresponding Pica3 syntax definition
 * key `modified` with a timestamp
-* key `total` with a non-negative integer
+* key `total` with a non-negative integer to indicate the number of times this subfield has been found
+* key `records` with a non-negative integer to indicate the number of records this subfield has been found in
 
 ##### Example
 
@@ -337,7 +339,8 @@ A **codelist** is a JSON object that maps values to code definitions. A **code d
 
 * `label` with the name of the code
 * `description` with additional description of the code
-* `total` with a non-negative integer
+* `total` with a non-negative integer to indicate the number of times this code has been found
+* `records` with a non-negative integer to indicate the number of records this code has been found in
 
 ##### Example
 
@@ -398,10 +401,10 @@ An Avram schema can be used to check:
 
 ### Changes
 
-#### 0.7.0 (2021-06-03)
+#### 0.7.0 (2021-09-29)
 
-* Rename `count` to `total`
-* Also allow `total` at field definitions, subfield definitions and code definitions.
+* Rename `count` to `records` to not confuse with `counter`
+* Add `total` and `records` at field definitions, subfield definitions and code definitions.
 
 #### 0.6.0 (2020-09-15)
 
