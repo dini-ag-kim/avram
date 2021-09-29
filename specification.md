@@ -336,7 +336,7 @@ Indicator codelist values MUST consist of a single character not being `#`.
 
 [codelist]: #codelist
 
-A **codelist** is a JSON object that maps values to code definitions. A **code definition** is a JSON object with optional keys:
+A **codelist** is a JSON object that maps codes to code definitions. A **code** is a non-empty string. All codes of a codelist MUST have same length. A **code definition** is a JSON object with optional keys:
 
 * `label` with the name of the code
 * `description` with additional description of the code
@@ -367,12 +367,45 @@ further restrict the allowed set of [field identifiers].
 
 ## Validation rules
 
-*Rules how to validate records against Avram Schemas have not been specified explicitly yet.*
+*This section (rules how to validate records against Avram Schemas) have not fully been specified yet!*
 
-An Avram schema can be used to check:
+### Record validation
 
-* whether all fields and subfields of a given record have been defined
-* whether defined fields and subfields of a given record conform the their definition
+A record is valid if:
+
+* every field has a field definition and is valid
+* and there is at least one field for each [field definition] with `required` being `true`
+
+Validation of a record can be configured:
+
+* to ignore fields without field definition (`ignore_unknown_fields`)
+* to allow fields defined as deprecated in the schemas (`allow_deprecated_fields`)
+
+### Field validation
+
+A field is valid if it conforms to its corresponding [field definition]:
+
+* if `repeatable` is `false` the field is valid only if the record does not contain another field with the same field definition.
+* every subfield has a [subfield definition] and is valid
+* there is at least one subfield for each [subfield definition] with `required` being `true`
+
+Field validation can be configured:
+
+* to ignore subfields not defined in the schema (`ignore_unknown_subfields`)
+* to allow subfields defined as deprecated in the schemas (`allow_deprecated_fields`)
+
+### Subfield validation
+
+A subfield is valid if it conforms to its corresponding [subfield definition]:
+
+* if `repeatable` is `false` the subfield is valid only if the field does not contain another subfield with the same subfield code.
+* Subfield value matches given `pattern` and/or `positions`
+
+Subfield validation can be configured:
+
+* to not validate subfields (`ignore_subfields`)
+* to ignore subfield values (`ignore_subfield_values`)
+* to ignore order of subfields (`ignore_subfield_order`)
 
 ## References
 
