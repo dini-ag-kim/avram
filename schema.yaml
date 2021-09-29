@@ -134,6 +134,8 @@ definitions:
         type: integer
       positions:
         $ref: '#/definitions/positions'
+      codes:
+        $ref: '#/definitions/codelist'
       pica3:
         type: string
       modified:
@@ -163,17 +165,20 @@ definitions:
       deprecated-codes:
         $ref: '#/definitions/codelist'
   codelist:
-    type: object
-    patternProperties:
-      '^.+$':
-        additionalProperties: false
-        properties:
-          label:
-            type: string
-          description:
-            type: string
-          total:
-            $ref: '#/definitions/non-negative-integer'
-          records:
-            $ref: '#/definitions/non-negative-integer'
+    oneOf:
+      - type: string
+        format: uri
+      - type: object
+        patternProperties:
+          '^.+$':
+            additionalProperties: false
+            properties:
+              label:
+                type: string
+              description:
+                type: string
+              total:
+                $ref: '#/definitions/non-negative-integer'
+              records:
+                $ref: '#/definitions/non-negative-integer'
 $schema: http://json-schema.org/draft-06/schema#

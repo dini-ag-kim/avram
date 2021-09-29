@@ -232,9 +232,6 @@ The data element definition MAY further contain keys:
 * `deprecated-codes` with a [codelist] of deprecated codes
 * `pattern` with a regular expression
 
-A data element definition MUST NOT contain more than one of the keys `codes`
-and `pattern`.
-
 ##### Example
 
 * Positions for MARC 21 field `005`:
@@ -268,6 +265,7 @@ The subfield definition MAY further contain keys:
 
 * `pattern` with a regular expression
 * `positions` with a specification of [positions]
+* `codes` with a [codelist]
 * `url` with an URL link to documentation
 * `description` with additional description of the subfield
 * `order` with a non-negative integer used to specify a partial or complete order
@@ -336,7 +334,9 @@ Indicator codelist values MUST consist of a single character not being `#`.
 
 [codelist]: #codelist
 
-A **codelist** is a JSON object that maps codes to code definitions. A **code** is a non-empty string. All codes of a codelist MUST have same length. A **code definition** is a JSON object with optional keys:
+A **codelist** is either an URI or a JSON object that maps codes to code definitions.
+
+A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
 
 * `label` with the name of the code
 * `description` with additional description of the code
@@ -399,13 +399,17 @@ Field validation can be configured:
 A subfield is valid if it conforms to its corresponding [subfield definition]:
 
 * if `repeatable` is `false` the subfield is valid only if the field does not contain another subfield with the same subfield code.
-* Subfield value matches given `pattern` and/or `positions`
+* Subfield value matches given `pattern`, `positions`, and/or `codes`
 
 Subfield validation can be configured:
 
 * to not validate subfields (`ignore_subfields`)
 * to ignore subfield values (`ignore_subfield_values`)
 * to ignore order of subfields (`ignore_subfield_order`)
+
+### Validation against a codelist
+
+A value is valid against a [codelist] given as JSON object if the value is one of the keys of the JSON object. If a [codelist] is given as URI, validation of a value against this codelist is out of the scope of this specification. Applications MAY translate the URI to a codelist in form of a JSON object.
 
 ## References
 
@@ -441,7 +445,8 @@ Subfield validation can be configured:
 #### 0.7.0 (2021-09-29)
 
 * Rename `count` to `records` to not confuse with `counter`
-* Add `total` and `records` at field definitions, subfield definitions and code definitions.
+* Add `total` and `records` at field definitions, subfield definitions and code definitions
+* Allow URIs as codelists and allow `codes` at subfield level
 
 #### 0.6.0 (2020-09-15)
 
