@@ -4,18 +4,47 @@ short: Avram
 language: en
 ---
 
-**Avram** is a [schema language](../../schema) for [MARC](../../marc) and
-related formats such as [PICA](../../pica) and [MAB](../../mab).
+**Avram** is a [schema language](../../schema) for [MARC](../../marc) and related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.7.0
-* date: 2021-09-29
+* version: 0.7.1
+* date: 2021-10-01
+
+## Table of Contents
+
+- [Introduction](#introduction)
+  - [Conformance requirements](#conformance-requirements)
+  - [Data types](#data-types)
+  - [Records](#records)
+- [Schema format](#schema-format)
+  - [Field schedule](#field-schedule)
+  - [Field identifier](#field-identifier)
+  - [Field definition](#field-definition)
+  - [Field types](#field-types)
+  - [Positions](#positions)
+  - [Subfield schedule](#subfield-schedule)
+  - [Indicator definition](#indicator-definition)
+  - [Codelist](#codelist)
+  - [Additional rules for MARC-based formats](#additional-rules-for-marc-based-formats)
+  - [Additional rules for PICA-based formats](#additional-rules-for-pica-based-formats)
+  - [Metaschema](#metaschema)
+- [Validation rules](#validation-rules)
+  - [Record validation](#record-validation)
+  - [Field validation](#field-validation)
+  - [Subfield validation](#subfield-validation)
+  - [Validation against a codelist](#validation-against-a-codelist)
+- [References](#references)
+  - [Normative references](#normative-references)
+  - [Informative references](#informative-references)
+  - [Changes](#changes)
 
 ## Introduction
 
-MARC and related formats are used since decades as the basis for library automation. Several variants, dialects and profiles exist for different applications. The Avram schema language allows to specify individual formats based on MARC, PICA and similar standards for documentation, validation, and requirements engineering. The schema language is named after [Henriette D. Avram (1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as the first automated cataloging system in the 1960s.
+MARC and related formats such as PICA and MAB are used since decades as the basis for library automation. Several variants, dialects and profiles exist for different applications. The Avram schema language allows to specify individual formats for documentation, validation, and requirements engineering. The schema language is named after [Henriette D. Avram (1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as the first automated cataloging system in the 1960s.
 
-This document consists of specification of the [schema format](#schema-format) and [validation rules](#validation-rules). It is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
+The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas.
+
+The document is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
 
 ### Conformance requirements
 
@@ -31,15 +60,36 @@ A **language** is a natural language identifier as defined with XML Schema datat
 
 A **non-negative integer** is a natural number (0, 1, 2...)
 
+A **range** is a sequence of digits, optionally followed by a dash (`-`) and a second sequence of digits with same length and numerical value larger than the first sequence (examples: `0`, `00`, `3-7`, `03-12`, `01-09`...). A string **matches** a range if it is a sequence of digits of same length as the sequence(s) in the range and the numerical value is equal to or between the numerical value(s) of the range. Applications MAY accept and normalize two sequences of different length to valid ranges.
+
+### Records
+
+[record]: #records
+[field]: #records
+[tag]: #tag
+[occurrence]: #records
+
+Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
+
+* either a **fixed field value**, being a non-empty string,
+* or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a character) and **subfield value** (being a non-empty string).
+
+Fields with subfields, also called **variable fields** MAY also have
+
+* either two **indicators**, each being a single character,
+* or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
+
+The encoding of records in individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
+
 ## Schema format
 
-An **Avram Schema** is a JSON object given as JSON document or any other format that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST be unique. String values SHOULD NOT be the empty string.
+An **Avram Schema** is a JSON object given as serialized JSON document or any other format that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST be unique. String values SHOULD NOT be the empty string. Applications MAY remove keys with empty string value.
 
-The schema MUST contain key:
+A schema MUST contain key
 
-* `fields` with a [field schedule](#field-schedule)
+* `fields` with a [field schedule](#field-schedule).
 
-The schema SHOULD contain keys documenting the format defined by the schema:
+A schema SHOULD contain keys documenting the format defined by the schema:
 
 * `title` with the name of the format
 * `description` with a short description of the format
@@ -52,10 +102,6 @@ The schema MAY contain keys:
 * `$schema` with an URL of the [Avram metaschema](#metaschema)
 * `deprecated-fields` with a [field schedule]
 * `records` with a non-negative integer to indicate a number of records
-
-Former versions of Avram also allowed key `count` with a non-negative integer. This key has been renamed to `records`.
-
-Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY exist but all schemas with same `profile` URI MUST include same [field definition] for fields with same [field identifier].
 
 ##### Example
 
@@ -71,7 +117,7 @@ Multiple schemas with same `title`, `description`, `url` and/or `profile` MAY ex
 }
 ~~~
 
-#### Field schedule
+### Field schedule
 
 [field schedule]: #field-schedule
 
@@ -86,43 +132,53 @@ A **field schedule** is a JSON object that maps [field identifiers](#field-ident
 }
 ~~~
 
-#### Field identifier
+Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to [match](#field-matching) a field with both. Applications MUST remove field identifiers and corresponding definitions to remove overlap of field identifiers.
+
+### Field identifier
 
 [field identifier]: #field-identifier
 [field identifiers]: #field-identifier
+[field counter]: #field-counter
+[field occurrence]: #field-occurrence
 
-A **field identifiers** is can be any non-empty string that uniquely identifies a field. The identifier consists of a **field tag**, optionally followed by
+A **field identifiers** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by
 
-* the slash (`/`) and a **field occurrence**,
-* or the small letter x (`x`)  and a **field counter**.
+* the slash (`/`) and a **field occurrence**, being a range of two digits except the single sequence of two digits (`00`),
+* or the small letter x (`x`)  and a **field counter**, being a range of one or two digits (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
 
-Applications SHOULD add further restrictions on field identifier syntax.
+Applications MAY further allow a tag followed by the slash and two zeroes (`/00`) as alias for a bare tag.
+
+A [field] **matches** a field identifier if the tag of the field is equal to the tag of the field identifier, and
+
+* the field has no occurrence and the field identifier has no field occurrence nor field counter,
+* or the occurrence of the field matches the range of the field occurrence,
+* or the first subfield value of subfield with subfield code `x` matches the range of the field counter. 
 
 ##### Examples
 
 * `LDR`, `001`, `850`... (MARC)
-* `021A`, `045B/00`, `209K`... (PICA)
+* `021A`, `045Q/01`, `028B/01-02`, `209K`, `209Ax00-09`, `247Ax0`... (PICA)
 * `001`, `100`, `805`... (MAB)
 
-#### Field definition
+### Field definition
 
 [field definition]: #field-definition
 
 A **field definition** is a JSON object that SHOULD contain key:
 
-* `tag` with the **field tag**
+* `tag` with the [tag]
 * `label` with the name of the field
 * `repeatable` with a boolean value, assumed as `false` by default
 * `required` with a boolean value, assumed as `false` by default
 
 The field definition MAY further contain keys:
 
-* `occurrence` with the **field occurrence**
-* `counter` with a **field counter**
+* `occurrence` with a [field occurrence]
+* `counter` with a [field counter]
 * `url` with an URL link to documentation
 * `description` with additional description of the field
-* `indicator1` with first [indicator], assumed as `null` by default
-* `indicator2` with second [indicator], assumed as `null` by default
+* `indicator1` with first [indicator definition] or `null`
+* `indicator2` with second [indicator definition] or `null`
 * `pica3` with corresponding Pica3 number
 * `modified` with a timestamp
 * `positions` with a specification of [positions] (for fixed fields)
@@ -134,21 +190,9 @@ The field definition MAY further contain keys:
 
 A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
 
-If a field definition is given in a [field schedule], values of `tag`, `occurrence` and `counter` MUST either be missing or be used to automatically derive the corresponding [field identifier].
+If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
-#### Additional rules for MARC-based formats
-
-* field definitions MUST NOT include the keys `occurrence`, `counter`, `pica3`.
-* field tag MUST either be the character sequence `LDR` for specification of the record leader, or consist of three digits (e.g. `001`).
-
-#### Additional rules for PICA-based formats
-
-* field definitions MUST NOT include the keys `indicator1` and `indicator2`.
-* field tag MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
-* field definitions of fields with identifier starting with digit `2`
-* field occurrence MUST NOT be given if field tag starts digit `2`.
-* field counter MUST NOT be given unless field tag starts digit `2`.
-* field occurrences and field counters MUST consist of digits (e.g. `00`, `21`..) or two sequences of digits with same length combined with `-` (e.g. `09-10` but not `9-10`).
+Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`) as alias for a field definition without occurrence.
 
 ##### Example
 
@@ -210,17 +254,16 @@ provide multiple schemas, one for each type.
 }
 ~~~
 
-#### Positions
+### Positions
 
 [positions]: #positions
 
-Fixed fields can be specified with a JSON object that maps **character
-positions** to data element definitions. A character position is sequence of
-digits (e.g.  `09`) or two sequences separated by `-` (e.g. `12-16`). A
-sequence of digit MUST NOT consists of zeroes only.  It is RECOMMENDED to use
-sequences of two digits. If two sequences are given, the second interpreted as
-number MUST NOT be smaller than the first interpreted as number. A **data
-element definition** is a JSON object that SHOULD contain key:
+Subfield values and fixed field values can be specified **positions**, being a
+JSON object that maps **character positions** to data **element definitions**.
+A character position is a range not consisting of zeroes only. It is
+RECOMMENDED to use sequences of two digits.
+
+A **data element definition** is a JSON object that SHOULD contain key:
 
 * `label` with the name of the data element
 
@@ -247,7 +290,7 @@ The data element definition MAY further contain keys:
     }
     ~~~
 
-#### Subfield schedule
+### Subfield schedule
 
 [subfield schedule]: #subfield-schedule
 [subfield schedules]: #subfield-schedule
@@ -301,22 +344,20 @@ The subfield definition MAY further contain keys:
     }
     ~~~
 
-#### Indicators
+### Indicator definition
 
-[indicator]: #indicators
+[indicator-definition]: #indicator-definition
 
-An **indicator** is either the value `null` or a JSON object that SHOULD contain key:
+An **indicator definition** is a JSON object that SHOULD contain key
 
 * `label` with the name of the indicator
 
-The indicator MAY further contain key:
+and further MAY contain keys:
 
 * `url` with an URL link to documentation
 * `description` with additional description of the indicator
 * `codes` with a [codelist]
 * `deprecated-codes` with a [codelist] of deprecated codes
-
-Indicator codelist values MUST consist of a single character not being `#`.
 
 ##### Example
 
@@ -330,7 +371,7 @@ Indicator codelist values MUST consist of a single character not being `#`.
 }
 ~~~
 
-#### Codelist
+### Codelist
 
 [codelist]: #codelist
 
@@ -357,6 +398,18 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
 }
 ~~~
 
+### Additional rules for MARC-based formats
+
+* [field definitions](#field-definition) MUST NOT include the keys `occurrence`, `counter`, `pica3`.
+* tags of a field definition or [field identifier] MUST either be the character sequence `LDR` for specification of the record leader, or consist of three digits (e.g. `001`).
+
+### Additional rules for PICA-based formats
+
+* field definitions MUST NOT include the keys `indicator1` and `indicator2`.
+* tags of a field identifier and field definition MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
+* field identifiers and field definitions MUST NOT include a [field occurence] if tag start with digit `2`.
+* field identifier and field definition MUST NOT include a [field counter] if tag does not start with digit `2`.
+
 ### Metaschema
 
 A [JSON Schema](http://json-schema.org/) to validate Avram Schemas is available
@@ -369,11 +422,14 @@ further restrict the allowed set of [field identifiers].
 
 *Rules how to validate records against Avram Schemas have not fully been specified yet!*
 
+Parts of an Avram schema can be used to validate and analyze [records].
+
 ### Record validation
 
 A record is valid if:
 
-* every field has a field definition and is valid
+* every field matches a corresponding [field definition]
+* every field is valid (see [field validation](#field-validation)
 * and there is at least one field for each [field definition] with `required` being `true`
 
 Validation of a record can be configured:
@@ -441,6 +497,11 @@ A value is valid against a [codelist] given as JSON object if the value is one o
 * [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
 
 ### Changes
+
+#### 0.7.1 (2021-10-01)
+
+* More explicitly specificy field occurrence and field counter
+* Textual refactoring
 
 #### 0.7.0 (2021-09-29)
 
