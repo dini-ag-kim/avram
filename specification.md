@@ -64,6 +64,7 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 
 ### Records
 
+[records]: #records
 [record]: #records
 [field]: #records
 [tag]: #tag
@@ -132,7 +133,7 @@ A **field schedule** is a JSON object that maps [field identifiers](#field-ident
 }
 ~~~
 
-Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to [match](#field-matching) a field with both. Applications MUST remove field identifiers and corresponding definitions to remove overlap of field identifiers.
+Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to match a field with both. Applications MUST remove field identifiers and corresponding definitions to remove overlap of field identifiers.
 
 ### Field identifier
 
@@ -294,6 +295,7 @@ The data element definition MAY further contain keys:
 
 [subfield schedule]: #subfield-schedule
 [subfield schedules]: #subfield-schedule
+[subfield definition]: #subfield-schedule
 
 A **subfield schedule** is a JSON object that maps subfield codes to subfield
 definitions.  A **subfield code** is a single character. A **subfield
@@ -346,7 +348,7 @@ The subfield definition MAY further contain keys:
 
 ### Indicator definition
 
-[indicator-definition]: #indicator-definition
+[indicator definition]: #indicator-definition
 
 An **indicator definition** is a JSON object that SHOULD contain key
 
