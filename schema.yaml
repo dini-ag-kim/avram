@@ -145,6 +145,8 @@ definitions:
         $ref: '#/definitions/positions'
       codes:
         $ref: '#/definitions/codelist'
+      deprecated-codes:
+        $ref: '#/definitions/codelist'
       pica3:
         type: string
       modified:
@@ -171,10 +173,10 @@ definitions:
         $ref: '#/definitions/url'
       codes:
         $ref: '#/definitions/codelist'
-      pattern:
-        type: string
       deprecated-codes:
         $ref: '#/definitions/codelist'
+      pattern:
+        type: string
   codelist:
     oneOf:
       - type: string

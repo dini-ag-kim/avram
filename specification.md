@@ -7,7 +7,7 @@ language: en
 **Avram** is a [schema language](../../schema) for [MARC](../../marc) and related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.7.2
+* version: 0.8.0
 * date: 2022-04-25
 
 ## Table of Contents
@@ -283,6 +283,7 @@ The subfield definition MAY further contain keys:
 * `pattern` with a regular expression
 * `positions` with a specification of [positions]
 * `codes` with a [codelist]
+* `deprecated-codes` with a [codelist] of deprecated codes
 * `checks` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
 * `description` with additional description of the subfield
@@ -526,11 +527,12 @@ Validation can further be configured to not validate against referenced codelist
 
 ### Changes
 
-#### 0.7.2 (2022-04-25)
+#### 0.8.0 (2022-04-25)
 
 * Add codelist directories (`codelists`)
 * Add external validation rules (`checks`)
 * Remove field types (`types`)
+* Allow `deprecated-codes` also at subfield schedules
 
 #### 0.7.1 (2021-10-01)
 
