@@ -29,6 +29,10 @@ properties:
   language:
     type: string
     pattern: '^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$'
+  codelists:
+    type: object
+    items:
+      $ref: '#/definitions/explicitcodelist'
 required:
   - fields
 definitions:
@@ -168,17 +172,19 @@ definitions:
     oneOf:
       - type: string
         format: uri
-      - type: object
-        patternProperties:
-          '^.+$':
-            additionalProperties: false
-            properties:
-              label:
-                type: string
-              description:
-                type: string
-              total:
-                $ref: '#/definitions/non-negative-integer'
-              records:
-                $ref: '#/definitions/non-negative-integer'
+      - $ref: '#/definitions/explicitcodelist'
+  explicitcodelist:
+    type: object
+    patternProperties:
+      '^.+$':
+        additionalProperties: false
+        properties:
+          label:
+            type: string
+          description:
+            type: string
+          total:
+            $ref: '#/definitions/non-negative-integer'
+          records:
+            $ref: '#/definitions/non-negative-integer'
 $schema: http://json-schema.org/draft-06/schema#

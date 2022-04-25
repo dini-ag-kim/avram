@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for [MARC](../../marc) and related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.7.1
-* date: 2021-10-01
+* version: 0.7.2
+* date: 2022-04-25
 
 ## Table of Contents
 
@@ -102,6 +102,7 @@ The schema MAY contain keys:
 
 * `$schema` with an URL of the [Avram metaschema](#metaschema)
 * `deprecated-fields` with a [field schedule]
+* `codelists` with a [codelist directory](#codelist)
 * `records` with a non-negative integer to indicate a number of records
 
 ##### Example
@@ -114,7 +115,7 @@ The schema MAY contain keys:
   "url": "https://www.loc.gov/marc/classification/",
   "profile": "http://format.gbv.de/marc/classification",
   "language": "en",
-  "$schema": "https://format.gbv.de/schema/avram/schema.json",
+  "$schema": "https://format.gbv.de/schema/avram/schema.json"
 }
 ~~~
 
@@ -377,7 +378,10 @@ and further MAY contain keys:
 
 [codelist]: #codelist
 
-A **codelist** is either an URI or a JSON object that maps codes to code definitions.
+A **codelist** is 
+
+* either a JSON object that maps codes to code definitions (**explicit codelist**)
+* or an URI (**referenced codelist**).
 
 A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
 
@@ -386,7 +390,9 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
 * `total` with a non-negative integer to indicate the number of times this code has been found
 * `records` with a non-negative integer to indicate the number of records this code has been found in
 
-##### Example
+A **codelist directory** is a JSON object that maps referenced codelists to explicit codelists.
+
+##### Examples (explicit, referenced, and truncated codelist directory)
 
 ~~~json
 {
@@ -397,6 +403,19 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
     "label": "Archival"
   },
   "x": { }
+}
+~~~
+
+~~~json
+"http://id.loc.gov/vocabulary/languages"
+~~~
+
+~~~json
+{
+  "http://id.loc.gov/vocabulary/languages": {
+    "eng": { "label": "English" },
+    "fre": { "label": "French" }
+  }
 }
 ~~~
 
@@ -467,7 +486,9 @@ Subfield validation can be configured:
 
 ### Validation against a codelist
 
-A value is valid against a [codelist] given as JSON object if the value is one of the keys of the JSON object. If a [codelist] is given as URI, validation of a value against this codelist is out of the scope of this specification. Applications MAY translate the URI to a codelist in form of a JSON object.
+A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist. To check whether a string value is valid against a referenced codelist, the codelist is resolved with the codelist directory of the Avram schema. Applications MAY resolve referenced codelists against externally defined explicit codelists. If so, the application MUST make clear whether codelists defined in the codelist directory are overriden or extened. 
+
+Validation can further be configured to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`).
 
 ## References
 
@@ -499,6 +520,10 @@ A value is valid against a [codelist] given as JSON object if the value is one o
 * [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
 
 ### Changes
+
+#### 0.7.2 (2022-04-25)
+
+* Add codelist directories (`codelists`)
 
 #### 0.7.1 (2021-10-01)
 
