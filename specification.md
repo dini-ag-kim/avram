@@ -67,7 +67,7 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 [records]: #records
 [record]: #records
 [field]: #records
-[tag]: #tag
+[tag]: #records
 [occurrence]: #records
 
 Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
@@ -103,6 +103,7 @@ The schema MAY contain keys:
 * `$schema` with an URL of the [Avram metaschema](#metaschema)
 * `deprecated-fields` with a [field schedule]
 * `codelists` with a [codelist directory](#codelist)
+* `checks` with [external validation rules](#external-validation-rules)
 * `records` with a non-negative integer to indicate a number of records
 
 ##### Example
@@ -187,6 +188,7 @@ The field definition MAY further contain keys:
 * `subfields` with a [subfield schedule] (for variable fields)
 * `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * `types` with specification of [field types] (for alternatives)
+* `checks` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
@@ -312,6 +314,7 @@ The subfield definition MAY further contain keys:
 * `pattern` with a regular expression
 * `positions` with a specification of [positions]
 * `codes` with a [codelist]
+* `checks` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
 * `description` with additional description of the subfield
 * `order` with a non-negative integer used to specify a partial or complete order
@@ -416,6 +419,39 @@ A **codelist directory** is a JSON object that maps referenced codelists to expl
     "eng": { "label": "English" },
     "fre": { "label": "French" }
   }
+}
+~~~
+
+### External validation rules
+
+An Avram Schema MAY include references to additional validation rules with key `checks` at the [root level](schema-format), at [field schedules](#field-schedule), and at [subfield schedules](#subfield-schedule). The value of this keys MUST be an string or a JSON array of strings. Strings SHOULD be URIs.
+
+##### Example
+
+~~~json
+{
+  "fields": {
+    "birth": {
+      "subfields": {
+        "Y": { "label": "year" },
+        "M": { "label": "month" },
+        "D": { "label": "day" }
+      },
+      "checks": "http://example.org/valid-date"
+    },
+    "death": {
+      "subfields": {
+        "Y": { "label": "year" },
+        "M": { "label": "month" },
+        "D": { "label": "day" }
+      },
+      "checks": "http://example.org/valid-date"
+    }
+  },
+  "checks": [
+    "death must not be earlier than birth",
+    "birth only allowed before 1950 for privacy reasons"
+  ]
 }
 ~~~
 
@@ -524,6 +560,7 @@ Validation can further be configured to not validate against referenced codelist
 #### 0.7.2 (2022-04-25)
 
 * Add codelist directories (`codelists`)
+* Add external validation rules (`checks`)
 
 #### 0.7.1 (2021-10-01)
 

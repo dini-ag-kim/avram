@@ -33,6 +33,8 @@ properties:
     type: object
     items:
       $ref: '#/definitions/explicitcodelist'
+  checks:
+    $ref: '#/definitions/checks'
 required:
   - fields
 definitions:
@@ -91,6 +93,8 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
+          checks:
+            $ref: '#/definitions/checks'
   positions:
     type: object
     patternProperties:
@@ -148,6 +152,8 @@ definitions:
         $ref: '#/definitions/non-negative-integer'
       records:
         $ref: '#/definitions/non-negative-integer'
+      checks:
+        $ref: '#/definitions/checks'
   indicator:
     oneOf:
       - type: 'null'
@@ -187,4 +193,10 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
+  checks:
+    oneOf:
+      - type: string
+      - type: array
+        items:
+          type: string
 $schema: http://json-schema.org/draft-06/schema#
