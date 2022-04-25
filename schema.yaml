@@ -87,6 +87,7 @@ definitions:
             $ref: '#/definitions/positions'
           types:
             $ref: '#/definitions/field-types'
+            description: 'deprecated, will be disallowed!'
           modified:
             $ref: '#/definitions/timestamp'
           total:

@@ -20,7 +20,6 @@ language: en
   - [Field schedule](#field-schedule)
   - [Field identifier](#field-identifier)
   - [Field definition](#field-definition)
-  - [Field types](#field-types)
   - [Positions](#positions)
   - [Subfield schedule](#subfield-schedule)
   - [Indicator definition](#indicator-definition)
@@ -187,12 +186,11 @@ The field definition MAY further contain keys:
 * `positions` with a specification of [positions] (for fixed fields)
 * `subfields` with a [subfield schedule] (for variable fields)
 * `deprecated-subfields` with a [subfield schedule] (for variable fields)
-* `types` with specification of [field types] (for alternatives)
 * `checks` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-A field definition MUST NOT contain keys for fixed fields (`position`), keys for variable fields (`subfields` and/or `deprecated-subfields`), and keys for alternatives (`types`).
+A field definition MUST NOT contain both keys for fixed fields (`position`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -228,35 +226,6 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
       }
     }
     ~~~
-
-#### Field types
-
-[field types]: #field-types
-
-**Field types** are alternative sets of [positions] or [subfield schedules] as
-part of a [field definition]. A specification of field types is a JSON object
-maps type names to JSON objects either all having field `positions` or all
-having field `subfields`.
-
-*Note:* field types make Avram schemas more complicated. An alternative is to
-provide multiple schemas, one for each type.
-
-##### Example
-
-~~~json
-{
-  "Map": {
-    "positions": { "00": { "codes": { "a": { } } } } 
-  },
-  "Electronic resource": { 
-    "positions": { "00": { "codes": { "c": { } } } } 
-  },
-  "Globe": { 
-    "positions": { "00": { "codes": { "d": { } } } } 
-  },
-  ...
-}
-~~~
 
 ### Positions
 
@@ -561,6 +530,7 @@ Validation can further be configured to not validate against referenced codelist
 
 * Add codelist directories (`codelists`)
 * Add external validation rules (`checks`)
+* Remove field types (`types`)
 
 #### 0.7.1 (2021-10-01)
 
