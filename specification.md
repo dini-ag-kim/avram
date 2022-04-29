@@ -454,18 +454,20 @@ further restrict the allowed set of [field identifiers].
 
 Parts of an Avram schema can be used to validate and analyze [records].
 
+Validation can further be configured with configuration options described below. An Avram validator MUST document which options it supports and which options are not disabled by default.
+
 ### Record validation
 
 A record is valid if:
 
-    * every field matches a corresponding [field definition]
-* every field is valid (see [field validation](#field-validation)
-        * and there is at least one field for each [field definition] with `required` being `true`
+* every field matches a corresponding [field definition]
+* every field is valid (see [field validation](#field-validation))
+* and there is at least one field for each [field definition] with `required` being `true`
 
-        Validation of a record can be configured:
+Validation of a record can be configured:
 
-        * to ignore fields without field definition (`ignore_unknown_fields`)
-        * to allow fields defined as deprecated in the schemas (`allow_deprecated_fields`)
+* to ignore fields without field definition (`ignore_unknown_fields`)
+* to allow fields defined as deprecated in the schemas (`allow_deprecateds`)
 
 ### Field validation
 
@@ -478,7 +480,7 @@ A field is valid if it conforms to its corresponding [field definition]:
 Field validation can be configured:
 
 * to ignore subfields not defined in the schema (`ignore_unknown_subfields`)
-* to allow subfields defined as deprecated in the schemas (`allow_deprecated_fields`)
+* to allow subfields defined as deprecated in the schemas (`allow_deprecated`)
 
 ### Subfield validation
 
@@ -497,7 +499,10 @@ Subfield validation can be configured:
 
 A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist. To check whether a string value is valid against a referenced codelist, the codelist is resolved with the codelist directory of the Avram schema. Applications MAY resolve referenced codelists against externally defined explicit codelists. If so, the application MUST make clear whether codelists defined in the codelist directory are overriden or extened. 
 
-Validation can further be configured to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`).
+Validation can further be configured
+
+* to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
+* to allow codes defined as deprecated in the subfield schedules or positions (`allow_deprecated`)
 
 ## Counting
 
