@@ -136,7 +136,7 @@ A **field schedule** is a JSON object that maps [field identifiers](#field-ident
 }
 ~~~
 
-Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to match a field with both. Applications MUST remove field identifiers and corresponding definitions to remove overlap of field identifiers.
+Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to match a field with both. Applications MUST either detect and reject overlapping field identifiers or match fields to the first of multiple overlapping field identifiers in alphabetical sort order.
 
 ### Field identifier
 
@@ -545,6 +545,10 @@ Enabling `count_subfields` implies `count_fields` and enabling `count_fields` or
 * [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
 
 ### Changes
+
+#### NEXT
+
+* Simplify treatment of overlapping field identifiers
 
 #### 0.8.0 (2022-04-25)
 
