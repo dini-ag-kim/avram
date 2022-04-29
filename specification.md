@@ -41,7 +41,7 @@ language: en
 
 MARC and related formats such as PICA and MAB are used since decades as the basis for library automation. Several variants, dialects and profiles exist for different applications. The Avram schema language allows to specify individual formats for documentation, validation, and requirements engineering. The schema language is named after [Henriette D. Avram (1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as the first automated cataloging system in the 1960s.
 
-The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas.
+The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas. The format can also be used to express results of record analysis.
 
 The document is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
 
@@ -82,6 +82,8 @@ Fields with subfields, also called **variable fields** MAY also have
 The encoding of records in individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
 
 ## Schema format
+
+[root level]: #schema-format
 
 An **Avram Schema** is a JSON object given as serialized JSON document or any other format that encodes a JSON document. In contrast to [RFC 7159], all object keys MUST be unique. String values SHOULD NOT be the empty string. Applications MAY remove keys with empty string value.
 
@@ -165,6 +167,7 @@ A [field] **matches** a field identifier if the tag of the field is equal to the
 ### Field definition
 
 [field definition]: #field-definition
+[field definitions]: #field-definition
 
 A **field definition** is a JSON object that SHOULD contain key:
 
@@ -394,34 +397,34 @@ A **codelist directory** is a JSON object that maps referenced codelists to expl
 
 ### External validation rules
 
-An Avram Schema MAY include references to additional validation rules with key `checks` at the [root level](schema-format), at [field schedules](#field-schedule), and at [subfield schedules](#subfield-schedule). The value of this keys MUST be an string or a JSON array of strings. Strings SHOULD be URIs.
+An Avram Schema MAY include references to additional validation rules with key `checks` at the [root level], at [field schedules](#field-schedule), and at [subfield schedules]. The value of this keys MUST be an string or a JSON array of strings. Strings SHOULD be URIs.
 
 ##### Example
 
 ~~~json
 {
-  "fields": {
-    "birth": {
-      "subfields": {
-        "Y": { "label": "year" },
-        "M": { "label": "month" },
-        "D": { "label": "day" }
-      },
-      "checks": "http://example.org/valid-date"
+    "fields": {
+        "birth": {
+            "subfields": {
+                "Y": { "label": "year" },
+                    "M": { "label": "month" },
+                    "D": { "label": "day" }
+            },
+                "checks": "http://example.org/valid-date"
+        },
+            "death": {
+                "subfields": {
+                    "Y": { "label": "year" },
+                    "M": { "label": "month" },
+                    "D": { "label": "day" }
+                },
+                "checks": "http://example.org/valid-date"
+            }
     },
-    "death": {
-      "subfields": {
-        "Y": { "label": "year" },
-        "M": { "label": "month" },
-        "D": { "label": "day" }
-      },
-      "checks": "http://example.org/valid-date"
-    }
-  },
-  "checks": [
-    "death must not be earlier than birth",
-    "birth only allowed before 1950 for privacy reasons"
-  ]
+        "checks": [
+            "death must not be earlier than birth",
+        "birth only allowed before 1950 for privacy reasons"
+        ]
 }
 ~~~
 
@@ -455,14 +458,14 @@ Parts of an Avram schema can be used to validate and analyze [records].
 
 A record is valid if:
 
-* every field matches a corresponding [field definition]
+    * every field matches a corresponding [field definition]
 * every field is valid (see [field validation](#field-validation)
-* and there is at least one field for each [field definition] with `required` being `true`
+        * and there is at least one field for each [field definition] with `required` being `true`
 
-Validation of a record can be configured:
+        Validation of a record can be configured:
 
-* to ignore fields without field definition (`ignore_unknown_fields`)
-* to allow fields defined as deprecated in the schemas (`allow_deprecated_fields`)
+        * to ignore fields without field definition (`ignore_unknown_fields`)
+        * to allow fields defined as deprecated in the schemas (`allow_deprecated_fields`)
 
 ### Field validation
 
@@ -495,6 +498,17 @@ Subfield validation can be configured:
 A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist. To check whether a string value is valid against a referenced codelist, the codelist is resolved with the codelist directory of the Avram schema. Applications MAY resolve referenced codelists against externally defined explicit codelists. If so, the application MUST make clear whether codelists defined in the codelist directory are overriden or extened. 
 
 Validation can further be configured to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`).
+
+## Counting
+
+An Avram schema can contain key `records` at [root level] and keys `records` and `total` at [field definitions], [subfield definitions](#subfield-schedule) and [code definitions](#codelist). Validation can be configured to not ignore these fields butto compare given counting fields to the actual number of records, subfields, and/or codes found in input data. Konfiguration keys are:
+
+* `count_records` to enable counting number of records (key `records` at root level)
+* `count_fields` to enable counting number of each field (keys `records` and `total` at field definitions)
+* `count_subfields` to enable counting number of each subfield (keys `records` and `total` at subfield definitions)
+* `count_codes` to enable counting number of each code (key `records` and `total` ad code definitions)
+
+Enabling `count_subfields` implies `count_fields` and enabling `count_fields` or `count_codes` implies `count_records`.
 
 ## References
 
