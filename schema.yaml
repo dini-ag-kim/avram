@@ -70,7 +70,7 @@ definitions:
           required:
             type: boolean
           pattern:
-            type: string
+            $ref: '#/definitions/regex'
           url:
             $ref: '#/definitions/url'
           indicator1:
@@ -96,6 +96,9 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           checks:
             $ref: '#/definitions/checks'
+  regex:
+    type: string
+    minLength: 1
   positions:
     type: object
     patternProperties:
@@ -176,7 +179,7 @@ definitions:
       deprecated-codes:
         $ref: '#/definitions/codelist'
       pattern:
-        type: string
+        $ref: '#/definitions/regex'
   codelist:
     oneOf:
       - type: string
