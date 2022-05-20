@@ -145,7 +145,7 @@ Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers 
 [field counter]: #field-counter
 [field occurrence]: #field-occurrence
 
-A **field identifiers** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by
+A **field identifier** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by
 
 * the slash (`/`) and a **field occurrence**, being a range of two digits except the single sequence of two digits (`00`),
 * or the small letter x (`x`)  and a **field counter**, being a range of one or two digits (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
@@ -193,7 +193,7 @@ The field definition MAY further contain keys:
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-A field definition MUST NOT contain both keys for fixed fields (`position`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
+A field definition MUST NOT contain both keys for fixed fields (`positions`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -474,8 +474,13 @@ Validation of a record can be configured:
 A field is valid if it conforms to its corresponding [field definition]:
 
 * if `repeatable` is `false` the field is valid only if the record does not contain another field with the same field definition.
-* every subfield has a [subfield definition] and is valid
-* there is at least one subfield for each [subfield definition] with `required` being `true`
+* for fixed field:
+    * the field value must be valid (see [value validation])
+* for variable fields:
+    * every subfield has a [subfield definition] and is valid
+    * there is at least one subfield for each [subfield definition] with `required` being `true`
+
+*TODO: occurrence, counter, and [indicator definition]*
 
 Field validation can be configured:
 
@@ -487,7 +492,9 @@ Field validation can be configured:
 A subfield is valid if it conforms to its corresponding [subfield definition]:
 
 * if `repeatable` is `false` the subfield is valid only if the field does not contain another subfield with the same subfield code.
-* Subfield value matches given `pattern`, `positions`, and/or `codes`
+* Subfield value must be valid (see [value validation])
+
+*TODO: subfield order*
 
 Subfield validation can be configured:
 
@@ -495,12 +502,33 @@ Subfield validation can be configured:
 * to ignore subfield values (`ignore_subfield_values`)
 * to ignore order of subfields (`ignore_subfield_order`)
 
+### Value validation
+
+A value (given as string), is valid if it conforms to a definition (given as [field definition], [subfield definition], [indicator definition], [data element definition](#positions)):
+
+* if the definition contains key `pattern`, the value must match its regular expression.
+* if the definition contains key `positions`, the value must be [valid against its positions](#validation-against-positions).
+* if the definition contains key `codes`, the value must be [valid against its codelists](#validation-against-a-codelist)
+
+A value is always valid if the definition contains neither of keys `pattern`, `positions`, and `codes`.
+
+### Validation against positions
+
+A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions.
+
+Note that substrings can be empty, for instance when the value is shorter than some character position. An empty substring can be valid, depending on the data element definition.
+
+Note that positions can recursively contain other positions via their data element definitions.
+
 ### Validation against a codelist
 
-A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist. To check whether a string value is valid against a referenced codelist, the codelist is resolved with the codelist directory of the Avram schema. Applications MAY resolve referenced codelists against externally defined explicit codelists. If so, the application MUST make clear whether codelists defined in the codelist directory are overriden or extened. 
+A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
 
-Validation can further be configured
+To check whether a string value is valid against a *referenced codelist*, the codelist is resolved with the codelist directory of the Avram schema. Applications MAY resolve referenced codelists against externally defined explicit codelists. If so, the application MUST make clear whether codelists defined in the codelist directory are overriden or extened.
 
+Validation can further be configured:
+
+* to not validate against codelists (`ignore_codes`)
 * to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
 * to allow codes defined as deprecated in the subfield schedules or positions (`allow_deprecated`)
 
