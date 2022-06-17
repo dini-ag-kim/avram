@@ -11,6 +11,9 @@ properties:
   url:
     type: string
     format: uri
+  non-empty-string:
+    type: string
+    minLength: 1
   profile:
     type: string
     format: uri
@@ -54,7 +57,7 @@ definitions:
         additionalProperties: false
         properties:
           tag:
-            type: string
+            $ref: '#/definitions/non-empty-string'
           label:
             type: string
           occurrence:
@@ -97,8 +100,7 @@ definitions:
           checks:
             $ref: '#/definitions/checks'
   regex:
-    type: string
-    minLength: 1
+    $ref: '#/definitions/non-empty-string'
   positions:
     type: object
     patternProperties:
@@ -128,38 +130,40 @@ definitions:
              - subfields
   subfield-schedule:
     type: object
-    additionalProperties: false
-    properties:
-      code:
-        type: string
-      label:
-        type: string
-      description:
-        type: string
-      repeatable:
-        type: boolean
-      required:
-        type: boolean
-      url:
-        $ref: '#/definitions/url'
-      order:
-        type: integer
-      positions:
-        $ref: '#/definitions/positions'
-      codes:
-        $ref: '#/definitions/codelist'
-      deprecated-codes:
-        $ref: '#/definitions/codelist'
-      pica3:
-        type: string
-      modified:
-        $ref: '#/definitions/timestamp'
-      total:
-        $ref: '#/definitions/non-negative-integer'
-      records:
-        $ref: '#/definitions/non-negative-integer'
-      checks:
-        $ref: '#/definitions/checks'
+    patternProperties:
+      '^.*$':
+        type: object
+        properties:
+          code:
+            type: string
+          label:
+            type: string
+          description:
+            type: string
+          repeatable:
+            type: boolean
+          required:
+            type: boolean
+          url:
+            $ref: '#/definitions/url'
+          order:
+            type: integer
+          positions:
+            $ref: '#/definitions/positions'
+          codes:
+            $ref: '#/definitions/codelist'
+          deprecated-codes:
+            $ref: '#/definitions/codelist'
+          pica3:
+            type: string
+          modified:
+            $ref: '#/definitions/timestamp'
+          total:
+            $ref: '#/definitions/non-negative-integer'
+          records:
+            $ref: '#/definitions/non-negative-integer'
+          checks:
+            $ref: '#/definitions/checks'
   indicator:
     oneOf:
       - type: 'null'
