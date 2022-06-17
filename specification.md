@@ -51,6 +51,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### Data types
 
+A **string** is a sequence of Unicode code points.
+
 A **timestamp** is a date or datetime as defined with XML Schema datatype [datetime](https://www.w3.org/TR/xmlschema-2/#dateTime) (`-?YYYY-MM-DDThh:mm:ss(\.s+)?(Z|[+-]hh:mm)?`) [date](https://www.w3.org/TR/xmlschema-2/#date) (`-?YYYY-MM-DD(Z|[+-]hh:mm)?`), [gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth) (`-?YYYY-MM`), or [gYear](https://www.w3.org/TR/xmlschema-2/#gYear) (`-?YYYY`).
 
 A **regular expression** is a non-empty string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern.
@@ -437,7 +439,7 @@ An Avram Schema MAY include references to additional validation rules with key `
 
 * field definitions MUST NOT include the keys `indicator1` and `indicator2`.
 * tags of a field identifier and field definition MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
-* field identifiers and field definitions MUST NOT include a [field occurence] if tag start with digit `2`.
+* field identifiers and field definitions MUST NOT include a [field occurrence] if tag start with digit `2`.
 * field identifier and field definition MUST NOT include a [field counter] if tag does not start with digit `2`.
 
 ### Metaschema
@@ -514,7 +516,7 @@ A value is always valid if the definition contains neither of keys `pattern`, `p
 
 ### Validation against positions
 
-A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions.
+A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions. Character positions are counted by Unicode code points.
 
 Note that substrings can be empty, for instance when the value is shorter than some character position. An empty substring can be valid, depending on the data element definition.
 
