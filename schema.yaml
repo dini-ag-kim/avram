@@ -11,9 +11,6 @@ properties:
   url:
     type: string
     format: uri
-  non-empty-string:
-    type: string
-    minLength: 1
   profile:
     type: string
     format: uri
@@ -41,6 +38,9 @@ properties:
 required:
   - fields
 definitions:
+  non-empty-string:
+    type: string
+    minLength: 1
   url:
     type: string
     format: uri
