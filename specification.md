@@ -514,6 +514,8 @@ A value (given as string), is valid if it conforms to a definition (given as [fi
 
 A value is always valid if the definition contains neither of keys `pattern`, `positions`, and `codes`.
 
+Note that the pattern is not anchored by default, so `^` and/or `$` must be included to match start and/or end of the value.
+
 ### Validation against positions
 
 A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions. Character positions are counted by Unicode code points.
