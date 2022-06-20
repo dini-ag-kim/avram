@@ -14,6 +14,8 @@ properties:
   profile:
     type: string
     format: uri
+  family:
+    $ref: '#/definitions/non-empty-string'
   $schema:
     type: string
     format: uri

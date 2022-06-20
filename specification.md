@@ -4,7 +4,7 @@ short: Avram
 language: en
 ---
 
-**Avram** is a [schema language](../../schema) for [MARC](../../marc) and related formats such as [PICA](../../pica) and [MAB](../../mab).
+**Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
 * author: Jakob Voß
 * version: 0.8.1
@@ -24,8 +24,7 @@ language: en
   - [Subfield schedule](#subfield-schedule)
   - [Indicator definition](#indicator-definition)
   - [Codelist](#codelist)
-  - [Additional rules for MARC-based formats](#additional-rules-for-marc-based-formats)
-  - [Additional rules for PICA-based formats](#additional-rules-for-pica-based-formats)
+  - [Additional rules for specific record families](#additional-rules-for-specific-record-families)
   - [Metaschema](#metaschema)
 - [Validation rules](#validation-rules)
   - [Record validation](#record-validation)
@@ -85,6 +84,12 @@ Fields with subfields, also called **variable fields**, MAY also have
 * either two **indicators**, each being a single character,
 * or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
 
+The record model can furthe be restricted by a **format family** such as the following:
+
+* In `pica` records all fields are variable fields without indicators
+* In `marc` records fields never have occurrence
+* In `flat` records all fields have flat field values 
+
 The encoding of records in individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
 
 ## Schema format
@@ -102,6 +107,7 @@ A schema SHOULD contain keys documenting the format defined by the schema:
 * `title` with the name of the format
 * `description` with a short description of the format
 * `url` with a homepage URL of the format
+* `family` with an expected record format family
 * `profile` with an URI of the format
 * `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
@@ -434,12 +440,18 @@ An Avram Schema MAY include references to additional validation rules with key `
 }
 ~~~
 
-### Additional rules for MARC-based formats
+### Additional rules for specific record families
+
+#### MARC-based formats
+
+Schemas with record family `marc`:
 
 * [field definitions](#field-definition) MUST NOT include the keys `occurrence`, `counter`, `pica3`.
 * tags of a field definition or [field identifier] MUST either be the character sequence `LDR` for specification of the record leader, or consist of three digits (e.g. `001`).
 
-### Additional rules for PICA-based formats
+#### PICA-based formats
+
+Schemas with record family `pica`:
 
 * field definitions MUST NOT include the keys `indicator1` and `indicator2`.
 * tags of a field identifier and field definition MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
@@ -606,13 +618,14 @@ Option | Aspect | Implication
 
 ### Changes
 
-#### NEXT
+#### 0.8.1 (2022-06-20)
 
 * Allow simple string for referenced codelists
 * Simplify treatment of overlapping field identifiers
 * Disallow empty string regular expressions
 * Extend formal description of validation
 * Rename "fixed fields" to "flat fields"
+* Add optional schema key `family`
 
 #### 0.8.0 (2022-04-25)
 
