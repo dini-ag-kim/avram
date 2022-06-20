@@ -359,7 +359,7 @@ and further MAY contain keys:
 A **codelist** is 
 
 * either a JSON object that maps codes to code definitions (**explicit codelist**)
-* or an URI (**referenced codelist**).
+* or a non-empty string that SHOULD be an URI (**referenced codelist**).
 
 A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
 

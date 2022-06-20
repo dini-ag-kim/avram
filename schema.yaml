@@ -186,8 +186,7 @@ definitions:
         $ref: '#/definitions/regex'
   codelist:
     oneOf:
-      - type: string
-        format: uri
+      - $ref: '#/definitions/non-empty-string'
       - $ref: '#/definitions/explicitcodelist'
   explicitcodelist:
     type: object
