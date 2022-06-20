@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for [MARC](../../marc) and related formats such as [PICA](../../pica) and [MAB](../../mab).
 
 * author: Jakob Voß
-* version: 0.8.0
-* date: 2022-04-25
+* version: 0.8.1
+* date: 2022-06-20
 
 ## Table of Contents
 
@@ -77,10 +77,10 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 
 Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
 
-* either a **fixed field value**, being a non-empty string,
+* either a **flat field value**, being a non-empty string,
 * or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a character) and **subfield value** (being a non-empty string).
 
-Fields with subfields, also called **variable fields** MAY also have
+Fields with subfields, also called **variable fields**, MAY also have
 
 * either two **indicators**, each being a single character,
 * or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
@@ -192,14 +192,14 @@ The field definition MAY further contain keys:
 * `indicator2` with second [indicator definition] or `null`
 * `pica3` with corresponding Pica3 number
 * `modified` with a timestamp
-* `positions` with a specification of [positions] (for fixed fields)
+* `positions` with a specification of [positions] (for flat fields)
 * `subfields` with a [subfield schedule] (for variable fields)
 * `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * `checks` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-A field definition MUST NOT contain both keys for fixed fields (`positions`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
+A field definition MUST NOT contain both keys for flat fields (`positions`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -240,7 +240,7 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
 
 [positions]: #positions
 
-Subfield values and fixed field values can be specified **positions**, being a
+Subfield values and flat field values can be specified **positions**, being a
 JSON object that maps **character positions** to data **element definitions**.
 A character position is a range not consisting of zeroes only. It is
 RECOMMENDED to use sequences of two digits.
@@ -483,7 +483,7 @@ A field is valid against a [field definition] if the following rules are met:
 
 * If the field contains indicators, their values must be valid by [value validation](#value-validation) against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator) not being `null`.
 
-* If the field is a fixed field, its field value must be valid by [value validation].
+* If the field is a flat field, its field value must be valid by [value validation].
 
 * If the field is a variable field:
 
@@ -571,7 +571,7 @@ Option | Aspect | Implication
 `ignore_subfields` | [field validation] | ignore subfields
 `ignore_unknown_subfields` | [field validation] | ignore subfields without subfield definition
 `check_subfield_order` | [field validation] | additionally validate order of subfields
-`ignore_values` | [value validation] | ignore all fixed field values and subfield values
+`ignore_values` | [value validation] | ignore all flat field values and subfield values
 `ignore_codes` | [validation with codelists] | don't validate with codelists
 `ignore_unknown_codelists` | [validation with codelists] | don't validate with unresolveable referenced codelists
 
@@ -612,6 +612,7 @@ Option | Aspect | Implication
 * Simplify treatment of overlapping field identifiers
 * Disallow empty string regular expressions
 * Extend formal description of validation
+* Rename "fixed fields" to "flat fields"
 
 #### 0.8.0 (2022-04-25)
 
