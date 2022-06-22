@@ -76,6 +76,12 @@ definitions:
             type: boolean
           pattern:
             $ref: '#/definitions/regex'
+          codes:
+            $ref: '#/definitions/codelist'
+          deprecated-codes:
+            $ref: '#/definitions/codelist'
+          positions:
+            $ref: '#/definitions/positions'
           url:
             $ref: '#/definitions/url'
           indicator1:
@@ -88,11 +94,6 @@ definitions:
             $ref: '#/definitions/subfield-schedule'
           deprecated-subfields:
             $ref: '#/definitions/subfield-schedule'
-          positions:
-            $ref: '#/definitions/positions'
-          types:
-            $ref: '#/definitions/field-types'
-            description: 'deprecated, will be disallowed!'
           modified:
             $ref: '#/definitions/timestamp'
           total:

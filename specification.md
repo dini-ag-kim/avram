@@ -50,7 +50,7 @@ The document is managed in a git repository at <https://github.com/gbv/avram> to
 
 ### Conformance requirements
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119].
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119].
 
 ### Data types
 
@@ -199,13 +199,16 @@ The field definition MAY further contain keys:
 * `pica3` with corresponding Pica3 number
 * `modified` with a timestamp
 * `positions` with a specification of [positions] (for flat fields)
+* `pattern` with a regular expression (for flat fields)
+* `codes` with a [codelist]
+* `deprecated-codes` with a [codelist] of deprecated codes (for flat fields)
 * `subfields` with a [subfield schedule] (for variable fields)
 * `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * `checks` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-A field definition MUST NOT contain both keys for flat fields (`positions`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
+A field definition MUST NOT contain both keys for flat fields (`positions`, `pattern`, `codes` and/or `deprecated-codes`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -617,6 +620,10 @@ Option | Aspect | Implication
 * [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
 
 ### Changes
+
+#### NEXT
+
+* Allow `pattern`, `codes` and `deprecated-codes` at flat field definitions
 
 #### 0.8.1 (2022-06-20)
 
