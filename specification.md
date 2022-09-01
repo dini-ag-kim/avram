@@ -44,7 +44,7 @@ language: en
 
 MARC and related formats such as PICA and MAB are used since decades as the basis for library automation. Several variants, dialects and profiles exist for different applications. The Avram schema language allows to specify individual formats for documentation, validation, and requirements engineering. The schema language is named after [Henriette D. Avram (1919-2006)](https://en.wikipedia.org/wiki/Henriette_Avram) who devised MARC as the first automated cataloging system in the 1960s.
 
-The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas. The format can also be used to express results of record analysis.
+The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas. The format can also be used to express results of record analysis. Avram schemas cover library formats based on MARC and PICA as well as simple key-value structures.
 
 The document is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
 
@@ -58,7 +58,7 @@ A **string** is a sequence of Unicode code points.
 
 A **timestamp** is a date or datetime as defined with XML Schema datatype [datetime](https://www.w3.org/TR/xmlschema-2/#dateTime) (`-?YYYY-MM-DDThh:mm:ss(\.s+)?(Z|[+-]hh:mm)?`) [date](https://www.w3.org/TR/xmlschema-2/#date) (`-?YYYY-MM-DD(Z|[+-]hh:mm)?`), [gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth) (`-?YYYY-MM`), or [gYear](https://www.w3.org/TR/xmlschema-2/#gYear) (`-?YYYY`).
 
-A **regular expression** is a non-empty string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern.
+A **regular expression** is a non-empty string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern with `.` matching all characters, including newlines.
 
 A **language** is a natural language identifier as defined with XML Schema datatype [language](https://www.w3.org/TR/xmlschema-2/#language).
 
@@ -109,7 +109,7 @@ A schema SHOULD contain keys documenting the format defined by the schema:
 * `title` with the name of the format
 * `description` with a short description of the format
 * `url` with a homepage URL of the format
-* `family` with a record [format family]
+* `family` with a [format family]
 * `profile` with an URI of the format
 * `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
@@ -170,7 +170,7 @@ A [field] **matches** a field identifier if the tag of the field is equal to the
 
 * the field has no occurrence and the field identifier has no field occurrence nor field counter,
 * or the occurrence of the field matches the range of the field occurrence,
-* or the first subfield value of subfield with subfield code `x` matches the range of the field counter. 
+* or the first subfield value of subfield with subfield code `x` matches the range of the field counter.
 
 ##### Examples
 
@@ -424,24 +424,24 @@ An Avram Schema MAY include references to additional validation rules with key `
         "birth": {
             "subfields": {
                 "Y": { "label": "year" },
-                    "M": { "label": "month" },
-                    "D": { "label": "day" }
+                "M": { "label": "month" },
+                "D": { "label": "day" }
             },
-                "checks": "http://example.org/valid-date"
+            "checks": "http://example.org/valid-date"
         },
-            "death": {
-                "subfields": {
-                    "Y": { "label": "year" },
-                    "M": { "label": "month" },
-                    "D": { "label": "day" }
-                },
-                "checks": "http://example.org/valid-date"
-            }
+        "death": {
+            "subfields": {
+                "Y": { "label": "year" },
+                "M": { "label": "month" },
+                "D": { "label": "day" }
+            },
+            "checks": "http://example.org/valid-date"
+        }
     },
-        "checks": [
-            "death must not be earlier than birth",
+    "checks": [
+        "death must not be earlier than birth",
         "birth only allowed before 1950 for privacy reasons"
-        ]
+    ]
 }
 ~~~
 
@@ -451,27 +451,26 @@ A format family restricts the [model of records](#records) than can be described
 
 #### flat formats
 
-Field definitions MUST NOT include keys `occurrence`, `counter`, `indicator1`, `indicator2`, `subfields`, or `deprecated-subfields`.
+Field identifiers are plain tags. Field definitions MUST NOT include keys `occurrence`, `counter`, `indicator1`, `indicator2`, `subfields`, or `deprecated-subfields`.
 
 #### marc formats
 
-Field definitions MUST NOT include keys `occurrence` or `counter`. Field definitions of flat fields MUST NOT have keys `indicator1` or `indicator2`. Field identifiers MUST either be the character sequence `LDR` or three digits. 
+Field identifiers are plain tags and MUST either be the character sequence `LDR` or three digits. Field definitions MUST NOT include keys `occurrence` or `counter`. Field definitions of flat fields MUST NOT have keys `indicator1` or `indicator2`.
 
 #### pica formats
 
-Field definitionss MUST NOT include keys `indicator1` or `indicator2`. Tags MUST match the regular expression `^[012][0-9][0-9][A-Z@]`. Field identifiers MUST NOT include a [field counter] if its tag starts with digit `0` or `1` and MUST NOT include a [field occurrence] if its tag starts with digit `2`.
+Field identifiers MUST NOT include a [field counter] if its tag starts with digit `0` or `1` and MUST NOT include a [field occurrence] if its tag starts with digit `2`.Tags MUST match the regular expression `^[012][0-9][0-9][A-Z@]`. Field definitions MUST NOT include keys `indicator1` or `indicator2`.
 
 #### mab formats
 
-Field definitions MUST NOT include keys `indicator2`, `occurrence`, or `counter`. Tags and field identifiers MUST consist of excactely three digits.
+Field identifiers are plain tags and MUST consist of excactely three digits. Field definitions MUST NOT include keys `indicator2`, `occurrence`, or `counter`. 
 
 ### Metaschema
 
 A [JSON Schema](http://json-schema.org/) to validate Avram Schemas is available
 at <https://format.gbv.de/schema/avram/schema.json>.
 
-Applications MAY extend the metaschema for particular formats, for instance the
-further restrict the allowed set of [field identifiers].
+Applications MAY extend the metaschema for particular [format families](#records) and formats, for instance by further restriction of the allowed set of [field identifiers].
 
 ## Validation rules
 
@@ -616,19 +615,31 @@ Option | Aspect | Implication
 
 ### Informative references
 
-* [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
-* [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
-* [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
-* [discussion that lead to Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
-* [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
-* [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
+#### Implementations
+
+- [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
+- [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
+- [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
+- [avram-js](https://github.com/gbv/avram-js) draft of JavaScript implementation
+
+#### Related standards
+
+- [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
+- [JSON Table Schema](https://frictionlessdata.io/specs/table-schema/) schema format for tabular data
+- [JSON Schema](https://json-schema.org/) schema language for JSON formats
+
+#### Background information
+
+- [discussion that lead to creation of Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
 
 ### Changes
 
-#### NEXT
+#### 0.8.2 (2022-09-01)
 
 * Allow `pattern`, `codes` and `deprecated-codes` at flat field definitions
 * Allow flat field values and subfield values to be empty
+* Let dot in regular expressions also match newlines
+* Extend definition of format families
 
 #### 0.8.1 (2022-06-20)
 
