@@ -76,8 +76,8 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 
 Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
 
-* either a **flat field value**, being a non-empty string,
-* or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a character) and **subfield value** (being a non-empty string).
+* either a **flat field value**, being a string,
+* or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a character) and **subfield value** (being a string).
 
 Fields with subfields, also called **variable fields**, MAY also have
 
@@ -624,6 +624,7 @@ Option | Aspect | Implication
 #### NEXT
 
 * Allow `pattern`, `codes` and `deprecated-codes` at flat field definitions
+* Allow flat field values and subfield values to be empty
 
 #### 0.8.1 (2022-06-20)
 
