@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
 * author: Jakob Voß
-* version: 0.8.1
-* date: 2022-06-20
+* version: 0.8.2
+* date: 2022-09-01
 
 ## Table of Contents
 
