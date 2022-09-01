@@ -154,8 +154,8 @@ Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers 
 
 [field identifier]: #field-identifier
 [field identifiers]: #field-identifier
-[field counter]: #field-counter
-[field occurrence]: #field-occurrence
+[field counter]: #field-identifier
+[field occurrence]: #field-identifier
 
 A **field identifier** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by
 
