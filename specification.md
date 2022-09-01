@@ -24,7 +24,7 @@ language: en
   - [Subfield schedule](#subfield-schedule)
   - [Indicator definition](#indicator-definition)
   - [Codelist](#codelist)
-  - [Additional rules for specific record families](#additional-rules-for-specific-record-families)
+  - [Restrictions by format family](#restrictions-by-format-family)
   - [Metaschema](#metaschema)
 - [Validation rules](#validation-rules)
   - [Record validation](#record-validation)
@@ -73,6 +73,7 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 [field]: #records
 [tag]: #records
 [occurrence]: #records
+[format family]: #records
 
 Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
 
@@ -84,11 +85,12 @@ Fields with subfields, also called **variable fields**, MAY also have
 * either two **indicators**, each being a single character,
 * or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
 
-The record model can furthe be restricted by a **format family** such as the following:
+The record model can further be restricted by a **format family**, identified by a non-empty string. The following format families are part of this specification and imply [restrictions on schemas for this format family](#restrictions-by-format-family):
 
-* In `pica` records all fields are variable fields without indicators
-* In `marc` records fields never have occurrence
-* In `flat` records all fields have flat field values 
+* `flat`: all fields are flat without indicators or occurrences (simple key-value structures with repeatable keys)
+* `marc`: flat fields have no indicators or occurrences, variable fields have two indicators and no occurrences
+* `pica`: all fields are variable without indicators
+* `mab`: fields have one indicator and no occurrences
 
 The encoding of records in individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
 
@@ -107,7 +109,7 @@ A schema SHOULD contain keys documenting the format defined by the schema:
 * `title` with the name of the format
 * `description` with a short description of the format
 * `url` with a homepage URL of the format
-* `family` with an expected record format family
+* `family` with a record [format family]
 * `profile` with an URI of the format
 * `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
@@ -443,23 +445,25 @@ An Avram Schema MAY include references to additional validation rules with key `
 }
 ~~~
 
-### Additional rules for specific record families
+### Restrictions by format family
 
-#### MARC-based formats
+A format family restricts the [model of records](#records) than can be described by an Avram schema. Known values of schema key `family` imply restriction on [field identifiers](#field-identifier) and [field definitions](#field-definition).
 
-Schemas with record family `marc`:
+#### flat formats
 
-* [field definitions](#field-definition) MUST NOT include the keys `occurrence`, `counter`, `pica3`.
-* tags of a field definition or [field identifier] MUST either be the character sequence `LDR` for specification of the record leader, or consist of three digits (e.g. `001`).
+Field definitions MUST NOT include keys `occurrence`, `counter`, `indicator1`, `indicator2`, `subfields`, or `deprecated-subfields`.
 
-#### PICA-based formats
+#### marc formats
 
-Schemas with record family `pica`:
+Field definitions MUST NOT include keys `occurrence` or `counter`. Field definitions of flat fields MUST NOT have keys `indicator1` or `indicator2`. Field identifiers MUST either be the character sequence `LDR` or three digits. 
 
-* field definitions MUST NOT include the keys `indicator1` and `indicator2`.
-* tags of a field identifier and field definition MUST be three digits, the first `0` to `2`, followed by an uppercase letter (`A` to `Z`) or `@`.
-* field identifiers and field definitions MUST NOT include a [field occurrence] if tag start with digit `2`.
-* field identifier and field definition MUST NOT include a [field counter] if tag does not start with digit `2`.
+#### pica formats
+
+Field definitionss MUST NOT include keys `indicator1` or `indicator2`. Tags MUST match the regular expression `^[012][0-9][0-9][A-Z@]`. Field identifiers MUST NOT include a [field counter] if its tag starts with digit `0` or `1` and MUST NOT include a [field occurrence] if its tag starts with digit `2`.
+
+#### mab formats
+
+Field definitions MUST NOT include keys `indicator2`, `occurrence`, or `counter`. Tags and field identifiers MUST consist of excactely three digits.
 
 ### Metaschema
 
@@ -473,7 +477,7 @@ further restrict the allowed set of [field identifiers].
 
 ***Rules how to validate records against Avram Schemas have not fully been specified yet!***
 
-Avram schemas can be used to validate [records] (see [record validation]). Validation can be configured with [validation options](#validation-options).
+Avram schemas can be used to validate [records] (see [record validation]). An Avram validator MAY limit validation to selected [format families](#record). Validation can be configured with [validation options](#validation-options).
 
 ### Record validation
 
