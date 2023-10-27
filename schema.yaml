@@ -108,7 +108,23 @@ definitions:
     type: object
     patternProperties:
       '^[0-9]+(-[0-9]+)?$':
-        $ref: '#/definitions/codedvalue'
+        type: object
+        additionalProperties: false
+        properties:
+          label:
+            type: string
+          description:
+            type: string
+          url:
+            $ref: '#/definitions/url'
+          codes:
+            $ref: '#/definitions/codelist'
+          pattern:
+            $ref: '#/definitions/regex'
+          start:
+            $ref: '#/definitions/non-negative-integer'
+          end:
+            $ref: '#/definitions/non-negative-integer'
   field-types:
     oneOf:
       - type: object

@@ -64,7 +64,7 @@ A **language** is a natural language identifier as defined with XML Schema datat
 
 A **non-negative integer** is a natural number (0, 1, 2...)
 
-A **range** is a sequence of digits, optionally followed by a dash (`-`) and a second sequence of digits with same length and numerical value larger than the first sequence (examples: `0`, `00`, `3-7`, `03-12`, `01-09`...). A string **matches** a range if it is a sequence of digits of same length as the sequence(s) in the range and the numerical value is equal to or between the numerical value(s) of the range. Applications MAY accept and normalize two sequences of different length to valid ranges.
+A **range** is a sequence of digits, optionally followed by a dash (`-`) and a second sequence of digits with same length. The numeric values of each sequence are called **start number** and **end number**, respectively. The end number, if given, must be larger than the start number. Examples of valid ranges include `0`, `00`, `3-7`, `03-12`, and `01-09` but not `3-12` nor `7-2`. A string **matches** a range if it is a sequence of digits of same length as the sequence(s) in the range and the numerical value is equal to or within the start number and the end number of the range. Applications MAY accept and normalize sequences of different length to valid ranges.
 
 ### Records
 
@@ -253,12 +253,13 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
 
 Subfield values and flat field values can be specified **positions**, being a
 JSON object that maps **character positions** to data **element definitions**.
-A character position is a range not consisting of zeroes only. It is
-RECOMMENDED to use sequences of two digits.
+A character position is a range. It is RECOMMENDED to use sequences of two digits.
 
 A **data element definition** is a JSON object that SHOULD contain key:
 
 * `label` with the name of the data element
+* `start` with the start number of the character position
+* `end` with the end number of the character position or the start number if there is no end number
 
 The data element definition MAY further contain keys:
 
@@ -267,18 +268,20 @@ The data element definition MAY further contain keys:
 * `codes` with a [codelist]
 * `pattern` with a regular expression
 
+Character positions of a positions object MUST NOT overlap. Two character positions overlap if there is a string that matches both of them.
+
 ##### Example
 
 * Positions for MARC 21 field `005`:
 
     ~~~json
     {
-      "00-03": { "label": "year" },
-      "04-05": { "label": "month" },
-      "06-07": { "label": "day" },
-      "08-09": { "label": "hour" },
-      "10-11": { "label": "minute" },
-      "12-15": { "label": "second" }
+      "00-03": { "label": "year", "start": 0, "end": 3 },
+      "04-05": { "label": "month", "start": 4, "end": 5 },
+      "06-07": { "label": "day", "start": 6, "end": 7 },
+      "08-09": { "label": "hour", "start": 8, "end": 9 },
+      "10-11": { "label": "minute", "start": 10, "end": 11 },
+      "12-15": { "label": "second", "start": 12, "end": 15 }
     }
     ~~~
 
@@ -636,6 +639,7 @@ Option | Aspect | Implication
 
 - Remove `deprecated-fields`, `deprecated-subfields` and `deprecated-codes`.
 - Allow `created` and `modified` at schema, field, subfield and code.
+- Add positions keys `start` and `end`.
 
 #### 0.8.2 (2022-09-01)
 
