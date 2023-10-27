@@ -19,6 +19,10 @@ properties:
   $schema:
     type: string
     format: uri
+  created:
+    $ref: '#/definitions/timestamp'
+  modified:
+    $ref: '#/definitions/timestamp'
   fields:
     $ref: '#/definitions/field-schedule'
   count:
@@ -88,6 +92,8 @@ definitions:
             type: string
           subfields:
             $ref: '#/definitions/subfield-schedule'
+          created:
+            $ref: '#/definitions/timestamp'
           modified:
             $ref: '#/definitions/timestamp'
           total:
@@ -151,6 +157,8 @@ definitions:
             $ref: '#/definitions/codelist'
           pica3:
             type: string
+          created:
+            $ref: '#/definitions/timestamp'
           modified:
             $ref: '#/definitions/timestamp'
           total:
@@ -195,6 +203,10 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
+          created:
+            $ref: '#/definitions/timestamp'
+          modified:
+            $ref: '#/definitions/timestamp'
   checks:
     oneOf:
       - type: string

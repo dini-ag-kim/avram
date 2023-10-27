@@ -119,6 +119,8 @@ The schema MAY contain keys:
 * `codelists` with a [codelist directory](#codelist)
 * `checks` with [external validation rules](#external-validation-rules)
 * `records` with a non-negative integer to indicate a number of records
+* `created` with a timestamp when this schema was created
+* `modified` with a timestamp when this schema was updated
 
 ##### Example
 
@@ -198,7 +200,8 @@ The field definition MAY further contain keys:
 * `indicator1` with first [indicator definition] or `null`
 * `indicator2` with second [indicator definition] or `null`
 * `pica3` with corresponding Pica3 number
-* `modified` with a timestamp
+* `created` with a timestamp when this field was introduced
+* `modified` with a timestamp when this field was changed
 * `positions` with a specification of [positions] (for flat fields)
 * `pattern` with a regular expression (for flat fields)
 * `codes` with a [codelist]
@@ -305,7 +308,8 @@ The subfield definition MAY further contain keys:
 * `order` with a non-negative integer used to specify a partial or complete order
   of subfields
 * `pica3` with a corresponding Pica3 syntax definition
-* `modified` with a timestamp
+* `created` with a timestamp when this subfield was introduced
+* `modified` with a timestamp when this subfield was updated
 * `total` with a non-negative integer to indicate the number of times this subfield has been found
 * `records` with a non-negative integer to indicate the number of records this subfield has been found in
 
@@ -376,6 +380,8 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
 * `description` with additional description of the code
 * `total` with a non-negative integer to indicate the number of times this code has been found
 * `records` with a non-negative integer to indicate the number of records this code has been found in
+* `created` with a timestamp when this code was introduced
+* `modified` with a timestamp when this code was updated
 
 A **codelist directory** is a JSON object that maps referenced codelists to explicit codelists.
 
@@ -387,7 +393,8 @@ A **codelist directory** is a JSON object that maps referenced codelists to expl
     "label": "No specified type"
   },
   "a": {
-    "label": "Archival"
+    "label": "Archival",
+    "created": "2022"
   },
   "x": { }
 }
@@ -628,6 +635,7 @@ Option | Aspect | Implication
 #### 0.?.? (2023-??-??)
 
 - Remove `deprecated-fields`, `deprecated-subfields` and `deprecated-codes`.
+- Allow `created` and `modified` at schema, field, subfield and code.
 
 #### 0.8.2 (2022-09-01)
 
