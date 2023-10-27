@@ -2,8 +2,6 @@
 
 > Specification of a schema language for MARC and related formats such as PICA and MAB
 
-[![Build Status](https://travis-ci.org/gbv/avram.svg?branch=master)](https://travis-ci.org/gbv/avram)
-
 This git repository contains the specification of **Avram** Schema Language.
 
 The specification is published at <https://format.gbv.de/schema/avram/specification>. See repository <https://github.com/gbv/format.gbv.de/> for additional sources.
