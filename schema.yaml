@@ -21,8 +21,6 @@ properties:
     format: uri
   fields:
     $ref: '#/definitions/field-schedule'
-  deprecated-fields:
-    $ref: '#/definitions/field-schedule'
   count:
     $ref: '#/definitions/non-negative-integer'
     description: 'deprecated, use "records" instead!'
@@ -78,8 +76,6 @@ definitions:
             $ref: '#/definitions/regex'
           codes:
             $ref: '#/definitions/codelist'
-          deprecated-codes:
-            $ref: '#/definitions/codelist'
           positions:
             $ref: '#/definitions/positions'
           url:
@@ -91,8 +87,6 @@ definitions:
           pica3:
             type: string
           subfields:
-            $ref: '#/definitions/subfield-schedule'
-          deprecated-subfields:
             $ref: '#/definitions/subfield-schedule'
           modified:
             $ref: '#/definitions/timestamp'
@@ -155,8 +149,6 @@ definitions:
             $ref: '#/definitions/positions'
           codes:
             $ref: '#/definitions/codelist'
-          deprecated-codes:
-            $ref: '#/definitions/codelist'
           pica3:
             type: string
           modified:
@@ -182,8 +174,6 @@ definitions:
       url:
         $ref: '#/definitions/url'
       codes:
-        $ref: '#/definitions/codelist'
-      deprecated-codes:
         $ref: '#/definitions/codelist'
       pattern:
         $ref: '#/definitions/regex'

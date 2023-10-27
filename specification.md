@@ -116,7 +116,6 @@ A schema SHOULD contain keys documenting the format defined by the schema:
 The schema MAY contain keys:
 
 * `$schema` with an URL of the [Avram metaschema](#metaschema)
-* `deprecated-fields` with a [field schedule]
 * `codelists` with a [codelist directory](#codelist)
 * `checks` with [external validation rules](#external-validation-rules)
 * `records` with a non-negative integer to indicate a number of records
@@ -203,14 +202,12 @@ The field definition MAY further contain keys:
 * `positions` with a specification of [positions] (for flat fields)
 * `pattern` with a regular expression (for flat fields)
 * `codes` with a [codelist]
-* `deprecated-codes` with a [codelist] of deprecated codes (for flat fields)
 * `subfields` with a [subfield schedule] (for variable fields)
-* `deprecated-subfields` with a [subfield schedule] (for variable fields)
 * `checks` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-A field definition MUST NOT contain both keys for flat fields (`positions`, `pattern`, `codes` and/or `deprecated-codes`) and keys for variable fields (`subfields` and/or `deprecated-subfields`) together.
+If a field definition contains keys for variable fields (`subfields`) it MUST NOT contain keys for flat fields (`positions`, `pattern` and/or `codes`).
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -265,7 +262,6 @@ The data element definition MAY further contain keys:
 * `url` with an URL link to documentation
 * `description` with additional description
 * `codes` with a [codelist]
-* `deprecated-codes` with a [codelist] of deprecated codes
 * `pattern` with a regular expression
 
 ##### Example
@@ -303,7 +299,6 @@ The subfield definition MAY further contain keys:
 * `pattern` with a regular expression
 * `positions` with a specification of [positions]
 * `codes` with a [codelist]
-* `deprecated-codes` with a [codelist] of deprecated codes
 * `checks` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
 * `description` with additional description of the subfield
@@ -353,7 +348,6 @@ and further MAY contain keys:
 * `url` with an URL link to documentation
 * `description` with additional description of the indicator
 * `codes` with a [codelist]
-* `deprecated-codes` with a [codelist] of deprecated codes
 
 ##### Example
 
@@ -451,7 +445,7 @@ A format family restricts the [model of records](#records) than can be described
 
 #### flat formats
 
-Field identifiers are plain tags. Field definitions MUST NOT include keys `occurrence`, `counter`, `indicator1`, `indicator2`, `subfields`, or `deprecated-subfields`.
+Field identifiers are plain tags. Field definitions MUST NOT include keys `occurrence`, `counter`, `indicator1`, `indicator2`, or `subfields`.
 
 #### marc formats
 
@@ -491,7 +485,7 @@ A record is valid against a [field schedule] if
 
 If validation option `ignore_unknown_fields` is enabled, all fields not matching a field identifier in the field schedule are valid by definition.
 
-A record is valid against a schema if it is valid against the field schedule given with key `fields` of the schema. If validation option `allow_deprecated` is enabled, a record is also valid if it is valid against the field schedule given with key `deprecated-fields`.
+A record is valid against a schema if it is valid against the field schedule given with key `fields` of the schema.
 
 ### Field validation
 
@@ -513,7 +507,6 @@ Field validation of variable fields can be configured:
 
 * to not validate subfields (`ignore_subfields`)
 * to ignore subfields not defined in the schema (`ignore_unknown_subfields`)
-* to allow subfields defined as deprecated in the schemas (`allow_deprecated`)
 
 Tag and occurrence of a field are not included in field validation as they are part of [record validation](#record-validation).
 
@@ -565,7 +558,6 @@ Validation can further be configured:
 
 * to not validate against codelists (`ignore_codes`)
 * to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
-* to allow codes defined as deprecated in the subfield schedules or positions (`allow_deprecated`)
 
 ### Counting
 
@@ -585,7 +577,6 @@ An Avram validator MAY support selected validation options to configure how vali
 Option | Aspect | Implication
 -------|--------|------------
 `ignore_unknown_fields` | [record validation] | ignore fields without field definition
-`allow_deprecated` | [record validation], [field validation], [validation with codelists] | include deprecated fields, subfields, and/or codelists
 `ignore_subfields` | [field validation] | ignore subfields
 `ignore_unknown_subfields` | [field validation] | ignore subfields without subfield definition
 `check_subfield_order` | [field validation] | additionally validate order of subfields
@@ -634,67 +625,71 @@ Option | Aspect | Implication
 
 ### Changes
 
+#### 0.?.? (2023-??-??)
+
+- Remove `deprecated-fields`, `deprecated-subfields` and `deprecated-codes`.
+
 #### 0.8.2 (2022-09-01)
 
-* Allow `pattern`, `codes` and `deprecated-codes` at flat field definitions
-* Allow flat field values and subfield values to be empty
-* Let dot in regular expressions also match newlines
-* Extend definition of format families
+- Allow `pattern`, `codes` and `deprecated-codes` at flat field definitions
+- Allow flat field values and subfield values to be empty
+- Let dot in regular expressions also match newlines
+- Extend definition of format families
 
 #### 0.8.1 (2022-06-20)
 
-* Allow simple string for referenced codelists
-* Simplify treatment of overlapping field identifiers
-* Disallow empty string regular expressions
-* Extend formal description of validation
-* Rename "fixed fields" to "flat fields"
-* Add optional schema key `family`
+- Allow simple string for referenced codelists
+- Simplify treatment of overlapping field identifiers
+- Disallow empty string regular expressions
+- Extend formal description of validation
+- Rename "fixed fields" to "flat fields"
+- Add optional schema key `family`
 
 #### 0.8.0 (2022-04-25)
 
-* Add codelist directories (`codelists`)
-* Add external validation rules (`checks`)
-* Remove field types (`types`)
-* Allow `deprecated-codes` also at subfield schedules
+- Add codelist directories (`codelists`)
+- Add external validation rules (`checks`)
+- Remove field types (`types`)
+- Allow `deprecated-codes` also at subfield schedules
 
 #### 0.7.1 (2021-10-01)
 
-* More explicitly specificy field occurrence and field counter
-* Textual refactoring
+- More explicitly specificy field occurrence and field counter
+- Textual refactoring
 
 #### 0.7.0 (2021-09-29)
 
-* Rename `count` to `records` to not confuse with `counter`
-* Add `total` and `records` at field definitions, subfield definitions and code definitions
-* Allow URIs as codelists and allow `codes` at subfield level
+- Rename `count` to `records` to not confuse with `counter`
+- Add `total` and `records` at field definitions, subfield definitions and code definitions
+- Allow URIs as codelists and allow `codes` at subfield level
 
 #### 0.6.0 (2020-09-15)
 
-* Add `counter` for PICA-based formats
-* Modify allowed values in `occurrence`
+- Add `counter` for PICA-based formats
+- Modify allowed values in `occurrence`
 
 #### 0.5.0 (2020-08-04)
 
-* Add option field `description` in addition to `label`
-* Add schema field `profile` to identify schemas
+- Add option field `description` in addition to `label`
+- Add schema field `profile` to identify schemas
 
 #### 0.4.0 (2019-05-09)
 
-* Add `count` and `language`
-* Change `occurrence` from three to two digits
+- Add `count` and `language`
+- Change `occurrence` from three to two digits
 
 #### 0.3.0 (2018-03-16)
 
-* Add `deprecated-subfields`
+- Add `deprecated-subfields`
 
 #### 0.2.0 (2018-03-09)
 
-* Add `pattern` at subfields and positions
-* Add `position` at subfields
-* Extend definition of positions
-* Disallow empty strings
+- Add `pattern` at subfields and positions
+- Add `position` at subfields
+- Extend definition of positions
+- Disallow empty strings
 
 #### 0.1.0 (2018-02-20)
 
-* First version
+- First version
 
