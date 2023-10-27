@@ -6,9 +6,9 @@ language: en
 
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
-* author: Jakob Voß
-* version: 0.8.2
-* date: 2022-09-01
+- author: Jakob Voß
+- version: 0.9.0
+- date: 2023-10-27
 
 ## Table of Contents
 
@@ -635,11 +635,11 @@ Option | Aspect | Implication
 
 ### Changes
 
-#### 0.?.? (2023-??-??)
+#### 0.9.0 (2023-10-27)
 
 - Remove `deprecated-fields`, `deprecated-subfields` and `deprecated-codes`.
 - Allow `created` and `modified` at schema, field, subfield and code.
-- Add positions keys `start` and `end`.
+- Add position keys `start` and `end`.
 
 #### 0.8.2 (2022-09-01)
 
