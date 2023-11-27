@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
 - author: Jakob Voß
-- version: 0.9.0
-- date: 2023-10-27
+- version: 0.9.1
+- date: 2023-11-27
 
 ## Table of Contents
 
@@ -379,12 +379,15 @@ A **codelist** is
 
 A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
 
+* `code` with the code
 * `label` with the name of the code
 * `description` with additional description of the code
-* `total` with a non-negative integer to indicate the number of times this code has been found
-* `records` with a non-negative integer to indicate the number of records this code has been found in
 * `created` with a timestamp when this code was introduced
 * `modified` with a timestamp when this code was updated
+* `total` with a non-negative integer to indicate the number of times this code has been found
+* `records` with a non-negative integer to indicate the number of records this code has been found in
+
+Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
 
 A **codelist directory** is a JSON object that maps referenced codelists to explicit codelists.
 
@@ -399,7 +402,9 @@ A **codelist directory** is a JSON object that maps referenced codelists to expl
     "label": "Archival",
     "created": "2022"
   },
-  "x": { }
+  "x": {
+    "code": "x"
+  }
 }
 ~~~
 
@@ -634,6 +639,11 @@ Option | Aspect | Implication
 - [discussion that lead to creation of Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
 
 ### Changes
+
+#### 0.9.1 (2023-11-27)
+
+- Add optional code definition key `code`.
+- Extend Metaschema.
 
 #### 0.9.0 (2023-10-27)
 
