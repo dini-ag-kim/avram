@@ -8,10 +8,12 @@ The specification is published at <https://format.gbv.de/schema/avram/specificat
 
 ## Source files
 
-* `specification.md` - Avram specification in Markdown format
-* `schema.yaml` - Avram JSON Schema (in YAML syntax)
-* `case.yaml` - Avram test case JSON Schema (in YAML syntax)
-* `tests/*.yaml` - Test suite
+- `specification.md` - Avram specification in Markdown format
+- `schema.yaml` - Avram JSON Schema (in YAML syntax)
+- `case.yaml` - Avram test case JSON Schema (in YAML syntax)
+- `test/*.yaml` - Test suite
+- `test/*.js` - Unit tests
+- `test/schema/*.json` - Example schemas
 
 The repository further contains a test script to check well-formedness of JSON schema. Run with:
 
@@ -22,7 +24,7 @@ npm test
 
 ## Test Suite
 
-Subdirectory `tests` contains a set of example schemas and records that
+Subdirectory `test` contains a set of example schemas and records that
 implementors of Avram validation libraries can use to test their validators.
 The directory contains a number of `.yaml` test files which logically group a
 set of test cases. The structure can best be illustrated with an example: 
@@ -52,7 +54,7 @@ or [PICA JSON] format as array of arrays.
 
 The test suite does not fully cover all aspects of Avram yet.
 
-The test suite itself is validated with `npm test`.
+The test suite itself is also validated with `npm test`.
 
 ## Implementations
 

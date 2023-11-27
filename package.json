@@ -9,7 +9,7 @@
     "url": "https://github.com/gbv/avram/issues"
   },
   "scripts": {
-    "test": "mocha check.js",
+    "test": "mocha",
     "schema.json": "js-yaml schema.yaml > schema.json"
   },
   "homepage": "https://github.com/gbv/avram#readme",
