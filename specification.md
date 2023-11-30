@@ -452,24 +452,32 @@ and further MAY contain keys:
 
 A **codelist** is 
 
-* either a JSON object that maps codes to code definitions (**explicit codelist**)
-* or a non-empty string that SHOULD be an URI (**referenced codelist**).
+- either a JSON object that maps codes to code definitions (**explicit codelist**)
+- or a non-empty string that SHOULD be an URI (**codelist reference**).
 
 A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
 
-* `code` with the code
-* `label` with the name of the code
-* `description` with additional description of the code
-* `created` with a timestamp when this code was introduced
-* `modified` with a timestamp when this code was updated
-* `total` with a non-negative integer to indicate the number of times this code has been found
-* `records` with a non-negative integer to indicate the number of records this code has been found in
+- `code` with the code
+- `label` with the name of the code
+- `description` with additional description of the code
+- `created` with a timestamp when this code was introduced
+- `modified` with a timestamp when this code was updated
+- `total` with a non-negative integer to indicate the number of times this code has been found
+- `records` with a non-negative integer to indicate the number of records this code has been found in
 
 Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
 
-A **codelist directory** is a JSON object that maps referenced codelists to explicit codelists. A referenced codelist can be **resolved** to an explicit codelist by looking it up as key in the codelist directory.
+An **extended codelist** is a JSON object having at least the mandatory key `codes` with a [codelist] and optional keys:
 
-##### Examples (explicit, referenced, and truncated codelist directory)
+- `title` with a name of the codelist
+- `description` with additional description of the codelist
+- `created` with a timestamp when this codelist was introduced
+- `modified` with a timestamp when this codelist was updated
+- `url` with a homepage URL or link to documentation of the codelist
+
+A **codelist directory** is a JSON object that maps codelist references to explicit codelists. A codelist reference can be **resolved** by looking up its value as key in the codelist directory to get the corresponding extended codelist and its embedded explicit codelist.
+
+##### Examples (explicit, reference, and codelist directory)
 
 ~~~json
 {
@@ -493,8 +501,11 @@ A **codelist directory** is a JSON object that maps referenced codelists to expl
 ~~~json
 {
   "http://id.loc.gov/vocabulary/languages": {
-    "eng": { "label": "English" },
-    "fre": { "label": "French" }
+    "title": "MARC List for Languages",
+    "codes": {
+      "eng": { "label": "English" },
+      "fre": { "label": "French" }
+    }
   }
 }
 ~~~
@@ -652,14 +663,14 @@ Positions can recursively contain other positions via their data element definit
 [Validation with codelists]: #validation-with-codelists--ar15-
 
 - **[AR17]** A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
-- **[AR18]** A string value is valid against a [referenced codelist](#codelist) if the referenced codelist can be resolved in the codelist directory of the schema and the value is a defined code in this resolved codelist.
+- **[AR18]** A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
-Applications MAY also resolve referenced codelists against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
+Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
 Validation can further be configured:
 
 - to not validate against codelists (`ignore_codes`)
-- to not validate against referenced codelists if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
+- to not validate against codelist references if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
 
 ### Counting
 
@@ -697,7 +708,7 @@ Option | Aspect | Implication
 `ignore_unknown_subfields` | [field validation] | ignore subfields without subfield definition
 `ignore_values` | [value validation] | ignore all flat field values and subfield values
 `ignore_codes` | [validation with codelists] | don't validate with codelists
-`ignore_unknown_codelists` | [validation with codelists] | don't validate with unresolveable referenced codelists
+`ignore_unknown_codelists` | [validation with codelists] | don't validate with unresolveable codelist reference
 `count_records`| [counting] | count and compare number of records
 `count_fields`| [counting] | count and compare number of defined fields
 `count_subfields`| [counting] | count and compare number of defined subfields
@@ -748,6 +759,7 @@ Option | Aspect | Implication
 
 #### 0.9.2 (2023-11-28)
 
+- Change codelist directory to support codelist metadata (*breaking change!*)
 - Remove subfield key `order` and validation option `check_subfield_order`
 - Enumerate and better describe validation rules
 - Add examples and improve wording
