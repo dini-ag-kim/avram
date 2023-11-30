@@ -16,6 +16,7 @@ language: en
   - [Conformance requirements](#conformance-requirements)
   - [Data types](#data-types)
   - [Records](#records)
+  - [Format families](#format-families)
 - [Schema format](#schema-format)
   - [Field schedule](#field-schedule)
   - [Field identifier](#field-identifier)
@@ -56,6 +57,8 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 A **string** is a sequence of Unicode code points.
 
+A **single character** is a string consisting of exactely one Unicode code point.
+
 A **timestamp** is a date or datetime as defined with XML Schema datatype [datetime](https://www.w3.org/TR/xmlschema-2/#dateTime) (`-?YYYY-MM-DDThh:mm:ss(\.s+)?(Z|[+-]hh:mm)?`) [date](https://www.w3.org/TR/xmlschema-2/#date) (`-?YYYY-MM-DD(Z|[+-]hh:mm)?`), [gYearMonth](https://www.w3.org/TR/xmlschema-2/#gYearMonth) (`-?YYYY-MM`), or [gYear](https://www.w3.org/TR/xmlschema-2/#gYear) (`-?YYYY`).
 
 A **regular expression** is a non-empty string that conforms to the [ECMA 262 (2015) regular expression grammar](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-patterns).  The expression is interpreted as Unicode pattern with `.` matching all characters, including newlines.
@@ -73,26 +76,101 @@ A **range** is a sequence of digits, optionally followed by a dash (`-`) and a s
 [field]: #records
 [tag]: #records
 [occurrence]: #records
-[format family]: #records
+[format family]: #format-families
 
 Avram schemas are used to [validate](#validation-rules) and analyze records. A **record** is a non-empty sequence of **fields**, each consisting of a **tag**, being a non-empty string and
 
 * either a **flat field value**, being a string,
-* or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a character) and **subfield value** (being a string).
+* or a non-empty sequence of **subfields**, each being a pair of **subfield code** (being a single character) and **subfield value** (being a string).
 
 Fields with subfields, also called **variable fields**, MAY also have
 
 * either two **indicators**, each being a single character,
 * or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
 
-The record model can further be restricted by a **format family**, identified by a non-empty string. The following format families are part of this specification and imply [restrictions on schemas for this format family](#restrictions-by-format-family):
+The record model can further be restricted by a [format family].
 
-* `flat`: all fields are flat without indicators or occurrences (simple key-value structures with repeatable keys)
-* `marc`: flat fields have no indicators or occurrences, variable fields have two indicators and no occurrences
-* `pica`: all fields are variable without indicators
-* `mab`: fields have one indicator and no occurrences
+The encoding of records in JSON or other individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
 
-The encoding of records in individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
+##### Example
+
+Possible JSON serialization of a record with two flat fields with occurence and
+one field with three subfields of code `g`, `g`, and `s`:
+
+~~~json
+[
+  {
+    "tag": "uri",
+    "occurrence": "01",
+    "value": "http://www.wikidata.org/entity/Q10953"
+  },
+  {
+    "tag": "uri",
+    "occurrence": "02"
+    "value": "https://viaf.org/viaf/18236820"
+  },
+  {
+    "tag": "name",
+    "subfields": [
+      "g", "Henriette",
+      "g", "Davidson",
+      "s", "Avram"
+    ]
+  }
+}
+~~~
+
+### Format families
+
+The [record model](#records) can be restricted by a **format family**, identified by a non-empty string. The following format families are part of this specification:
+
+- `flat`: all fields are flat without indicators or occurrences (simple key-value structures with repeatable keys)
+
+- `marc`: flat fields have no indicators or occurrences, variable fields have two indicators and no occurrences.
+   Field tags are either the string `LDR` or a string of three digits.
+
+- `pica`: all fields are variable without indicators. Field tags consist of four characters being
+   a digit `0`, `1`, or `2`, followed by two digits, followed by an uppercase letter `A` to `Z` or `@`.
+
+- `mab`: fields have one indicator and no occurrences. Field tags consist of three digits.
+
+Restrictions on records by a format family imply [restrictions on schemas for this format family](#restrictions-by-format-family).
+
+##### Example
+
+Possible JSON serialization of a record of family `flat`, `marc`, and `pica`, respectively: 
+
+~~~json
+[
+  { "tag": "given", "value": "Henriette" },
+  { "tag": "given", "value": "Davidson" },
+  { "tag": "surname", "value": "Avram" },
+  { "tag": "birth", "value": "1919-10-07" }
+]
+~~~
+
+~~~json
+[
+  { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
+  { "tag": "001", "value": "1089521669" },
+  { 
+    "tag": "100",
+    "indicators" [ "1", " " ],
+    "subfields": [
+      "a", "Avram, Henriette D."
+      "d", "1919-2006"
+    ]
+  }
+]
+~~~
+
+~~~json
+[
+  { "tag": "003U", "subfields": [ "a", "http://d-nb.info/gnd/1089521669" ] },
+  { "tag": "028A", "subfields": [ "d", "Henriette D.", "a", "Avram" ] },
+  { "tag": "060R", "subfields": [ "a", "1919", "b", "2006", "4", "datl" ] }
+]
+~~~
 
 ## Schema format
 
@@ -464,7 +542,7 @@ Field identifiers are plain tags. Field definitions MUST NOT include keys `occur
 
 #### marc formats
 
-Field identifiers are plain tags and MUST either be the character sequence `LDR` or three digits. Field definitions MUST NOT include keys `occurrence` or `counter`. Field definitions of flat fields MUST NOT have keys `indicator1` or `indicator2`.
+Field identifiers are plain tags and MUST either be the string `LDR` or three digits. Field definitions MUST NOT include keys `occurrence` or `counter`. Field definitions of flat fields MUST NOT have keys `indicator1` or `indicator2`.
 
 #### pica formats
 
