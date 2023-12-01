@@ -8,7 +8,7 @@ language: en
 
 - author: Jakob Voß
 - version: 0.9.2
-- date: 2023-11-28
+- date: 2023-11-29
 
 ## Table of Contents
 
@@ -30,7 +30,6 @@ language: en
 - [Validation rules](#validation-rules)
   - [Record validation](#record-validation)
   - [Field validation]
-  - [Subfield validation]
   - [Value validation]
   - [Validation with positions]
   - [Validation with codelists]
@@ -449,6 +448,7 @@ and further MAY contain keys:
 ### Codelist
 
 [codelist]: #codelist
+[code definition]: #code-definition
 
 A **codelist** is 
 
@@ -576,9 +576,9 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] (see [record validation]). An Avram validator MAY limit validation to selected [format families](#record). Validation can be configured with [validation options](#validation-options).
+Avram schemas can be used to validate [records] (see [record validation]). An Avram validator MAY limit validation to selected [format families](#record). Validation can be configured with [validation options](#validation-options). The validation rules are numbered below with codes from AR1 (read as "Avram Rule One") to AR24. Avram validators MUST implement rule AR1 to AR16 and MAY implement additional rules AR17 to AR24 for [counting] and [external rules](#validation-with-external-validation-rules).
 
-The validation rules are numbered below with codes such as **AR1** (read as "Avram Rule One").
+- **[AR1]** a set of records is invalid against a schema, if any its records does not pass [record validation].
 
 ### Record validation
 
@@ -586,29 +586,33 @@ The validation rules are numbered below with codes such as **AR1** (read as "Avr
 
 A record is valid against a [field schedule] if
 
-- **[AR1]** every field matches a field identifier in the field schedule,
-- **[AR2]** the record does not contain more than one field matching the same field definition with `repeatable` being `false`,
-- **[AR3]** and the record contains at least one field for each field definition with `required` being `true`,
-- **[AR5]** and every field is valid against its corresponding [field definition] from the field schedule (see [field validation](#field-validation)).
+- **[AR2]** every field matches a field identifier in the field schedule,
+
+- **[AR3]** the record does not contain more than one field matching the same field definition with `repeatable` being `false`,
+
+- **[AR4]** and the record contains at least one field for each field definition with `required` being `true`,
+
+- **[AR5]** and every field is valid against its corresponding [field definition] from the field schedule (see [field validation]).
 
 If validation option `ignore_unknown_fields` is enabled, all fields not matching a field identifier in the field schedule are valid by definition.
 
-### Field validation (AR5)
+### Field validation
 
-[field validation]: #field-validation--ar5-
-[Field validation]: #field-validation--ar5-
+[field validation]: #field-validation
+[Field validation]: #field-validation
 
 A field is valid against a [field definition] if the following rules are met:
 
-- **[AR6]** If the field contains indicators, their values must be valid by [value validation] against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator) not being `null`.
-
-- **[AR7]** If the field is a flat field, its field value must be valid by [value validation].
+- **[AR6]** If the field is a flat field, its field value must be valid by [value validation].
 
 - If the field is a variable field:
-    - **[AR8]** every subfield has a corresponding [subfield definition]
-    - **[AR9]** for subfield definitions with `repeatable` being `true` the field must at most contain one subfield
-    - **[AR10]** and there is at least one subfield for each [subfield definition] with `required` being `true`.
-    - **[AR11]** Every subfield is is valid against its corresponding [subfield definition] (see [subfield validation])
+    - **[AR7]** every subfield has a corresponding [subfield definition]
+
+    - **[AR8]** for subfield definitions with `repeatable` being `true`, the field MUST at most contain one subfield
+    - **[AR9]** for subfield definitions with `required` being `true`, the field MUST contain at least one subfield
+    - **[AR10]** every subfield value is valid by [value validation] against its corresponding [subfield definition]
+
+- **[AR11]** If the field contains indicators, their values must be valid by [value validation] against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator) not being `null`.
 
 Field validation of variable fields can be configured:
 
@@ -617,53 +621,42 @@ Field validation of variable fields can be configured:
 
 Tag and occurrence of a field are not included in field validation as they are part of [record validation](#record-validation).
 
-### Subfield validation (AR11)
+### Value validation
 
-[subfield validation]: #subfield-validation--ar11-
-[Subfield validation]: #subfield-validation--ar11-
-
-A subfield is valid if it conforms to its corresponding [subfield definition]:
-
-- **[AR12]** if `repeatable` is `false` the subfield is valid only if the field does not contain another subfield with the same subfield code.
-- **[AR13]** the subfield value must be valid (see [value validation])
-
-Subfield validation can be configured:
-
-- to ignore subfield values (`ignore_values`)
-
-### Value validation (AR13)
-
-[value validation]: #value-validation--ar13-
-[Value validation]: #value-validation--ar13-
+[value validation]: #value-validation
+[Value validation]: #value-validation
 
 A value (given as string), is valid if it conforms to a definition (given as [field definition], [subfield definition], [indicator definition], [data element definition](#positions)):
 
-- **[AR14]** if the definition contains key `pattern`, the value must match its regular expression. The pattern is not anchored by default, so `^` and/or `$` must be included to match start and/or end of the value.
-- **[AR15]** if the definition contains key `positions`, the value must be [valid against its positions](#validation-with-positions).
-- **[AR16]** if the definition contains key `codes`, the value must be [valid against its codelist](#validation-with-codelists)
+- **[AR12]** if the definition contains key `pattern`, the value must match its regular expression. The pattern is not anchored by default, so `^` and/or `$` must be included to match start and/or end of the value.
+
+- **[AR13]** if the definition contains key `positions`, the value must be [valid against its positions](#validation-with-positions).
+
+- **[AR14]** if the definition contains key `codes`, the value must be [valid against its codelist](#validation-with-codelists)
 
 A value is always valid if the definition contains neither of keys `pattern`, `positions`, and `codes`.
 
 If validation option `ignore_values` is enabled, all non-indicator values are valid.
 
-### Validation with positions (AR15)
+### Validation with positions
 
-[validation with positions]: #validation-with-positions--ar14-
-[Validation with positions]: #validation-with-positions--ar14-
+[validation with positions]: #validation-with-positions
+[Validation with positions]: #validation-with-positions
 
-- A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions. Character positions are counted by Unicode code points.
+A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions. Character positions are counted by Unicode code points.
 
 Substrings can be empty, for instance when the value is shorter than some character position. An empty substring can be valid, depending on the data element definition.
 
 Positions can recursively contain other positions via their data element definitions.
 
-### Validation with codelists (AR16)
+### Validation with codelists
 
-[validation with codelists]: #validation-with-codelists--ar15-
-[Validation with codelists]: #validation-with-codelists--ar15-
+[validation with codelists]: #validation-with-codelists
+[Validation with codelists]: #validation-with-codelists
 
-- **[AR17]** A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
-- **[AR18]** A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
+- **[AR15]** A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
+
+- **[AR16]** A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
 Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
@@ -678,24 +671,38 @@ Validation can further be configured:
 
 Avram schemas can also be used to give or expect a number of elements with keys `records` at [root level] and keys `records` and `total` at [field definitions], [subfield definitions](#subfield-schedule) and [code definitions](#codelist). By default these keys are ignore during validation.
 
-Validation can be configured to not ignore these fields but to compare given given numbers to the actual number of records, fields, subfields, and/or codes found in input data. Validation options are:
+Validation of a set of records can be configured to not ignore these fields but to compare given given numbers to the actual number of records, fields, subfields, and/or codes found in the records. Validation options to enable counting are:
 
-- `count_records` to enable counting:
-    - the total number of records
-    - the number of records each field from the [field schedule] is found in
-    - the number of records each code from a [code definition](#codelist) is found in
+- `count_records` to enable counting the total number of records,
+   and the total numbers or records each field with a [field definition],
+   each subfield with a [subfield definition], and each code with
+   a [code definition](#codelist) is found in.
 
 - `count_fields` to enable counting the total number each field from the [field schedule] is found
 
 - `count_subfields` to enable counting the total number each subfield field from a [subfield schedule] is found
 
-- `count_code` to enable counting the total number of each code from a [codelist] is found
+- `count_codes` to enable counting the total number of each code from a [codelist] is found
 
-Additional validation option `count_all` can be used to enable all counting options.
+Support of counting in Avram validators is OPTIONAL. If selected counting options are supported and enabled, then the following validation rules must be respected:
+
+- **[AR17]** the number of validated records MUST be equal to the value of schema key `records` if this key exist (enabled with option `count_records`).
+
+- **[AR18]** if a [field definition] of the schema includes key `records` then the number of input records with this field MUST be equal to the number given by this key (enabled by combination of option `count_records` and `count_fields`).
+
+- **[AR19]** if a [subfield definition] of the schema includes key `records` then the number of input records with a field with this subfield MUST be equal to the number given by this key (enabledby combination of option `count_records` and `count_subfields`).
+
+- **[AR20]** if a [code definition] of the schema includes key `records` then the number of input records this code is used in MUST be equal to the number given by this key (enabled by combination of option `count_records` and `count_codes`).
+
+- **[AR21]** if a [field definition] of the schema includes key `total` then the total number this field is contained in input records MUST be equal to the number given by this key (enbaled by option `count_fields`).
+
+- **[AR22]** if a [subfield definition] of the schema includes key `total` then the total number this subfield is contained in input records MUST be equal to the number given by this key (enbaled by option `count_subfields`).
+
+- **[AR23]** if a [code definition] of the schema includes key `total` then the total number this code is contained in input records MUST be equal to the number given by this key (enbaled by option `count_codes`).
 
 ### Validation with external validation rules
 
-By default [external validation rules](#external-validatio-rules) are ignored for validation. Validation option `check_rules` enforces an Avram validator to process all external rules and reject input data as invalid if a rule cannot be checked.
+By default [external validation rules](#external-validatio-rules) are ignored for validation. Optional validation option `check_rules` enforces an Avram validator to process all external rules and reject input data as invalid if a rule cannot be checked **[AR24]**.
 
 ### Validation options
 
@@ -713,7 +720,6 @@ Option | Aspect | Implication
 `count_fields`| [counting] | count and compare number of defined fields
 `count_subfields`| [counting] | count and compare number of defined subfields
 `count_codes`| [counting] | count and compare number of defined codes
-`count_all`| [counting] | all of `count_records`, `count_fields`, `count_subfields`, and `count_codes`
 `check_rules` | [external rules](#validation-with-external-rules) | all external rules must be respected
 
 ## References
@@ -757,7 +763,7 @@ Option | Aspect | Implication
 
 ### Changes
 
-#### 0.9.2 (2023-11-28)
+#### 0.9.2 (2023-11-29)
 
 - Change codelist directory to support codelist metadata (*breaking change!*)
 - Remove subfield key `order` and validation option `check_subfield_order`
