@@ -66,6 +66,10 @@ A **language** is a natural language identifier as defined with XML Schema datat
 
 A **non-negative integer** is a natural number (0, 1, 2...)
 
+An **URI** is a valid URI string according to [RFC 3986].
+
+An **URL** is an URI starting with `http://` or `https://`.
+
 A **range** is a sequence of digits, optionally followed by a dash (`-`) and a second sequence of digits with same length. The numeric values of each sequence are called **start number** and **end number**, respectively. The end number, if given, must be larger than the start number. Examples of valid ranges include `0`, `00`, `3-7`, `03-12`, and `01-09` but not `3-12` nor `7-2`. A string **matches** a range if it is a sequence of digits of same length as the sequence(s) in the range and the numerical value is equal to or within the start number and the end number of the range. Applications MAY accept and normalize sequences of different length to valid ranges.
 
 ### Records
@@ -726,6 +730,9 @@ Option | Aspect | Implication
 
 ### Normative references
 
+* T. Berners-Lee, R. Fielding, L. Masinter: *Uniform Resource Identifier (URI): Generic Syntax*.
+  RFC 3986, January 2005, <https://tools.ietf.org/html/rfc3986>.
+
 * P. Biron, A. Malhotra: *XML Schema Part 2: Datatypes Second Edition*.
   W3C Recommendation, October 2005.
   <https://www.w3.org/TR/xmlschema-2/>
@@ -740,6 +747,7 @@ Option | Aspect | Implication
    June 2015. <http://www.ecma-international.org/ecma-262/6.0/>
 
 [RFC 2119]: https://tools.ietf.org/html/rfc2119
+[RFC 3986]: https://tools.ietf.org/html/rfc3986
 [RFC 7159]: https://tools.ietf.org/html/rfc7159
 
 ### Informative references
@@ -762,6 +770,10 @@ Option | Aspect | Implication
 - [discussion that lead to creation of Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
 
 ### Changes
+
+#### pre-release
+
+- Add formal specification of URI and URL based on RFC 3986
 
 #### 0.9.2 (2023-11-29)
 

@@ -9,8 +9,7 @@ properties:
   description:
     type: string
   url:
-    type: string
-    format: uri
+    $ref: '#/definitions/url'
   profile:
     type: string
     format: uri
@@ -52,8 +51,7 @@ properties:
               modified:
                 $ref: '#/definitions/timestamp'
               url:
-                type: string
-                format: uri
+                $ref: '#/definitions/url'
             required:
             - codes
   checks:
@@ -67,6 +65,7 @@ definitions:
   url:
     type: string
     format: uri
+    pattern: '^https?://'
   timestamp:
     type: string
   non-negative-integer:
