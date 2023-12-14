@@ -471,7 +471,7 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
 
 Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
 
-An **extended codelist** is a JSON object having at least the mandatory key `codes` with a [codelist] and optional keys:
+A **codelist directory** is a JSON object that maps codelist references to JSON objects each having at least the mandatory key `codes` with a [codelist] and optional keys:
 
 - `title` with a name of the codelist
 - `description` with additional description of the codelist
@@ -479,7 +479,7 @@ An **extended codelist** is a JSON object having at least the mandatory key `cod
 - `modified` with a timestamp when this codelist was updated
 - `url` with a homepage URL or link to documentation of the codelist
 
-A **codelist directory** is a JSON object that maps codelist references to extended codelists. A codelist reference can be **resolved** by looking up its value as key in the codelist directory to get the corresponding extended codelist and its embedded explicit codelist.
+A codelist reference can be **resolved** by looking up its value as key in the codelist directory to get the corresponding explicit codelist.
 
 ##### Examples (explicit, reference, and codelist directory)
 
