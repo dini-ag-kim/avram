@@ -265,16 +265,16 @@ A [field] **matches** a field identifier if the tag of the field is equal to the
 
 A **field definition** is a JSON object that SHOULD contain key:
 
-* `tag` with the [tag]
+* `tag` with the [tag] of the field
 * `label` with the name of the field
 * `repeatable` with a boolean value, assumed as `false` by default
 * `required` with a boolean value, assumed as `false` by default
 
 The field definition MAY further contain keys:
 
-* `occurrence` with a [field occurrence]
-* `counter` with a [field counter]
-* `url` with an URL link to documentation
+* `occurrence` with the [field occurrence] of the field
+* `counter` with the [field counter] of the field
+* `url` with an URL link to documentation of the field
 * `description` with additional description of the field
 * `indicator1` with first [indicator definition] or `null`
 * `indicator2` with second [indicator definition] or `null`
@@ -289,9 +289,9 @@ The field definition MAY further contain keys:
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
-If a field definition contains keys for variable fields (`subfields`) it MUST NOT contain keys for flat fields (`positions`, `pattern` and/or `codes`).
-
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
+
+If a field definition contains keys for variable fields (`subfields`) it MUST NOT contain keys for flat fields (`positions`, `pattern` and/or `codes`).
 
 Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`) as alias for a field definition without occurrence.
 
