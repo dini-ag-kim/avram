@@ -210,22 +210,17 @@ definitions:
   indicator:
     oneOf:
       - type: 'null'
-      - type: 'string'
-      - $ref: '#/definitions/codedvalue'
-  codedvalue:
-    type: object
-    additionalProperties: false
-    properties:
-      label:
-        type: string
-      description:
-        type: string
-      url:
-        $ref: '#/definitions/url'
-      codes:
-        $ref: '#/definitions/codelist'
-      pattern:
-        $ref: '#/definitions/regex'
+      - type: object
+        additionalProperties: false
+        properties:
+          label:
+            type: string
+          description:
+            type: string
+          url:
+            $ref: '#/definitions/url'
+          codes:
+            $ref: '#/definitions/codelist'
   codelist:
     oneOf:
       - $ref: '#/definitions/non-empty-string'
@@ -236,8 +231,8 @@ definitions:
     patternProperties:
       '^.+$':
         oneOf:
-          - type: string
-          - additionalProperties: false
+          - type: object
+            additionalProperties: false
             properties:
               code:
                 type: string
@@ -253,6 +248,7 @@ definitions:
                 $ref: '#/definitions/timestamp'
               modified:
                 $ref: '#/definitions/timestamp'
+          - type: string
   checks:
     oneOf:
       - type: string
