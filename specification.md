@@ -754,7 +754,7 @@ Option | Aspect | Implication
 
 #### Implementations
 
-- **[avram-js](https://github.com/gbv/avram-js) reference implementation**
+- **[avram-js](https://github.com/gbv/avram-js) reference implementation of an Avram validator**, also includes an Avram meta-validator to check whether an Avram schema conforms to this specification
 - [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
 - [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
 - [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
