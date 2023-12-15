@@ -210,6 +210,7 @@ definitions:
   indicator:
     oneOf:
       - type: 'null'
+      - type: 'string'
       - $ref: '#/definitions/codedvalue'
   codedvalue:
     type: object
@@ -234,22 +235,24 @@ definitions:
     additionalProperties: false
     patternProperties:
       '^.+$':
-        additionalProperties: false
-        properties:
-          code:
-            type: string
-          label:
-            type: string
-          description:
-            type: string
-          total:
-            $ref: '#/definitions/non-negative-integer'
-          records:
-            $ref: '#/definitions/non-negative-integer'
-          created:
-            $ref: '#/definitions/timestamp'
-          modified:
-            $ref: '#/definitions/timestamp'
+        oneOf:
+          - type: string
+          - additionalProperties: false
+            properties:
+              code:
+                type: string
+              label:
+                type: string
+              description:
+                type: string
+              total:
+                $ref: '#/definitions/non-negative-integer'
+              records:
+                $ref: '#/definitions/non-negative-integer'
+              created:
+                $ref: '#/definitions/timestamp'
+              modified:
+                $ref: '#/definitions/timestamp'
   checks:
     oneOf:
       - type: string

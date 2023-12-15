@@ -459,7 +459,7 @@ A **codelist** is
 - either a JSON object that maps codes to code definitions (**explicit codelist**)
 - or a non-empty string that SHOULD be an URI (**codelist reference**).
 
-A **code** is a non-empty string. A **code definition** is a JSON object with optional keys:
+A **code** is a non-empty string. A **code definition** is either a string or a JSON object with optional keys:
 
 - `code` with the code
 - `label` with the name of the code
@@ -470,6 +470,8 @@ A **code** is a non-empty string. A **code definition** is a JSON object with op
 - `records` with a non-negative integer to indicate the number of records this code has been found in
 
 Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
+
+A code definition being a string MUST be treated identical to a codelist definition being JSON object with only key `label` having the value of the string.
 
 A **codelist directory** is a JSON object that maps codelist references to JSON objects each having at least the mandatory key `codes` with a [codelist] and optional keys:
 
@@ -485,9 +487,7 @@ A codelist reference can be **resolved** by looking up its value as key in the c
 
 ~~~json
 {
-  " ": {
-    "label": "No specified type"
-  },
+  " ": "No specified type",
   "a": {
     "label": "Archival",
     "created": "2022"
@@ -774,6 +774,7 @@ Option | Aspect | Implication
 #### pre-release
 
 - Add formal specification of URI and URL based on RFC 3986
+- Allow plain strings as code definition
 
 #### 0.9.2 (2023-11-29)
 
