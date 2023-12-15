@@ -230,7 +230,7 @@ A **field schedule** is a JSON object that maps [field identifiers](#field-ident
 }
 ~~~
 
-Field identifiers of a field schedule SHOULD NOT overlap. Two field identifiers overlap when it is possible to match a field with both. Applications MUST either detect and reject overlapping field identifiers or match fields to the first of multiple overlapping field identifiers in alphabetical sort order.
+Field identifiers of a field schedule MUST NOT overlap. Two field identifiers overlap when it is possible to match a field with both.
 
 ### Field identifier
 
@@ -775,6 +775,7 @@ Option | Aspect | Implication
 
 - Add formal specification of URI and URL based on RFC 3986
 - Allow plain strings as code definition
+- Disallow overlapping field identifiers of a field schedule
 
 #### 0.9.2 (2023-11-29)
 
