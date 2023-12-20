@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
 - author: Jakob Voß
-- version: 0.9.2
-- date: 2023-11-29
+- version: 0.9.3
+- date: 2023-12-20
 
 ## Table of Contents
 
@@ -598,7 +598,7 @@ A record is valid against a [field schedule] if
 
 - **[AR5]** and every field is valid against its corresponding [field definition] from the field schedule (see [field validation]).
 
-If validation option `ignore_unknown_fields` is enabled, all fields not matching a field identifier in the field schedule are valid by definition.
+If validation option `undefinedField` is enabled, all fields not matching a field identifier in the field schedule are valid by definition.
 
 ### Field validation
 
@@ -620,8 +620,8 @@ A field is valid against a [field definition] if the following rules are met:
 
 Field validation of variable fields can be configured:
 
-- to not validate subfields (`ignore_subfields`)
-- to ignore subfields not defined in the schema (`ignore_unknown_subfields`)
+- to not validate subfields (`invalidSubfield`)
+- to ignore subfields not defined in the schema (`undefinedSubfield`)
 
 Tag and occurrence of a field are not included in field validation as they are part of [record validation](#record-validation).
 
@@ -640,7 +640,7 @@ A value (given as string), is valid if it conforms to a definition (given as [fi
 
 A value is always valid if the definition contains neither of keys `pattern`, `positions`, and `codes`.
 
-If validation option `ignore_values` is enabled, all non-indicator values are valid.
+If validation option `invalidValue` is enabled, all non-indicator values are valid.
 
 ### Validation with positions
 
@@ -666,8 +666,8 @@ Applications MAY also resolve codelist references against externally defined exp
 
 Validation can further be configured:
 
-- to not validate against codelists (`ignore_codes`)
-- to not validate against codelist references if the corresponding explicit codelist cannot be found (`ignore_unknown_codelists`)
+- to not validate against codelists (`undefinedCode`)
+- to not validate against codelist references if the corresponding explicit codelist cannot be found (`undefinedCodelist`)
 
 ### Counting
 
@@ -677,54 +677,60 @@ Avram schemas can also be used to give or expect a number of elements with keys 
 
 Validation of a set of records can be configured to not ignore these fields but to compare given given numbers to the actual number of records, fields, subfields, and/or codes found in the records. Validation options to enable counting are:
 
-- `count_records` to enable counting the total number of records,
+- `countRecords` to enable counting the total number of records,
    and the total numbers or records each field with a [field definition],
    each subfield with a [subfield definition], and each code with
    a [code definition](#codelist) is found in.
 
-- `count_fields` to enable counting the total number each field from the [field schedule] is found
+- `countFields` to enable counting the total number each field from the [field schedule] is found
 
-- `count_subfields` to enable counting the total number each subfield field from a [subfield schedule] is found
+- `countSubfields` to enable counting the total number each subfield field from a [subfield schedule] is found
 
-- `count_codes` to enable counting the total number of each code from a [codelist] is found
+- `countCodes` to enable counting the total number of each code from a [codelist] is found
 
 Support of counting in Avram validators is OPTIONAL. If selected counting options are supported and enabled, then the following validation rules must be respected:
 
-- **[AR17]** the number of validated records MUST be equal to the value of schema key `records` if this key exist (enabled with option `count_records`).
+- **[AR17]** the number of validated records MUST be equal to the value of schema key `records` if this key exist (enabled with option `countRecords`).
 
-- **[AR18]** if a [field definition] of the schema includes key `records` then the number of input records with this field MUST be equal to the number given by this key (enabled by combination of option `count_records` and `count_fields`).
+- **[AR18]** if a [field definition] of the schema includes key `records` then the number of input records with this field MUST be equal to the number given by this key (enabled by combination of option `countRecords` and `countFields`).
 
-- **[AR19]** if a [subfield definition] of the schema includes key `records` then the number of input records with a field with this subfield MUST be equal to the number given by this key (enabledby combination of option `count_records` and `count_subfields`).
+- **[AR19]** if a [subfield definition] of the schema includes key `records` then the number of input records with a field with this subfield MUST be equal to the number given by this key (enabledby combination of option `countRecords` and `countSubfields`).
 
-- **[AR20]** if a [code definition] of the schema includes key `records` then the number of input records this code is used in MUST be equal to the number given by this key (enabled by combination of option `count_records` and `count_codes`).
+- **[AR20]** if a [code definition] of the schema includes key `records` then the number of input records this code is used in MUST be equal to the number given by this key (enabled by combination of option `countRecords` and `countCodes`).
 
-- **[AR21]** if a [field definition] of the schema includes key `total` then the total number this field is contained in input records MUST be equal to the number given by this key (enbaled by option `count_fields`).
+- **[AR21]** if a [field definition] of the schema includes key `total` then the total number this field is contained in input records MUST be equal to the number given by this key (enbaled by option `countFields`).
 
-- **[AR22]** if a [subfield definition] of the schema includes key `total` then the total number this subfield is contained in input records MUST be equal to the number given by this key (enbaled by option `count_subfields`).
+- **[AR22]** if a [subfield definition] of the schema includes key `total` then the total number this subfield is contained in input records MUST be equal to the number given by this key (enbaled by option `countSubfields`).
 
-- **[AR23]** if a [code definition] of the schema includes key `total` then the total number this code is contained in input records MUST be equal to the number given by this key (enbaled by option `count_codes`).
+- **[AR23]** if a [code definition] of the schema includes key `total` then the total number this code is contained in input records MUST be equal to the number given by this key (enbaled by option `countCodes`).
 
 ### Validation with external validation rules
 
-By default [external validation rules](#external-validatio-rules) are ignored for validation. Optional validation option `check_rules` enforces an Avram validator to process all external rules and reject input data as invalid if a rule cannot be checked **[AR24]**.
+By default [external validation rules](#external-validatio-rules) are ignored for validation. Optional validation option `externalRules` enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked **[AR24]**.
 
 ### Validation options
 
-An Avram validator MAY support selected validation options to configure how validation rules are applied. All options MUST be disabled by default and if not supported. An Avram validator MUST document which options it supports. The following validation options are defined:
+An Avram validator MAY support selected validation options to configure which validation rules are applied. An Avram validator MUST document which options it supports. The following validation options are defined:
 
-Option | Aspect | Implication
--------|--------|------------
-`ignore_unknown_fields` | [record validation] | ignore fields without field definition
-`ignore_subfields` | [field validation] | ignore subfields
-`ignore_unknown_subfields` | [field validation] | ignore subfields without subfield definition
-`ignore_values` | [value validation] | ignore all flat field values and subfield values
-`ignore_codes` | [validation with codelists] | don't validate with codelists
-`ignore_unknown_codelists` | [validation with codelists] | don't validate with unresolveable codelist reference
-`count_records`| [counting] | count and compare number of records
-`count_fields`| [counting] | count and compare number of defined fields
-`count_subfields`| [counting] | count and compare number of defined subfields
-`count_codes`| [counting] | count and compare number of defined codes
-`check_rules` | [external rules](#validation-with-external-rules) | all external rules must be respected
+Option | Default | Aspect | Avram Rules
+-------|---------|--------|-------------
+`undefinedField` | enabled | [record validation] | AR2 
+`nonrepeatableField` | enabled | [record validation] | AR3
+`missingField` | enabled | [record validation] | AR4
+`invalidIndicator` | enabled | [field validation] | AR11
+`invalidSubfield` | enabled | [field validation] | AR7-AR10
+`undefinedSubfield` | enabled | [field validation] | AR7
+`nonrepeatableSubfield` | enabled | [field validation] | AR8
+`missingSubfield` | enabled | [field validation] | AR9
+`invalidValue` | enabled | [value validation] | AR6 and AR10
+`patternMismatch` | enabled | [value validation] | AR12
+`undefinedCode` | enabled | [validation with codelists] | AR14
+`undefinedCodelist` | disabled | [validation with codelists] | AR16
+`countRecords` | disabled | [counting] | AR17
+`countFields` | disabled | [counting] | AR18 and AR21
+`countSubfields` | disabled | [counting] | AR19 and AR22
+`countCodes` | disabled | [counting] | AR20 and AR23
+`externalRules` | disabled | [external rules](#validation-with-external-rules) | AR24
 
 ## References
 
@@ -771,11 +777,12 @@ Option | Aspect | Implication
 
 ### Changes
 
-#### pre-release
+#### 0.9.3 - 2023-12-20
 
 - Add formal specification of URI and URL based on RFC 3986
 - Allow plain strings as code definition
 - Disallow overlapping field identifiers of a field schedule
+- Rename validation options
 
 #### 0.9.2 (2023-11-29)
 
