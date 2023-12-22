@@ -581,7 +581,7 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold).
 
-1. **invalidRecord**: A set of records is valid against a schema, if all of its records pass [record validation] against the field schedule of the schema:.
+1. **invalidRecord**: A set of records is valid against a schema, if all of its records pass [record validation] against the field schedule of the schema.
 
 An Avram validator MAY limit validation to selected [format families](#record). An Avram validator MAY choose to support only a limited set of validation rules, it MAY allow to enable and disable selected rules and it MAY disable selected rules by default. Support and selection of validation rules MUST be documented.
 
