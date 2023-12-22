@@ -644,8 +644,6 @@ A string value is valid against [positions](#positions) if all substrings define
 
 Substrings can be empty, for instance when the value is shorter than some character position. An empty substring can be valid, depending on the data element definition.
 
-Positions can recursively contain other positions via their data element definitions.
-
 ### Validation with codelists
 
 [validation with codelists]: #validation-with-codelists
