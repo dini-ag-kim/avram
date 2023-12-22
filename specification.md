@@ -465,8 +465,6 @@ A **code** is a non-empty string. A **code definition** is either a string or a 
 - `description` with additional description of the code
 - `created` with a timestamp when this code was introduced
 - `modified` with a timestamp when this code was updated
-- `total` with a non-negative integer to indicate the number of times this code has been found
-- `records` with a non-negative integer to indicate the number of records this code has been found in
 
 Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
 
@@ -672,8 +670,6 @@ Validation rules for counting are:
 
 16. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
 
-17. **countCode** to enable counting the total number of each code from a [codelist] is found.
-
 If selected counting rules are supported and enabled, then the following must be checked by an Avram validator:
 
 - the number of validated records MUST be equal to the value of schema key `records` if this key exist (rule **`countRecord`**).
@@ -682,19 +678,15 @@ If selected counting rules are supported and enabled, then the following must be
 
 - if a [subfield definition] of the schema includes key `records` then the number of input records with a field with this subfield MUST be equal to the number given by this key (combination of rules **`countRecord`** and **`countSubfield`**).
 
-- if a [code definition] of the schema includes key `records` then the number of input records this code is used in MUST be equal to the number given by this key (combination of rules **`countRecord`** and **`countCode`**).
-
 - if a [field definition] of the schema includes key `total` then the total number this field is contained in input records MUST be equal to the number given by this key (rule **`countField`**).
 
 - if a [subfield definition] of the schema includes key `total` then the total number this subfield is contained in input records MUST be equal to the number given by this key (rule **`countSubfield`**).
-
-- if a [code definition] of the schema includes key `total` then the total number this code is contained in input records MUST be equal to the number given by this key (rule **`countCode`**).
 
 ### Validation with external validation rules
 
 By default [external validation rules](#external-validatio-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
-18. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
+17. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
 ## References
 
@@ -745,6 +737,7 @@ By default [external validation rules](#external-validatio-rules) are ignored fo
 
 - Add formal specification of URI and URL based on RFC 3986
 - Allow plain strings as code definition
+- Remove code counting
 - Disallow overlapping field identifiers of a field schedule
 - Rename validation options and replace numbered validation rules
 

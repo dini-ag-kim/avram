@@ -240,10 +240,6 @@ definitions:
                 type: string
               description:
                 type: string
-              total:
-                $ref: '#/definitions/non-negative-integer'
-              records:
-                $ref: '#/definitions/non-negative-integer'
               created:
                 $ref: '#/definitions/timestamp'
               modified:
