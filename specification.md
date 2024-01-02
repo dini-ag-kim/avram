@@ -240,10 +240,10 @@ Field identifiers of a field schedule MUST NOT overlap. Two field identifiers ov
 [field counter]: #field-identifier
 [field occurrence]: #field-identifier
 
-A **field identifier** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by
+A **field identifier** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by the slash (`/`) and
 
-* the slash (`/`) and a **field occurrence**, being a range of two digits except the single sequence of two digits (`00`),
-* or the small letter x (`x`)  and a **field counter**, being a range of one or two digits (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
+- either a **field occurrence**, being a range of two digits except the single sequence of two digits (`00`),
+- or the dollar character (`$`) followed by small letter x (`x`) and a **field counter**, being a range of one or two digits (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
 
 Applications MAY further allow a tag followed by the slash and two zeroes (`/00`) as alias for a bare tag.
 
@@ -256,7 +256,7 @@ A [field] **matches** a field identifier if the tag of the field is equal to the
 ##### Examples
 
 * `LDR`, `001`, `850`... (MARC)
-* `021A`, `045Q/01`, `028B/01-02`, `209K`, `209Ax00-09`, `247Ax0`... (PICA)
+* `021A`, `045Q/01`, `028B/01-02`, `209K`, `209A/$x00-09`, `247A/$x0`... (PICA)
 * `001`, `100`, `805`... (MAB)
 
 ### Field definition
@@ -739,6 +739,10 @@ Thanks to Péter Király for [picking up the idea](https://github.com/pkiraly/me
 for comments, code and contributions.
 
 ### Changes
+
+#### 0.9.4 - 2024-??
+
+- Change expressing field counters in field identifiers (`xNN` to `/$xNN`)
 
 #### 0.9.3 - 2023-12-22
 
