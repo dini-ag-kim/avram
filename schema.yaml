@@ -54,8 +54,8 @@ properties:
                 $ref: '#/definitions/url'
             required:
             - codes
-  checks:
-    $ref: '#/definitions/checks'
+  rules:
+    $ref: '#/definitions/rules'
 required:
   - fields
 definitions:
@@ -119,8 +119,8 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
-          checks:
-            $ref: '#/definitions/checks'
+          rules:
+            $ref: '#/definitions/rules'
   regex:
     $ref: '#/definitions/non-empty-string'
   positions:
@@ -205,8 +205,8 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
-          checks:
-            $ref: '#/definitions/checks'
+          rules:
+            $ref: '#/definitions/rules'
   indicator:
     oneOf:
       - type: 'null'
@@ -245,10 +245,10 @@ definitions:
               modified:
                 $ref: '#/definitions/timestamp'
           - type: string
-  checks:
-    oneOf:
+  rules:
+    type: array
+    items:
+      oneOf:
       - type: string
-      - type: array
-        items:
-          type: string
+      - type: object
 $schema: http://json-schema.org/draft-06/schema#

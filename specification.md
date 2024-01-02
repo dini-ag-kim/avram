@@ -197,7 +197,7 @@ The schema MAY contain keys:
 
 * `$schema` with an URL of the [Avram metaschema](#metaschema)
 * `codelists` with a [codelist directory](#codelist)
-* `checks` with [external validation rules](#external-validation-rules)
+* `rules` with [external validation rules](#external-validation-rules)
 * `records` with a non-negative integer to indicate a number of records
 * `created` with a timestamp when this schema was created
 * `modified` with a timestamp when this schema was updated
@@ -286,7 +286,7 @@ The field definition MAY further contain keys:
 * `pattern` with a regular expression (for flat fields)
 * `codes` with a [codelist]
 * `subfields` with a [subfield schedule] (for variable fields)
-* `checks` with [external validation rules](#external-validation-rules)
+* `rules` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 
@@ -385,7 +385,7 @@ The subfield definition MAY further contain keys:
 * `pattern` with a regular expression
 * `positions` with a specification of [positions]
 * `codes` with a [codelist]
-* `checks` with [external validation rules](#external-validation-rules)
+* `rules` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
 * `description` with additional description of the subfield
 * `pica3` with a corresponding Pica3 syntax definition
@@ -515,7 +515,7 @@ A codelist reference can be **resolved** by looking up its value as key in the c
 
 ### External validation rules
 
-An Avram Schema MAY include references to additional validation rules with key `checks` at the [root level], at [field schedules](#field-schedule), and at [subfield schedules] to check additional data types or integrity constraints. The value of this keys MUST be an string or a JSON array of strings. Strings SHOULD be URIs.
+An Avram Schema MAY include references to additional validation rules with key `rules` at the [root level], at [field schedules](#field-schedule), and at [subfield schedules] to check additional data types or integrity constraints. The value of this keys MUST be an array of strings or arbitrary JSON objects. String elements MUST NOT be equal to names of [validation rules](#validation-rules) but they SHOULD be URIs.
 
 ##### Example
 
@@ -528,7 +528,7 @@ An Avram Schema MAY include references to additional validation rules with key `
                 "M": { "label": "month" },
                 "D": { "label": "day" }
             },
-            "checks": "http://example.org/valid-date"
+            "rules": ["http://example.org/valid-date"]
         },
         "death": {
             "subfields": {
@@ -536,16 +536,20 @@ An Avram Schema MAY include references to additional validation rules with key `
                 "M": { "label": "month" },
                 "D": { "label": "day" }
             },
-            "checks": "http://example.org/valid-date"
+            "rules": ["http://example.org/valid-date"]
         },
         "age": {
-          "checks": "xsd:nonNegativeInteger"
+          "rules": ["xsd:nonNegativeInteger"]
         }
     },
-    "checks": [
-        "death must not be earlier than birth",
-        "birth only allowed before 1950 for privacy reasons",
-        "age must equal death minus birth, if given"
+    "rules": [
+        "death must not be earlier than birth, except for time-travelers",
+        "age must equal death minus birth, if given",
+        {
+            "if": "birth?",
+            "then": "birth.Y < 1950",
+            "description": "birth only allowed before 1950 for privacy reasons"
+        },
     ]
 }
 ~~~
@@ -740,10 +744,11 @@ for comments, code and contributions.
 
 ### Changes
 
-#### 0.9.4 - 2024-??
+#### 0.9.4 - 2024-01-02
 
 - Change expressing field counters in field identifiers (`xNN` to `/$xNN`)
-- Define indicator value `null` as placeholder
+- Define indicator value `null` as placeholder for `{" ":{}}`
+- Rename and redefine `checks` as `rules`
 
 #### 0.9.3 - 2023-12-22
 
