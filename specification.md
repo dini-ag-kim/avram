@@ -579,11 +579,11 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold).
+Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 17). Rule 1 to 13 refer to validation of individual records, fields, and subfields. Rule 14 to 16 ([counting](#counting)) refer to validation of sets of records. Rule 17 can refer to both.
+
+An Avram validator MAY limit validation to selected [format families](#record). An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. Support and selection of validation rules MUST be documented.
 
 1. **invalidRecord**: A set of records is valid against a schema, if all of its records pass [record validation] against the field schedule of the schema.
-
-An Avram validator MAY limit validation to selected [format families](#record). An Avram validator MAY choose to support only a limited set of validation rules, it MAY allow to enable and disable selected rules and it MAY disable selected rules by default. Support and selection of validation rules MUST be documented.
 
 ### Record validation
 
@@ -686,7 +686,7 @@ If selected counting rules are supported and enabled, then the following must be
 
 ### Validation with external validation rules
 
-By default [external validation rules](#external-validatio-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
+By default [external validation rules](#external-validation-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
 17. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
