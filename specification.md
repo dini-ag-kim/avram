@@ -130,8 +130,8 @@ The [record model](#records) can be restricted by a **format family**, identifie
 
 - `flat`: all fields are flat without indicators or occurrences (simple key-value structures with repeatable keys)
 
-- `marc`: flat fields have no indicators or occurrences, variable fields have two indicators and no occurrences.
-   Field tags are either the string `LDR` or a string of three digits.
+- `marc`: flat fields have no indicators or occurrences, variable fields have no occurrences and exactely two indicators, each being a lowercase alphanumeric character or a space character (`a` to `z`, `0` to `9`, and ` `).
+   Field tags are either a string of three digits or the string `LDR`.
 
 - `pica`: all fields are variable without indicators. Field tags consist of four characters being
    a digit `0`, `1`, or `2`, followed by two digits, followed by an uppercase letter `A` to `Z` or `@`.
@@ -277,8 +277,8 @@ The field definition MAY further contain keys:
 * `counter` with the [field counter] of the field
 * `url` with an URL link to documentation of the field
 * `description` with additional description of the field
-* `indicator1` with first [indicator definition] or `null`
-* `indicator2` with second [indicator definition] or `null`
+* `indicator1` with first [indicator definition] or `null` as placeholder for `{" ":{}}`
+* `indicator2` with second [indicator definition] or `null` as placeholder for `{" ":{}}`
 * `pica3` with corresponding Pica3 number
 * `created` with a timestamp when this field was introduced
 * `modified` with a timestamp when this field was changed
@@ -436,7 +436,7 @@ and further MAY contain keys:
 
 * `url` with an URL link to documentation
 * `description` with additional description of the indicator
-* `codes` with a [codelist]
+* `codes` with a [codelist] of single character codes
 
 ##### Example
 
@@ -743,6 +743,7 @@ for comments, code and contributions.
 #### 0.9.4 - 2024-??
 
 - Change expressing field counters in field identifiers (`xNN` to `/$xNN`)
+- Define indicator value `null` as placeholder
 
 #### 0.9.3 - 2023-12-22
 
