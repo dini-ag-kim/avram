@@ -25,6 +25,7 @@ language: en
   - [Subfield schedule](#subfield-schedule)
   - [Indicator definition](#indicator-definition)
   - [Codelist](#codelist)
+  - [External validation rules](#external-validation-rules)
   - [Restrictions by format family](#restrictions-by-format-family)
   - [Metaschema](#metaschema)
 - [Validation rules](#validation-rules)
