@@ -37,6 +37,8 @@ language: en
 - [References](#references)
   - [Normative references](#normative-references)
   - [Informative references](#informative-references)
+- [Appendix](#appendix)
+  - [Acknowledgments](#acknowledgments)
   - [Changes](#changes)
 
 ## Introduction
@@ -729,7 +731,12 @@ By default [external validation rules](#external-validatio-rules) are ignored fo
 
 #### Background information
 
-- [discussion that lead to creation of Avram](https://github.com/pkiraly/metadata-qa-marc/issues/45)
+## Appendix
+
+### Acknowledgments
+
+Thanks to Péter Király for [picking up the idea](https://github.com/pkiraly/metadata-qa-marc/issues/45) and for collaborative development. Thanks to Carsten Klee, Ed Summers, Harry Gegic, Johann Rolschewski, Stefan Majewski, Thomas Frings, and Timothy Thompson
+for comments, code and contributions.
 
 ### Changes
 
