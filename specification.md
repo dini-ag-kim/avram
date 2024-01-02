@@ -290,7 +290,7 @@ The field definition MAY further contain keys:
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
-If a field definition contains keys for variable fields (`subfields`) it MUST NOT contain keys for flat fields (`positions`, `pattern` and/or `codes`).
+If a field definition contains the `subfield` keys indicating a variable field, it MUST NOT contain keys for flat fields (`positions`, `pattern` and/or `codes`).
 
 Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`) as alias for a field definition without occurrence.
 
