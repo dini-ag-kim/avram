@@ -733,8 +733,6 @@ By default [external validation rules](#external-validation-rules) are ignored f
 - [JSON Table Schema](https://frictionlessdata.io/specs/table-schema/) schema format for tabular data
 - [JSON Schema](https://json-schema.org/) schema language for JSON formats
 
-#### Background information
-
 ## Appendix
 
 ### Acknowledgments
