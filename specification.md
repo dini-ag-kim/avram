@@ -727,18 +727,20 @@ By default [external validation rules](#external-validation-rules) are ignored f
 
 ### Informative references
 
-#### Implementations
+#### Implementations and public Avram schemas
 
 - **[avram-js](https://github.com/gbv/avram-js) reference implementation of an Avram validator**, also includes an Avram meta-validator to check whether an Avram schema conforms to this specification
 - [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
 - [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
 - [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
+- [marctable](https://github.com/edsu/marctable) crawls MARC21 Bibliographic format from Library of Congress as Avram Schema
+- [K10plus Avram schemas](https://format.k10plus.de/avram.pl)
 
 #### Related standards
 
-- [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
 - [JSON Table Schema](https://frictionlessdata.io/specs/table-schema/) schema format for tabular data
 - [JSON Schema](https://json-schema.org/) schema language for JSON formats
+- [MARCspec - A common MARC record path language](http://marcspec.github.io/MARCspec/marc-spec.html)
 
 ## Appendix
 
