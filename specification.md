@@ -72,7 +72,7 @@ An **URI** is a valid URI string according to [RFC 3986].
 
 An **URL** is an URI starting with `http://` or `https://`.
 
-A **range** is a sequence of digits, optionally followed by a dash (`-`) and a second sequence of digits with same length. The numeric values of each sequence are called **start number** and **end number**, respectively. The end number, if given, must be larger than the start number. Examples of valid ranges include `0`, `00`, `3-7`, `03-12`, and `01-09` but not `3-12` nor `7-2`. A string **matches** a range if it is a sequence of digits of same length as the sequence(s) in the range and the numerical value is equal to or within the start number and the end number of the range. Applications MAY accept and normalize sequences of different length to valid ranges.
+A **range** is a sequence of digits or a sequence of digits followed by a dash (`-`) and a second sequence of digits. The second sequence, if given, SHOULD have same length as the first. The numeric values of each sequence are called **start number** and **end number**, respectively. The end number, if given, MUST be larger than the start number. Examples of valid ranges include `0`, `00`, `3-7`, `03-12`, and `1-09` but not `7-2`. A string **matches** a range if it is a sequence of digits of same length as the longest sequence in the range and the numerical value is equal to or within the start number and the end number of the range. For instance `7` matches range `0-9` but it does not match `1-3` nor `03-10` and `07` matches `03-10` but not `0-9`.
 
 ### Records
 
@@ -243,8 +243,8 @@ Field identifiers of a field schedule MUST NOT overlap. Two field identifiers ov
 
 A **field identifier** is a non-empty string that can be used to match fields. The identifier consists of a [tag], optionally followed by the slash (`/`) and
 
-- either a **field occurrence**, being a range of two digits except the single sequence of two digits (`00`),
-- or the dollar character (`$`) followed by small letter x (`x`) and a **field counter**, being a range of one or two digits (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
+- either a **field occurrence**, being a range of two digit sequences except the single sequence of two digits (`00`),
+- or the dollar character (`$`) followed by small letter x (`x`) and a **field counter**, being a range of one or two digits sequences (`0`, `0-1`..., `00`, `00-01`..., `98-99`).
 
 Applications MAY further allow a tag followed by the slash and two zeroes (`/00`) as alias for a bare tag.
 
@@ -469,7 +469,7 @@ A **code** is a non-empty string. A **code definition** is either a string or a 
 - `created` with a timestamp when this code was introduced
 - `modified` with a timestamp when this code was updated
 
-Optional key `code` of a code definition must be equal to the key of the code definition in its codelist.
+Optional key `code` of a code definition MUST be equal to the key of the code definition in its codelist.
 
 A code definition being a string MUST be treated identical to a codelist definition being JSON object with only key `label` having the value of the string.
 
@@ -746,6 +746,7 @@ for comments, code and contributions.
 ### 0.9.5 - draft
 
 - Clarify fixed length of codes in indicator definitions and positions
+- Allow to omit leading zeroes in ranges
 
 #### 0.9.4 - 2024-01-02
 
