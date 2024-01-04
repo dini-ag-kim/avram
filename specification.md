@@ -346,7 +346,7 @@ The data element definition MAY further contain keys:
 
 * `url` with an URL link to documentation
 * `description` with additional description
-* `codes` with a [codelist]
+* `codes` with a [codelist] with codes of length defined by the character position range
 * `pattern` with a regular expression
 
 Character positions of a positions object MUST NOT overlap. Two character positions overlap if there is a string that matches both of them.
@@ -742,6 +742,10 @@ Thanks to Péter Király for [picking up the idea](https://github.com/pkiraly/me
 for comments, code and contributions.
 
 ### Changes
+
+### 0.9.5 - draft
+
+- Clarify fixed length of codes in indicator definitions and positions
 
 #### 0.9.4 - 2024-01-02
 
