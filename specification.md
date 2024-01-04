@@ -283,6 +283,7 @@ The field definition MAY further contain keys:
 * `pica3` with corresponding Pica3 number
 * `created` with a timestamp when this field was introduced
 * `modified` with a timestamp when this field was changed
+* `deprecated` with a boolean value, assumed as `false` by default
 * `positions` with a specification of [positions] (for flat fields)
 * `pattern` with a regular expression (for flat fields)
 * `codes` with a [codelist]
@@ -392,6 +393,7 @@ The subfield definition MAY further contain keys:
 * `pica3` with a corresponding Pica3 syntax definition
 * `created` with a timestamp when this subfield was introduced
 * `modified` with a timestamp when this subfield was updated
+* `deprecated` with a boolean value, assumed as `false` by default
 * `total` with a non-negative integer to indicate the number of times this subfield has been found
 * `records` with a non-negative integer to indicate the number of records this subfield has been found in
 
@@ -584,7 +586,7 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 17). Rule 1 to 13 refer to validation of individual records, fields, and subfields. Rule 14 to 16 ([counting](#counting)) refer to validation of sets of records. Rule 17 can refer to both.
+Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 20). Rule 1 to 16 refer to validation of individual records, fields, and subfields. Rule 17 to 19 ([counting](#counting)) refer to validation of sets of records. Rule 20 can refer to both.
 
 An Avram validator MAY limit validation to selected [format families](#record). An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. Support and selection of validation rules MUST be documented.
 
@@ -598,9 +600,11 @@ A record is valid against a [field schedule] if the following rules are met and 
 
 2. **undefinedField**: Every field matches a field identifier in the field schedule.
 
-3. **nonrepeatableField**: The record does not contain more than one field matching the same field definition with `repeatable` being `false`.
+3. **deprecatedField**: The matched field definition must not have key `deprecated` set to `true`.
 
-4. **missingField**: the record contains at least one field for each field definition with `required` being `true`.
+4. **nonrepeatableField**: The record does not contain more than one field matching the same field definition with `repeatable` being `false`.
+
+5. **missingField**: the record contains at least one field for each field definition with `required` being `true`.
 
 ### Field validation
 
@@ -609,19 +613,21 @@ A record is valid against a [field schedule] if the following rules are met and 
 
 A field is valid against a [field definition] if the following rules are met:
 
-5. **invalidFieldValue**: If the field is a flat field, its field value must be valid by [value validation].
+6. **invalidFieldValue**: If the field is a flat field, its field value must be valid by [value validation].
 
-6. **invalidIndicator**: If the field contains indicators, their values must be valid by [value validation] against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator).
+7. **invalidIndicator**: If the field contains indicators, their values must be valid by [value validation] against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator).
 
 If the field is a variable field:
 
-7. **undefinedSubfield**: Every subfield has a corresponding [subfield definition].
+8. **undefinedSubfield**: Every subfield has a corresponding [subfield definition].
 
-8. **nonrepeatableSubfield**: For subfield definitions with `repeatable` being `true`, the field MUST NOT contain more than one subfield.
+9. **deprecatedSubfield**: The matched subfield definition must not have key `deprecated` set to `true`.
 
-9. **missingSubfield**: For subfield definitions with `required` being `true`, the field MUST contain at least one subfield.
+10. **nonrepeatableSubfield**: For subfield definitions with `repeatable` being `true`, the field MUST NOT contain more than one subfield.
 
-10. **invalidSubfieldValue**: Every subfield value is valid by [value validation] against its corresponding [subfield definition].
+11. **missingSubfield**: For subfield definitions with `required` being `true`, the field MUST contain at least one subfield.
+
+12. **invalidSubfieldValue**: Every subfield value is valid by [value validation] against its corresponding [subfield definition].
 
 Tag and occurrence of a field are not included in field validation as they are part of [record validation](#record-validation).
 
@@ -632,9 +638,9 @@ Tag and occurrence of a field are not included in field validation as they are p
 
 A value (given as string), is valid if it conforms to a definition (given as [field definition], [subfield definition], [indicator definition], or [data element definition](#positions)) by meeting the following rules:
 
-11. **patternMismatch**: If the definition contains key `pattern`, the value must match its regular expression. The pattern is not anchored by default, so `^` and/or `$` must be included to match start and/or end of the value.
+13. **patternMismatch**: If the definition contains key `pattern`, the value must match its regular expression. The pattern is not anchored by default, so `^` and/or `$` must be included to match start and/or end of the value.
 
-12. **invalidPosition**: If the definition contains key `positions`, the value must be [valid against its positions](#validation-with-positions).
+14. **invalidPosition**: If the definition contains key `positions`, the value must be [valid against its positions](#validation-with-positions).
 
 If the definition contains key `codes`, the value must further be [valid against its codelist](#validation-with-codelists) (see corresponding rules below).
  
@@ -654,9 +660,9 @@ Substrings can be empty, for instance when the value is shorter than some charac
 [validation with codelists]: #validation-with-codelists
 [Validation with codelists]: #validation-with-codelists
 
-13. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
+15. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
 
-14. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
+16. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
 Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
@@ -668,14 +674,14 @@ Avram schemas can also be used to give or expect a number of elements with keys 
 
 Validation rules for counting are:
 
-14. **countRecord** to enable counting the total number of records,
+17. **countRecord** to enable counting the total number of records,
    and the total numbers or records each field with a [field definition],
    each subfield with a [subfield definition], and each code with
    a [code definition](#codelist) is found in.
 
-15. **countField** to enable counting the total number each field from the [field schedule] is found
+18. **countField** to enable counting the total number each field from the [field schedule] is found
 
-16. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
+19. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
 
 If selected counting rules are supported and enabled, then the following must be checked by an Avram validator:
 
@@ -693,7 +699,7 @@ If selected counting rules are supported and enabled, then the following must be
 
 By default [external validation rules](#external-validation-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
-17. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
+20. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
 ## References
 
@@ -747,6 +753,7 @@ for comments, code and contributions.
 
 - Clarify fixed length of codes in indicator definitions and positions
 - Allow to omit leading zeroes in ranges
+- Support deprecated fields and subfields
 
 #### 0.9.4 - 2024-01-02
 

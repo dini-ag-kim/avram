@@ -95,6 +95,8 @@ definitions:
             type: boolean
           required:
             type: boolean
+          deprecated:
+            type: boolean
           pattern:
             $ref: '#/definitions/regex'
           codes:
@@ -185,6 +187,8 @@ definitions:
           repeatable:
             type: boolean
           required:
+            type: boolean
+          deprecated:
             type: boolean
           url:
             $ref: '#/definitions/url'
