@@ -123,8 +123,28 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           rules:
             $ref: '#/definitions/rules'
-  regex:
+          types:
+            type: object
+            patternProperties:
+              '^.+$':
+                type: object
+                $ref: '#/definitions/typed-field-definition'
+    regex:
     $ref: '#/definitions/non-empty-string'
+  typed-field-definition:
+    type: object
+    additionalProperties: false
+    properties:
+      description:
+        type: string
+      pattern:
+        $ref: '#/definitions/regex'
+      codes:
+        $ref: '#/definitions/codelist'
+      positions:
+        $ref: '#/definitions/positions'
+      url:
+        $ref: '#/definitions/url'
   positions:
     type: object
     additionalProperties: false

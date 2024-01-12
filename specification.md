@@ -7,8 +7,8 @@ language: en
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
 - author: Jakob Voß
-- version: 0.9.4
-- date: 2024-01-02
+- version: 0.9.5
+- date: 2024-01-12
 
 ## Table of Contents
 
@@ -34,6 +34,7 @@ language: en
   - [Value validation]
   - [Validation with positions]
   - [Validation with codelists]
+  - [Validation with record types]
   - [Counting](#counting)
 - [References](#references)
   - [Normative references](#normative-references)
@@ -93,35 +94,40 @@ Fields with subfields, also called **variable fields**, MAY also have
 * either two **indicators**, each being a single character,
 * or an **occurrence**, being a sequence of two digits with positive numerical value (`01`, `02`, ...`99`).
 
+In addition, each record has a set of **record types**, each being a non-empty string. By default this set is empty and applications MAY choose to not support record types at all (see [validation with record types]).
+
 The record model can further be restricted by a [format family].
 
 The encoding of records in JSON or other individual serialization formats such as MARCXML, ISO 2709, or PICA JSON is out of the scope of this specification.
 
-##### Example
+##### Examples
 
-Possible JSON serialization of a record with two flat fields with occurence and
-one field with three subfields of code `g`, `g`, and `s`:
+Possible JSON serialization of a record of type `test` and two flat fields
+with occurence and one field with three subfields of code `g`, `g`, and `s`:
 
 ~~~json
-[
-  {
-    "tag": "uri",
-    "occurrence": "01",
-    "value": "http://www.wikidata.org/entity/Q10953"
-  },
-  {
-    "tag": "uri",
-    "occurrence": "02"
-    "value": "https://viaf.org/viaf/18236820"
-  },
-  {
-    "tag": "name",
-    "subfields": [
-      "g", "Henriette",
-      "g", "Davidson",
-      "s", "Avram"
-    ]
-  }
+{
+  "types": [ "test" ],
+  "fields": [
+    {
+      "tag": "uri",
+      "occurrence": "01",
+      "value": "http://www.wikidata.org/entity/Q10953"
+    },
+    {
+      "tag": "uri",
+      "occurrence": "02"
+      "value": "https://viaf.org/viaf/18236820"
+    },
+    {
+      "tag": "name",
+      "subfields": [
+        "g", "Henriette",
+        "g", "Davidson",
+        "s", "Avram"
+      ]
+    }
+  ]
 }
 ~~~
 
@@ -141,9 +147,9 @@ The [record model](#records) can be restricted by a **format family**, identifie
 
 Restrictions on records by a format family imply [restrictions on schemas for this format family](#restrictions-by-format-family).
 
-##### Example
+##### Examples
 
-Possible JSON serialization of a record of family `flat`, `marc`, and `pica`, respectively: 
+Possible JSON serializations of records of family `flat`, `marc`, and `pica`, respectively:
 
 ~~~json
 [
@@ -155,7 +161,7 @@ Possible JSON serialization of a record of family `flat`, `marc`, and `pica`, re
 ~~~
 
 ~~~json
-[
+[ 
   { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
   { "tag": "001", "value": "1089521669" },
   { "tag": "100",
@@ -291,6 +297,9 @@ The field definition MAY further contain keys:
 * `rules` with [external validation rules](#external-validation-rules)
 * `total` with a non-negative integer to indicate the number of times this field has been found
 * `records` with a non-negative integer to indicate the number of records this field has been found in
+* `types` with a JSON object that maps record types to typed field definitons.
+
+A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `codes`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -300,7 +309,7 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
 
 ##### Example
 
-*   MARC field `240` specified as mandatory and non-repeatable:
+-   MARC field `240` specified as mandatory and non-repeatable:
 
     ~~~json
     {
@@ -313,7 +322,7 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
     }
     ~~~
 
-*   PICA field `045B/02` in K10plus format
+-   PICA field `045B/02` in K10plus format
 
     ~~~json
     {
@@ -328,6 +337,8 @@ Applications MAY allow and remove `occurrence` keys with value two zeroes (`00`)
       }
     }
     ~~~
+
+-   MARC field `007` with 
 
 ### Positions
 
@@ -586,9 +597,11 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 20). Rule 1 to 16 refer to validation of individual records, fields, and subfields. Rule 17 to 19 ([counting](#counting)) refer to validation of sets of records. Rule 20 can refer to both.
+Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 21). Rule 1 to 17 refer to validation of individual records, fields, and subfields. Rule 18 to 20 ([counting](#counting)) refer to validation of sets of records. Rule 21 can refer to both.
 
-An Avram validator MAY limit validation to selected [format families](#record). An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. Support and selection of validation rules MUST be documented.
+An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. It is RECOMMENDED to disable counting rules (18 to 20) and external rules (21) by default. Support and selection of validation rules MUST be documented.
+
+An Avram validator MAY limit validation to selected [format families](#record).
 
 1. **invalidRecord**: A set of records is valid against a schema, if all of its records pass [record validation] against the field schedule of the schema.
 
@@ -613,7 +626,7 @@ A record is valid against a [field schedule] if the following rules are met and 
 
 A field is valid against a [field definition] if the following rules are met:
 
-6. **invalidFieldValue**: If the field is a flat field, its field value must be valid by [value validation].
+6. **invalidfieldvalue**: if the field is a flat field, its field value must be valid by [value validation] and by [validation with record types].
 
 7. **invalidIndicator**: If the field contains indicators, their values must be valid by [value validation] against the corresponding [indicator definition] `indicator1` (first indicator) and `indicator2` (second indicator).
 
@@ -646,6 +659,42 @@ If the definition contains key `codes`, the value must further be [valid against
  
 A value is always valid if the definition contains neither of keys `pattern`, `positions`, and `codes`.
 
+### Validation with record types
+
+[validation with record types]: #validation-with-record-types
+
+Record types are arbitrary strings attached to a record as flags. An Avram validator SHOULD support the following rule to enable additional validation depending on record types.
+
+15. **recordTypes**: If a [field definition] contains key `types` with a JSON object, the record types of a record must be looked up in this object to corresponding typed field definitions. All resulting typed field definitions must then be used for additional [value validation] with their keys `pattern`, `positions`, and `codes`.
+
+##### Example
+
+A MARC 21 Bibliographic record has a *type of material* such as Book (`BK`) and Visual Material (`VM`) and a *category of material* such as Text (`t`) and Motion Picture (`m`). Both can be encoded as Avram record types (not to be confused with MARC 21 record types). For instance a record may have the two types `BK` and `t`. An Avram Schema of MARC 21 Bibliographic format could support these types by including the following in definition of field `008` and `007`:
+
+~~~json
+{
+  "tag": "008",
+  "url": "https://www.loc.gov/marc/bibliographic/bd008.html",
+  "positions": { ...common positions for all materials... },
+  "types": {
+    "BK": {
+      "url": "https://www.loc.gov/marc/bibliographic/bd008b.html",
+      "positions": { ...additional positions for books... }
+    }, ...
+  }  
+},
+{
+  "tag": "007",
+  "url": "https://www.loc.gov/marc/bibliographic/bd007.html",
+  "types": {
+    "t": {
+      "url": "https://www.loc.gov/marc/bibliographic/bd007t.html",
+      "positions": { ... }
+    }, ...
+  }
+}
+~~~
+
 ### Validation with positions
 
 [validation with positions]: #validation-with-positions
@@ -660,9 +709,9 @@ Substrings can be empty, for instance when the value is shorter than some charac
 [validation with codelists]: #validation-with-codelists
 [Validation with codelists]: #validation-with-codelists
 
-15. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
+16. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
 
-16. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
+17. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
 Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
@@ -674,14 +723,14 @@ Avram schemas can also be used to give or expect a number of elements with keys 
 
 Validation rules for counting are:
 
-17. **countRecord** to enable counting the total number of records,
+18. **countRecord** to enable counting the total number of records,
    and the total numbers or records each field with a [field definition],
    each subfield with a [subfield definition], and each code with
    a [code definition](#codelist) is found in.
 
-18. **countField** to enable counting the total number each field from the [field schedule] is found
+19. **countField** to enable counting the total number each field from the [field schedule] is found
 
-19. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
+20. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
 
 If selected counting rules are supported and enabled, then the following must be checked by an Avram validator:
 
@@ -699,7 +748,7 @@ If selected counting rules are supported and enabled, then the following must be
 
 By default [external validation rules](#external-validation-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
-20. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
+21. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
 ## References
 
@@ -733,7 +782,7 @@ By default [external validation rules](#external-validation-rules) are ignored f
 - [QA catalogue](https://github.com/pkiraly/metadata-qa-marc) Java implementation for MARC-based formats
 - [PICA::Schema](https://metacpan.org/pod/PICA::Schema) Perl implementation for PICA-based formats
 - [MARC::Schema](https://metacpan.org/pod/MARC::Schema) Perl implementation for MARC-based formats
-- [marctable](https://github.com/edsu/marctable) crawls MARC21 Bibliographic format from Library of Congress as Avram Schema
+- [marctable](https://github.com/edsu/marctable) crawls MARC 21 Bibliographic format from Library of Congress as Avram Schema
 - [K10plus Avram schemas](https://format.k10plus.de/avram.pl)
 
 #### Related standards
@@ -751,8 +800,9 @@ for comments, code and contributions.
 
 ### Changes
 
-### 0.9.5 - draft
+#### 0.9.5 - 2024-01-12
 
+- Add record types
 - Clarify fixed length of codes in indicator definitions and positions
 - Allow to omit leading zeroes in ranges
 - Support deprecated fields and subfields
