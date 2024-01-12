@@ -129,7 +129,7 @@ definitions:
               '^.+$':
                 type: object
                 $ref: '#/definitions/typed-field-definition'
-    regex:
+  regex:
     $ref: '#/definitions/non-empty-string'
   typed-field-definition:
     type: object
