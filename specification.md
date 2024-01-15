@@ -482,6 +482,7 @@ A **code** is a non-empty string. A **code definition** is either a string or a 
 - `description` with additional description of the code
 - `created` with a timestamp when this code was introduced
 - `modified` with a timestamp when this code was updated
+- `deprecated` with a boolean value, assumed as `false` by default
 
 Optional key `code` of a code definition MUST be equal to the key of the code definition in its codelist.
 
@@ -598,7 +599,7 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 21). Rule 1 to 17 refer to validation of individual records, fields, and subfields. Rule 18 to 20 ([counting](#counting)) refer to validation of sets of records. Rule 21 can refer to both.
+Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 21). Rule 1 to 18 refer to validation of individual records, fields, and subfields. Rule 19 to 21 ([counting](#counting)) refer to validation of sets of records. Rule 22 can refer to both.
 
 An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. It is RECOMMENDED to disable counting rules (18 to 20) and external rules (21) by default. Support and selection of validation rules MUST be documented.
 
@@ -712,7 +713,9 @@ Substrings can be empty, for instance when the value is shorter than some charac
 
 16. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
 
-17. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
+17. **deprecatedCode**: A string value is not valid against an [explicit codelist](#codelist) if its code has key `deprecated` set to `true`.
+
+18. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
 Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
@@ -724,14 +727,14 @@ Avram schemas can also be used to give or expect a number of elements with keys 
 
 Validation rules for counting are:
 
-18. **countRecord** to enable counting the total number of records,
+19. **countRecord** to enable counting the total number of records,
    and the total numbers or records each field with a [field definition],
    each subfield with a [subfield definition], and each code with
    a [code definition](#codelist) is found in.
 
-19. **countField** to enable counting the total number each field from the [field schedule] is found
+20. **countField** to enable counting the total number each field from the [field schedule] is found
 
-20. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
+21. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
 
 If selected counting rules are supported and enabled, then the following must be checked by an Avram validator:
 
@@ -749,7 +752,7 @@ If selected counting rules are supported and enabled, then the following must be
 
 By default [external validation rules](#external-validation-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
-21. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
+22. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
 ## References
 
@@ -805,6 +808,7 @@ for comments, code and contributions.
 
 - Allow labels in typed field definition
 - Allow pattern in indicator definition
+- Support deprecated codes
 
 #### 0.9.5 - 2024-01-12
 

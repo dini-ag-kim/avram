@@ -272,6 +272,8 @@ definitions:
                 $ref: '#/definitions/timestamp'
               modified:
                 $ref: '#/definitions/timestamp'
+              deprecated:
+                type: boolean
           - type: string
   rules:
     type: array
