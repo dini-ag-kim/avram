@@ -299,7 +299,7 @@ The field definition MAY further contain keys:
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 * `types` with a JSON object that maps record types to typed field definitons.
 
-A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `codes`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
+A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `codes`, `label`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -799,6 +799,10 @@ Thanks to Péter Király for [picking up the idea](https://github.com/pkiraly/me
 for comments, code and contributions.
 
 ### Changes
+
+### 0.9.6 -
+
+- Allow labels in typed field definitions
 
 #### 0.9.5 - 2024-01-12
 

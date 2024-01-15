@@ -135,6 +135,8 @@ definitions:
     type: object
     additionalProperties: false
     properties:
+      label:
+        type: string
       description:
         type: string
       pattern:
