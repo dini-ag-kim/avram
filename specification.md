@@ -284,8 +284,8 @@ The field definition MAY further contain keys:
 * `counter` with the [field counter] of the field
 * `url` with an URL link to documentation of the field
 * `description` with additional description of the field
-* `indicator1` with first [indicator definition] or `null` as placeholder for `{" ":{}}`
-* `indicator2` with second [indicator definition] or `null` as placeholder for `{" ":{}}`
+* `indicator1` with first [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
+* `indicator2` with second [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
 * `pica3` with corresponding Pica3 number
 * `created` with a timestamp when this field was introduced
 * `modified` with a timestamp when this field was changed
