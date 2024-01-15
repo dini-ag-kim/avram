@@ -451,6 +451,7 @@ and further MAY contain keys:
 * `url` with an URL link to documentation
 * `description` with additional description of the indicator
 * `codes` with a [codelist] of single character codes
+* `pattern` with a a regular expression
 
 ##### Example
 
@@ -802,7 +803,8 @@ for comments, code and contributions.
 
 ### 0.9.6 -
 
-- Allow labels in typed field definitions
+- Allow labels in typed field definition
+- Allow pattern in indicator definition
 
 #### 0.9.5 - 2024-01-12
 

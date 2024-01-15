@@ -247,6 +247,8 @@ definitions:
             $ref: '#/definitions/url'
           codes:
             $ref: '#/definitions/codelist'
+          pattern:
+            $ref: '#/definitions/regex'
   codelist:
     oneOf:
       - $ref: '#/definitions/non-empty-string'
