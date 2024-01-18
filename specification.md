@@ -152,33 +152,41 @@ Restrictions on records by a format family imply [restrictions on schemas for th
 Possible JSON serializations of records of family `flat`, `marc`, and `pica`, respectively:
 
 ~~~json
-[
-  { "tag": "given", "value": "Henriette" },
-  { "tag": "given", "value": "Davidson" },
-  { "tag": "surname", "value": "Avram" },
-  { "tag": "birth", "value": "1919-10-07" }
-]
+{
+  "fields": [
+    { "tag": "given", "value": "Henriette" },
+    { "tag": "given", "value": "Davidson" },
+    { "tag": "surname", "value": "Avram" },
+    { "tag": "birth", "value": "1919-10-07" }
+  ]
+}
 ~~~
 
 ~~~json
-[ 
-  { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
-  { "tag": "001", "value": "1089521669" },
-  { "tag": "100",
-    "indicators": [ "1", " " ],
-    "subfields": [
-      "a", "Avram, Henriette D."
-      "d", "1919-2006"
+{
+  "types": ["z"],
+  "fields": [
+    { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
+    { "tag": "001", "value": "1089521669" },
+    { "tag": "100",
+      "indicator1": "1",
+      "indicator2": " ",
+      "subfields": [
+        "a", "Avram, Henriette D."
+        "d", "1919-2006"
     ] }
-]
+  ]
+}
 ~~~
 
 ~~~json
-[
-  { "tag": "003U", "subfields": [ "a", "http://d-nb.info/gnd/1089521669" ] },
-  { "tag": "028A", "subfields": [ "d", "Henriette D.", "a", "Avram" ] },
-  { "tag": "060R", "subfields": [ "a", "1919", "b", "2006", "4", "datl" ] }
-]
+{
+  "fields": [
+    { "tag": "003U", "subfields": [ "a", "http://d-nb.info/gnd/1089521669" ] },
+    { "tag": "028A", "subfields": [ "d", "Henriette D.", "a", "Avram" ] },
+    { "tag": "060R", "subfields": [ "a", "1919", "b", "2006", "4", "datl" ] }
+  ]
+}
 ~~~
 
 ## Schema format
