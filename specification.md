@@ -6,9 +6,9 @@ language: en
 
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
 
-- author: Jakob Voß
-- version: 0.9.5
-- date: 2024-01-12
+- author: Jakob Voß (`voss@gbv.de`)
+- version: 0.9.6
+- date: 2024-01-18
 
 ## Table of Contents
 
@@ -102,34 +102,34 @@ The encoding of records in JSON or other individual serialization formats such a
 
 ##### Examples
 
-Possible JSON serialization of a record of type `test` and two flat fields
-with occurence and one field with three subfields of code `g`, `g`, and `s`:
+-   Possible JSON serialization of a record of type `test` and two flat fields
+    with occurence and one field with three subfields of code `g`, `g`, and `s`:
 
-~~~json
-{
-  "types": [ "test" ],
-  "fields": [
+    ~~~json
     {
-      "tag": "uri",
-      "occurrence": "01",
-      "value": "http://www.wikidata.org/entity/Q10953"
-    },
-    {
-      "tag": "uri",
-      "occurrence": "02"
-      "value": "https://viaf.org/viaf/18236820"
-    },
-    {
-      "tag": "name",
-      "subfields": [
-        "g", "Henriette",
-        "g", "Davidson",
-        "s", "Avram"
+      "types": [ "test" ],
+      "fields": [
+        {
+          "tag": "uri",
+          "occurrence": "01",
+          "value": "http://www.wikidata.org/entity/Q10953"
+        },
+        {
+          "tag": "uri",
+          "occurrence": "02"
+          "value": "https://viaf.org/viaf/18236820"
+        },
+        {
+          "tag": "name",
+          "subfields": [
+            "g", "Henriette",
+            "g", "Davidson",
+            "s", "Avram"
+          ]
+        }
       ]
     }
-  ]
-}
-~~~
+    ~~~
 
 ### Format families
 
@@ -137,7 +137,8 @@ The [record model](#records) can be restricted by a **format family**, identifie
 
 - `flat`: all fields are flat without indicators or occurrences (simple key-value structures with repeatable keys)
 
-- `marc`: flat fields have no indicators or occurrences, variable fields have no occurrences and exactely two indicators, each being a lowercase alphanumeric character or a space character (`a` to `z`, `0` to `9`, and ` `).
+- `marc`: flat fields have no indicators or occurrences, variable fields have no occurrences and exactely two indicators,
+   each being a lowercase alphanumeric character or a space character (`a` to `z`, `0` to `9`, and ` `).
    Field tags are either a string of three digits or the string `LDR`.
 
 - `pica`: all fields are variable without indicators. Field tags consist of four characters being
@@ -149,45 +150,45 @@ Restrictions on records by a format family imply [restrictions on schemas for th
 
 ##### Examples
 
-Possible JSON serializations of records of family `flat`, `marc`, and `pica`, respectively:
+-   Possible JSON serializations of records of family `flat`, `marc`, and `pica`, respectively:
 
-~~~json
-{
-  "fields": [
-    { "tag": "given", "value": "Henriette" },
-    { "tag": "given", "value": "Davidson" },
-    { "tag": "surname", "value": "Avram" },
-    { "tag": "birth", "value": "1919-10-07" }
-  ]
-}
-~~~
+    ~~~json
+    {
+      "fields": [
+        { "tag": "given", "value": "Henriette" },
+        { "tag": "given", "value": "Davidson" },
+        { "tag": "surname", "value": "Avram" },
+        { "tag": "birth", "value": "1919-10-07" }
+      ]
+    }
+    ~~~
 
-~~~json
-{
-  "types": ["z"],
-  "fields": [
-    { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
-    { "tag": "001", "value": "1089521669" },
-    { "tag": "100",
-      "indicator1": "1",
-      "indicator2": " ",
-      "subfields": [
-        "a", "Avram, Henriette D."
-        "d", "1919-2006"
-    ] }
-  ]
-}
-~~~
+    ~~~json
+    {
+      "types": ["z"],
+      "fields": [
+        { "tag": "LDR", "value": "00000nz  a2200000oc 4500" },
+        { "tag": "001", "value": "1089521669" },
+        { "tag": "100",
+          "indicator1": "1",
+          "indicator2": " ",
+          "subfields": [
+            "a", "Avram, Henriette D."
+            "d", "1919-2006"
+        ] }
+      ]
+    }
+    ~~~
 
-~~~json
-{
-  "fields": [
-    { "tag": "003U", "subfields": [ "a", "http://d-nb.info/gnd/1089521669" ] },
-    { "tag": "028A", "subfields": [ "d", "Henriette D.", "a", "Avram" ] },
-    { "tag": "060R", "subfields": [ "a", "1919", "b", "2006", "4", "datl" ] }
-  ]
-}
-~~~
+    ~~~json
+    {
+      "fields": [
+        { "tag": "003U", "subfields": [ "a", "http://d-nb.info/gnd/1089521669" ] },
+        { "tag": "028A", "subfields": [ "d", "Henriette D.", "a", "Avram" ] },
+        { "tag": "060R", "subfields": [ "a", "1919", "b", "2006", "4", "datl" ] }
+      ]
+    }
+    ~~~
 
 ## Schema format
 
@@ -410,7 +411,6 @@ Character positions of a positions object MUST NOT overlap. Two character positi
     }
     ~~~
 
-
 ### Subfield schedule
 
 [subfield schedule]: #subfield-schedule
@@ -531,36 +531,38 @@ A **codelist directory** is a JSON object that maps codelist references to JSON 
 
 A codelist reference can be **resolved** by looking up its value as key in the codelist directory to get the corresponding explicit codelist.
 
-##### Examples (explicit, reference, and codelist directory)
+##### Examples
 
-~~~json
-{
-  " ": "No specified type",
-  "a": {
-    "label": "Archival",
-    "created": "2022"
-  },
-  "x": {
-    "code": "x"
-  }
-}
-~~~
+-   Explicit, reference, and codelist directory:
 
-~~~json
-"http://id.loc.gov/vocabulary/languages"
-~~~
-
-~~~json
-{
-  "http://id.loc.gov/vocabulary/languages": {
-    "title": "MARC List for Languages",
-    "codes": {
-      "eng": { "label": "English" },
-      "fre": { "label": "French" }
+    ~~~json
+    {
+      " ": "No specified type",
+      "a": {
+        "label": "Archival",
+        "created": "2022"
+      },
+      "x": {
+        "code": "x"
+      }
     }
-  }
-}
-~~~
+    ~~~
+
+    ~~~json
+    "http://id.loc.gov/vocabulary/languages"
+    ~~~
+
+    ~~~json
+    {
+      "http://id.loc.gov/vocabulary/languages": {
+        "title": "MARC List for Languages",
+        "codes": {
+          "eng": { "label": "English" },
+          "fre": { "label": "French" }
+        }
+      }
+    }
+    ~~~
 
 ### External validation rules
 
@@ -570,36 +572,37 @@ An Avram Schema MAY include references to additional validation rules with key `
 
 ~~~json
 {
-    "fields": {
-        "birth": {
-            "subfields": {
-                "Y": { "label": "year" },
-                "M": { "label": "month" },
-                "D": { "label": "day" }
-            },
-            "rules": ["http://example.org/valid-date"]
-        },
-        "death": {
-            "subfields": {
-                "Y": { "label": "year" },
-                "M": { "label": "month" },
-                "D": { "label": "day" }
-            },
-            "rules": ["http://example.org/valid-date"]
-        },
-        "age": {
-          "rules": ["xsd:nonNegativeInteger"]
-        }
+  "fields": {
+    "birth": {
+      "subfields": {
+        "Y": { "label": "year" },
+        "M": { "label": "month" },
+        "D": { "label": "day" }
+      },
+      "rules": ["http://example.org/valid-date"]
     },
-    "rules": [
-        "death must not be earlier than birth, except for time-travelers",
-        "age must equal death minus birth, if given",
-        {
-            "if": "birth?",
-            "then": "birth.Y < 1950",
-            "description": "birth only allowed before 1950 for privacy reasons"
-        },
-    ]
+    "death": {
+      "subfields": {
+        "Y": { "label": "year" },
+        "M": { "label": "month" },
+        "D": { "label": "day" }
+      },
+      "rules": ["http://example.org/valid-date"]
+    },
+    "age": {
+      "rules": ["xsd:nonNegativeInteger"]
+    }
+  },
+  "rules": [
+    "death must not be earlier than birth, except for time-travelers",
+    "age must equal death minus birth, if given",
+    {
+      "id": "privacy",
+      "if": "birth?",
+      "then": "birth.Y < 1950",
+      "description": "birth only allowed before 1950 for privacy reasons"
+    },
+  ]
 }
 ~~~
 
@@ -704,31 +707,31 @@ Record types are arbitrary strings attached to a record as flags. An Avram valid
 
 ##### Example
 
-A MARC 21 Bibliographic record has a *type of material* such as Book (`BK`) and Visual Material (`VM`) and a *category of material* such as Text (`t`) and Motion Picture (`m`). Both can be encoded as Avram record types (not to be confused with MARC 21 record types). For instance a record may have the two types `BK` and `t`. An Avram Schema of MARC 21 Bibliographic format could support these types by including the following in definition of field `008` and `007`:
+-   A MARC 21 Bibliographic record has a *type of material* such as Book (`BK`) and Visual Material (`VM`) and a *category of material* such as Text (`t`) and Motion Picture (`m`). Both can be encoded as Avram record types (not to be confused with MARC 21 record types). For instance a record may have the two types `BK` and `t`. An Avram Schema of MARC 21 Bibliographic format could support these types by including the following in definition of field `008` and `007`:
 
-~~~json
-{
-  "tag": "008",
-  "url": "https://www.loc.gov/marc/bibliographic/bd008.html",
-  "positions": { ...common positions for all materials... },
-  "types": {
-    "BK": {
-      "url": "https://www.loc.gov/marc/bibliographic/bd008b.html",
-      "positions": { ...additional positions for books... }
-    }, ...
-  }  
-},
-{
-  "tag": "007",
-  "url": "https://www.loc.gov/marc/bibliographic/bd007.html",
-  "types": {
-    "t": {
-      "url": "https://www.loc.gov/marc/bibliographic/bd007t.html",
-      "positions": { ... }
-    }, ...
-  }
-}
-~~~
+    ~~~json
+    {
+      "tag": "008",
+      "url": "https://www.loc.gov/marc/bibliographic/bd008.html",
+      "positions": { ...common positions for all materials... },
+      "types": {
+        "BK": {
+          "url": "https://www.loc.gov/marc/bibliographic/bd008b.html",
+          "positions": { ...additional positions for books... }
+        }, ...
+      }  
+    },
+    {
+      "tag": "007",
+      "url": "https://www.loc.gov/marc/bibliographic/bd007.html",
+      "types": {
+        "t": {
+          "url": "https://www.loc.gov/marc/bibliographic/bd007t.html",
+          "positions": { ... }
+        }, ...
+      }
+    }
+    ~~~
 
 ### Validation with positions
 
@@ -837,14 +840,11 @@ for comments, code and contributions.
 
 ### Changes
 
-### 0.9.6 -
-
-- Add flags in positions
-
-### 0.9.5 - 2024-01-18
+#### 0.9.6 - 2024-01-18
 
 - Allow labels in typed field definition
 - Allow pattern in indicator definition
+- Add flags in positions
 - Support deprecated codes
 
 #### 0.9.5 - 2024-01-12
