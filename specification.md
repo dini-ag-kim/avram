@@ -359,13 +359,14 @@ The data element definition MAY further contain keys:
 * `url` with an URL link to documentation
 * `description` with additional description
 * `codes` with a [codelist] with codes of length defined by the character position range
+* `flags` with a [codelist] with codes of same length being a proper divisor of the length of the character position range
 * `pattern` with a regular expression
 
 Character positions of a positions object MUST NOT overlap. Two character positions overlap if there is a string that matches both of them.
 
-##### Example
+##### Examples
 
-* Positions for MARC 21 field `005`:
+* Positions in MARC 21 Bibliographic field `005`:
 
     ~~~json
     {
@@ -377,6 +378,30 @@ Character positions of a positions object MUST NOT overlap. Two character positi
       "12-15": { "label": "second", "start": 12, "end": 15 }
     }
     ~~~
+
+* Position `33-35` in MARC 21 Bibliographic field `008` can hold a combination
+  of flags, filled up with spaces:
+
+    ~~~json
+    {
+      "33-35": {
+        "flags": {
+          " ": { "label": "No specified special format characteristics" },
+          "e": { "label": "Manuscript" }  ,
+          "j": { "label": "Picture card } post card" },
+          "k": { "label": "Calendar" },
+          "l": { "label": "Puzzle" },
+          "n": { "label": "Game" },
+          "o": { "label": "Wall map" }   ,
+          "p": { "label": "Playing cards" }       ,
+          "r": { "label": "Loose-leaf" },
+          "z": { "label": "Other" } ,
+          "|": { "label": "No attempt to code" }
+        },
+        "pattern": "^[^ ]* *$"
+    }
+    ~~~
+
 
 ### Subfield schedule
 
@@ -599,7 +624,7 @@ Applications MAY extend the metaschema for particular [format families](#records
 
 ## Validation rules
 
-Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 21). Rule 1 to 18 refer to validation of individual records, fields, and subfields. Rule 19 to 21 ([counting](#counting)) refer to validation of sets of records. Rule 22 can refer to both.
+Avram schemas can be used to validate [records] based on **validation rules** specfied in this section (marked in bold and numbered from 1 to 23). Rule 1 to 19 refer to validation of individual records, fields, and subfields. Rule [20 to 22](#counting) refer to validation of sets of records. Rule 22 can refer to both.
 
 An Avram validator MAY choose to support only a limited set of validation rules, it SHOULD allow to enable and disable selected rules and it MAY disable selected rules by default. It is RECOMMENDED to disable counting rules (18 to 20) and external rules (21) by default. Support and selection of validation rules MUST be documented.
 
@@ -702,20 +727,20 @@ A MARC 21 Bibliographic record has a *type of material* such as Book (`BK`) and 
 [validation with positions]: #validation-with-positions
 [Validation with positions]: #validation-with-positions
 
-A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid against the corresponding data element definitions. Character positions are counted by Unicode code points.
+A string value is valid against [positions](#positions) if all substrings defined by character positions of the positions are valid by [value validation] against the corresponding data element definitions. Character positions are counted by Unicode code points.
 
-Substrings can be empty, for instance when the value is shorter than some character position. An empty substring can be valid, depending on the data element definition.
+16. **invalidFlag**: If a data element definition contains key `flags`, the substring MUST also consist of a concatenation of codes from the [codelist] defined by `flags`.
 
 ### Validation with codelists
 
 [validation with codelists]: #validation-with-codelists
 [Validation with codelists]: #validation-with-codelists
 
-16. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
+17. **undefinedCode**: A string value is valid against an [explicit codelist](#codelist) if the value is a defined code in this codelist.
 
-17. **deprecatedCode**: A string value is not valid against an [explicit codelist](#codelist) if its code has key `deprecated` set to `true`.
+18. **deprecatedCode**: A string value is not valid against an [explicit codelist](#codelist) if its code has key `deprecated` set to `true`.
 
-18. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
+19. **undefinedCodelist**: A string value is valid against a [codelist reference](#codelist) if the codelist reference can be resolved and the value is defined in the resolved explicit codelist.
 
 Applications MAY also resolve codelist references against externally defined explicit codelists by implicitly extending the codelist directory of the schema. If so, the application MUST make clear whether codelists directly defined in the codelist directory are overriden or extened.
 
@@ -727,14 +752,14 @@ Avram schemas can also be used to give or expect a number of elements with keys 
 
 Validation rules for counting are:
 
-19. **countRecord** to enable counting the total number of records,
+20. **countRecord** to enable counting the total number of records,
    and the total numbers or records each field with a [field definition],
    each subfield with a [subfield definition], and each code with
    a [code definition](#codelist) is found in.
 
-20. **countField** to enable counting the total number each field from the [field schedule] is found
+21. **countField** to enable counting the total number each field from the [field schedule] is found
 
-21. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
+22. **countSubfield** to enable counting the total number each subfield field from a [subfield schedule] is found
 
 If selected counting rules are supported and enabled, then the following must be checked by an Avram validator:
 
@@ -752,7 +777,7 @@ If selected counting rules are supported and enabled, then the following must be
 
 By default [external validation rules](#external-validation-rules) are ignored for validation because their semantics is out of the scope of this specification. The following rule can be enabled to require records to met all external rules:
 
-22. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
+23. **externalRule**: Enforces an Avram validator to process all external rules and reject input data as invalid if a rule is violated or cannot be checked.
 
 ## References
 
@@ -806,6 +831,10 @@ for comments, code and contributions.
 
 ### 0.9.6 -
 
+- Add flags in positions
+
+### 0.9.5 - 2024-01-18
+
 - Allow labels in typed field definition
 - Allow pattern in indicator definition
 - Support deprecated codes
@@ -816,6 +845,7 @@ for comments, code and contributions.
 - Clarify fixed length of codes in indicator definitions and positions
 - Allow to omit leading zeroes in ranges
 - Support deprecated fields and subfields
+- Add flags and corresponding validation rule
 
 #### 0.9.4 - 2024-01-02
 
