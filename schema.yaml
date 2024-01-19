@@ -99,6 +99,8 @@ definitions:
             type: boolean
           pattern:
             $ref: '#/definitions/regex'
+          groups:
+            $ref: '#/definitions/groups'
           codes:
             $ref: '#/definitions/codelist'
           positions:
@@ -141,6 +143,8 @@ definitions:
         type: string
       pattern:
         $ref: '#/definitions/regex'
+      groups:
+        $ref: '#/definitions/groups'
       codes:
         $ref: '#/definitions/codelist'
       positions:
@@ -167,6 +171,8 @@ definitions:
             $ref: '#/definitions/codelist'
           pattern:
             $ref: '#/definitions/regex'
+          groups:
+            $ref: '#/definitions/groups'
           start:
             $ref: '#/definitions/non-negative-integer'
           end:
@@ -251,6 +257,21 @@ definitions:
             $ref: '#/definitions/codelist'
           pattern:
             $ref: '#/definitions/regex'
+          groups:
+            $ref: '#/definitions/groups'
+  groups:
+    type: object
+    patternProperties:  
+      '^[1-9][0-9]*$':
+        type: object
+        additionalProperties: false
+        properties:
+          label:
+            type: string
+          description:
+            type: string
+          url:
+            $ref: '#/definitions/url'
   codelist:
     oneOf:
       - $ref: '#/definitions/non-empty-string'

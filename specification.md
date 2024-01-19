@@ -8,7 +8,7 @@ language: en
 
 - author: Jakob Voß (`voss@gbv.de`)
 - version: 0.9.6
-- date: 2024-01-18
+- date: 2024-01-19
 
 ## Table of Contents
 
@@ -22,6 +22,7 @@ language: en
   - [Field identifier](#field-identifier)
   - [Field definition](#field-definition)
   - [Positions](#positions)
+  - [Pattern groups](#pattern-groups)
   - [Subfield schedule](#subfield-schedule)
   - [Indicator definition](#indicator-definition)
   - [Codelist](#codelist)
@@ -301,6 +302,7 @@ The field definition MAY further contain keys:
 * `deprecated` with a boolean value, assumed as `false` by default
 * `positions` with a specification of [positions] (for flat fields)
 * `pattern` with a regular expression (for flat fields)
+* `groups` with [pattern groups](#pattern-groups) of the regular expression (for flat fields)
 * `codes` with a [codelist]
 * `subfields` with a [subfield schedule] (for variable fields)
 * `rules` with [external validation rules](#external-validation-rules)
@@ -308,7 +310,7 @@ The field definition MAY further contain keys:
 * `records` with a non-negative integer to indicate the number of records this field has been found in
 * `types` with a JSON object that maps record types to typed field definitons.
 
-A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `codes`, `label`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
+A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `groups`, `codes`, `label`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
 
@@ -370,6 +372,7 @@ The data element definition MAY further contain keys:
 * `codes` with a [codelist] with codes of length defined by the character position range
 * `flags` with a [codelist] with codes of same length being a proper divisor of the length of the character position range
 * `pattern` with a regular expression
+* `groups` with [pattern groups](#pattern-groups) of the regular expression
 
 Character positions of a positions object MUST NOT overlap. Two character positions overlap if there is a string that matches both of them.
 
@@ -411,6 +414,14 @@ Character positions of a positions object MUST NOT overlap. Two character positi
     }
     ~~~
 
+### Pattern groups
+
+**Pattern groups** are a JSON object that maps numbers of capturing groups (starting with `"1"`) of a regular expression to documentation objects, each with optional keys:
+
+- `label` with the name of the group
+- `description` with additional description of the group
+- `url` with an URL link to documentation of the group
+
 ### Subfield schedule
 
 [subfield schedule]: #subfield-schedule
@@ -429,6 +440,7 @@ definition** is a JSON object that SHOULD contain keys:
 The subfield definition MAY further contain keys:
 
 * `pattern` with a regular expression
+* `groups` with [pattern groups](#pattern-groups) of the regular expression
 * `positions` with a specification of [positions]
 * `codes` with a [codelist]
 * `rules` with [external validation rules](#external-validation-rules)
@@ -485,6 +497,7 @@ and further MAY contain keys:
 * `description` with additional description of the indicator
 * `codes` with a [codelist] of single character codes
 * `pattern` with a a regular expression
+* `groups` with [pattern groups](#pattern-groups) of the regular expression
 
 ##### Example
 
@@ -840,12 +853,13 @@ for comments, code and contributions.
 
 ### Changes
 
-#### 0.9.6 - 2024-01-18
+#### 0.9.6 - 2024-01-19
 
 - Allow labels in typed field definition
 - Allow pattern in indicator definition
 - Add flags in positions
 - Support deprecated codes
+- Add pattern groups
 
 #### 0.9.5 - 2024-01-12
 
