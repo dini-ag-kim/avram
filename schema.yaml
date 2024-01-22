@@ -34,26 +34,23 @@ properties:
     additionalProperties: false
     patternProperties:
       "^.+$":
-        anyOf:
-          - $ref: '#/definitions/explicitcodelist' 
-            description: 'deprecated since 0.9.2'
-          - type: object
-            additionalProperties: false
-            properties:
-              codes:
-                $ref: '#/definitions/explicitcodelist' 
-              title:
-                type: string
-              description:
-                type: string
-              created:
-                $ref: '#/definitions/timestamp'
-              modified:
-                $ref: '#/definitions/timestamp'
-              url:
-                $ref: '#/definitions/url'
-            required:
-            - codes
+        type: object
+        additionalProperties: false
+        properties:
+          codes:
+            $ref: '#/definitions/explicitcodelist' 
+          title:
+            type: string
+          description:
+            type: string
+          created:
+            $ref: '#/definitions/timestamp'
+          modified:
+            $ref: '#/definitions/timestamp'
+          url:
+            $ref: '#/definitions/url'
+        required:
+        - codes
   rules:
     $ref: '#/definitions/rules'
 required:
