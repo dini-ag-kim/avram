@@ -2,6 +2,7 @@
 title: Avram Specification
 short: Avram
 language: en
+page: true
 ---
 
 **Avram** is a [schema language](../../schema) for field-based data formats such as key-value records or library formats [MARC](../../marc) and [PICA](../../pica).
