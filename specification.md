@@ -423,6 +423,19 @@ Character positions of a positions object MUST NOT overlap. Two character positi
 - `description` with additional description of the group
 - `url` with an URL link to documentation of the group
 
+##### Example
+
+~~~json
+{
+  "pattern": "^([0-9]{4})-([01][0-9])-([0-3][0-9])$",
+  "groups": {
+    "1": { "label": "year" },
+    "2": { "label": "month" },
+    "3": { "label": "day" },
+  }
+}
+~~~
+
 ### Subfield schedule
 
 [subfield schedule]: #subfield-schedule
