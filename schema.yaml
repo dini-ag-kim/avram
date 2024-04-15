@@ -294,6 +294,8 @@ definitions:
                 $ref: '#/definitions/timestamp'
               deprecated:
                 type: boolean
+              url:
+                $ref: '#/definitions/url'
           - type: string
   rules:
     type: array

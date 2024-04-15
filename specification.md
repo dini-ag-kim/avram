@@ -542,6 +542,7 @@ A **code** is a non-empty string. A **code definition** is either a string or a 
 - `description` with additional description of the code
 - `created` with a timestamp when this code was introduced
 - `modified` with a timestamp when this code was updated
+- `url` with a link to documentation of the code
 - `deprecated` with a boolean value, assumed as `false` by default
 
 Optional key `code` of a code definition MUST be equal to the key of the code definition in its codelist.
@@ -866,6 +867,10 @@ Thanks to Péter Király for [picking up the idea](https://github.com/pkiraly/me
 for comments, code and contributions.
 
 ### Changes
+
+#### 0.9.7 - work in progress
+
+- Add code field `url`
 
 #### 0.9.6 - 2024-01-19
 
