@@ -73,6 +73,8 @@ A **non-negative integer** is a natural number (0, 1, 2...)
 
 An **URI** is a valid URI string according to [RFC 3986].
 
+An **IRI reference** is a non-empty string matching the regular expression `` ^[^\x00-\x20<>"{}|^`\\]+$ ``.
+
 An **URL** is an URI starting with `http://` or `https://`.
 
 A **range** is a sequence of digits or a sequence of digits followed by a dash (`-`) and a second sequence of digits. The second sequence, if given, SHOULD have same length as the first. The numeric values of each sequence are called **start number** and **end number**, respectively. The end number, if given, MUST be larger than the start number. Examples of valid ranges include `0`, `00`, `3-7`, `03-12`, and `1-09` but not `7-2`. A string **matches** a range if it is a sequence of digits of same length as the longest sequence in the range and the numerical value is equal to or within the start number and the end number of the range. For instance `7` matches range `0-9` but it does not match `1-3` nor `03-10` and `07` matches `03-10` but not `0-9`.
@@ -594,7 +596,11 @@ A codelist reference can be **resolved** by looking up its value as key in the c
 
 ### External validation rules
 
-An Avram Schema MAY include references to additional validation rules with key `rules` at the [root level], at [field schedules](#field-schedule), and at [subfield schedules] to check additional data types or integrity constraints. The value of this keys MUST be an array of strings or arbitrary JSON objects. String elements MUST NOT be equal to names of [validation rules](#validation-rules) but they SHOULD be URIs.
+An Avram Schema MAY include references to additional validation rules with key `rules` at the [root level], at [field schedules](#field-schedule), and at [subfield schedules] to check additional data types or integrity constraints. The value of this keys MUST be an array. The elements of this array MUST 
+
+- either a **rule identifier**, being an IRI reference that MUST NOT be equal to names of [validation rules](#validation-rules),
+
+- or a JSON object
 
 ##### Example
 

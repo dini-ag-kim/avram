@@ -302,5 +302,6 @@ definitions:
     items:
       oneOf:
       - type: string
+        pattern: '^[^<>"{}|^`\\]+$'
       - type: object
 $schema: http://json-schema.org/draft-06/schema#
