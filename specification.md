@@ -51,7 +51,7 @@ MARC and related formats such as PICA and MAB are used since decades as the basi
 
 The Avram specification consists of a [schema format](#schema-format) based on JSON and [validation rules](#validation-rules) to validate [records] against individual schemas. The format can also be used to express results of record analysis. Avram schemas cover library formats based on MARC and PICA as well as simple key-value structures.
 
-The document is managed in a git repository at <https://github.com/gbv/avram> together with test files for implementations.
+The document is managed in a git repository at <https://github.com/dini-ag-kim/avram> together with test files for implementations.
 
 ### Conformance requirements
 
