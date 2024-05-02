@@ -73,7 +73,7 @@ A **non-negative integer** is a natural number (0, 1, 2...)
 
 An **URI** is a valid URI string according to [RFC 3986].
 
-An **IRI reference** is a non-empty string matching the regular expression `` ^[^\x00-\x20<>"{}|^`\\]+$ ``.
+An **IRI reference** is a non-empty string matching the regular expression `` ^[^\x00-\x20<>"{}|^`\\]+$ `` and conforming to the syntax of IRI as defined in [RFC 3987].
 
 An **URL** is an URI starting with `http://` or `https://`.
 
@@ -600,7 +600,8 @@ An Avram Schema MAY include references to additional validation rules with key `
 
 - either a **rule identifier**, being an IRI reference that MUST NOT be equal to names of [validation rules](#validation-rules),
 
-- or a JSON object
+- or a JSON object with arbitrary contents. The object SHOULD include a key
+  `class` having an IRI reference as value to specify the kind of rule.
 
 ##### Example
 
@@ -628,14 +629,12 @@ An Avram Schema MAY include references to additional validation rules with key `
     }
   },
   "rules": [
-    "death must not be earlier than birth, except for time-travelers",
-    "age must equal death minus birth, if given",
     {
-      "id": "privacy",
+      "class: "conditional-rule",
       "if": "birth?",
       "then": "birth.Y < 1950",
       "description": "birth only allowed before 1950 for privacy reasons"
-    },
+    }
   ]
 }
 ~~~
@@ -830,6 +829,9 @@ By default [external validation rules](#external-validation-rules) are ignored f
 
 * T. Berners-Lee, R. Fielding, L. Masinter: *Uniform Resource Identifier (URI): Generic Syntax*.
   RFC 3986, January 2005, <https://tools.ietf.org/html/rfc3986>.
+
+* M. Duerst, M. Suignard: *Internationalized Resource Identifiers (IRIs)*.
+  RFC 3987, January 2005,  <https://tools.ietf.org/html/rfc3987>.
 
 * P. Biron, A. Malhotra: *XML Schema Part 2: Datatypes Second Edition*.
   W3C Recommendation, October 2005.
