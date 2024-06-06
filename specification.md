@@ -208,9 +208,9 @@ A schema SHOULD contain keys documenting the format defined by the schema:
 
 * `title` with the name of the format
 * `description` with a short description of the format
-* `url` with a homepage URL of the format
 * `family` with a [format family]
-* `profile` with an URI of the format
+* `url` with a homepage URL of the format
+* `uri` with an URI to uniquely identify the format
 * `language` with the language values of keys `title`, `description`, and `label` used throughout the schema. Its value SHOULD be assumed as `und` if not specified.
 
 The schema MAY contain keys:
@@ -230,7 +230,7 @@ The schema MAY contain keys:
   "title": "MARC 21 Format for Classification Data",
   "description": "MARC format for classification numbers and captions associated with them",
   "url": "https://www.loc.gov/marc/classification/",
-  "profile": "http://format.gbv.de/marc/classification",
+  "uri": "http://format.gbv.de/marc/classification",
   "language": "en",
   "$schema": "https://format.gbv.de/schema/avram/schema.json"
 }
@@ -882,6 +882,7 @@ for comments, code and contributions.
 
 - Add code key `url`
 - Add field and subfield key `comment`
+- Rename schema field `profile` to `uri`
 
 #### 0.9.6 - 2024-01-19
 

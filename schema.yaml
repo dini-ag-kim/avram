@@ -10,9 +10,13 @@ properties:
     type: string
   url:
     $ref: '#/definitions/url'
+  uri:
+    type: string
+    format: uri
   profile:
     type: string
     format: uri
+    $comment: deprecated
   family:
     $ref: '#/definitions/non-empty-string'
   $schema:
