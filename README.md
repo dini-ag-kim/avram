@@ -1,6 +1,6 @@
 # Avram Specification
 
-> Specification of a schema language for MARC and related formats such as PICA and MAB
+> Specification of a schema language for field-based data formats
 
 This git repository contains the specification of **Avram** Schema Language.
 
