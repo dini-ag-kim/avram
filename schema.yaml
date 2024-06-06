@@ -88,6 +88,12 @@ definitions:
             pattern: '^[0-9]+(-[0-9]+)?$'
           description:
             type: string
+          comment:
+            type: string
+          examples:
+            type: array
+            items:
+              type: string
           repeatable:
             type: boolean
           required:
@@ -211,6 +217,12 @@ definitions:
             type: string
           description:
             type: string
+          comment:
+            type: string
+          examples:
+            type: array
+            items:
+              type: string
           repeatable:
             type: boolean
           required:

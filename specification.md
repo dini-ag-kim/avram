@@ -296,7 +296,8 @@ The field definition MAY further contain keys:
 * `occurrence` with the [field occurrence] of the field
 * `counter` with the [field counter] of the field
 * `url` with an URL link to documentation of the field
-* `description` with additional description of the field
+* `description` with a description of the field
+* `comment` with an additional comment about the field
 * `indicator1` with first [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
 * `indicator2` with second [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
 * `pica3` with corresponding Pica3 number
@@ -461,7 +462,8 @@ The subfield definition MAY further contain keys:
 * `codes` with a [codelist]
 * `rules` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
-* `description` with additional description of the subfield
+* `description` with a description of the subfield
+* `comment` with an additional comment about the subfield
 * `pica3` with a corresponding Pica3 syntax definition
 * `created` with a timestamp when this subfield was introduced
 * `modified` with a timestamp when this subfield was updated
@@ -878,7 +880,8 @@ for comments, code and contributions.
 
 #### 0.9.7 - work in progress
 
-- Add code field `url`
+- Add code key `url`
+- Add field and subfield key `comment`
 
 #### 0.9.6 - 2024-01-19
 
