@@ -12,6 +12,15 @@
         "x": {
           "code": "x"
         }
+      },
+      "categories": ["a"]
+    },
+    "field-with-subfields": {
+      "subfields": {
+        "#": {
+          "code": "#",
+          "categories": ["y","z"]
+        }
       }
     }
   },

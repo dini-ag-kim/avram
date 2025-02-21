@@ -72,6 +72,10 @@ definitions:
   non-negative-integer:
     type: integer
     minimum: 0
+  category:
+    type: array
+    items:
+      type: string
   field-schedule:
     type: object
     additionalProperties: false
@@ -138,6 +142,8 @@ definitions:
               '^.+$':
                 type: object
                 $ref: '#/definitions/typed-field-definition'
+          categories:
+            $ref: '#/definitions/category'
   regex:
     $ref: '#/definitions/non-empty-string'
   typed-field-definition:
@@ -254,6 +260,8 @@ definitions:
             $ref: '#/definitions/non-negative-integer'
           rules:
             $ref: '#/definitions/rules'
+          categories:
+            $ref: '#/definitions/category'
   indicator:
     oneOf:
       - type: 'null'
