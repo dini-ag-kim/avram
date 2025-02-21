@@ -1,0 +1,15 @@
+project:
+  type: manuscript
+  output-dir: docs
+
+resources:
+  - schema.json
+
+manuscript:
+  article: specification.md
+
+format:
+  html:
+    highlight-style: kate
+    theme: flatly
+    css: style.css
