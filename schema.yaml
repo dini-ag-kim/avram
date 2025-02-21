@@ -80,7 +80,7 @@ definitions:
     type: object
     additionalProperties: false
     patternProperties:
-      '^.+$':
+      '^.+':
         type: object
         additionalProperties: false
         properties:
@@ -139,7 +139,7 @@ definitions:
           types:
             type: object
             patternProperties:
-              '^.+$':
+              '^.+':
                 type: object
                 $ref: '#/definitions/typed-field-definition'
           categories:
@@ -195,7 +195,7 @@ definitions:
       - type: object
         additionalProperties: false
         patternProperties:
-          '^.*$':
+          '^.*':
             type: object
             additionalProperties: false
             properties:
@@ -206,7 +206,7 @@ definitions:
       - type: object
         additionalProperties: false
         patternProperties:
-          '^.*$':
+          '^.*':
             type: object
             additionalProperties: false
             properties:
@@ -218,7 +218,7 @@ definitions:
     type: object
     additionalProperties: false
     patternProperties:
-      '^.*$':
+      '^.*':
         type: object
         properties:
           code:
@@ -301,7 +301,7 @@ definitions:
     type: object
     additionalProperties: false
     patternProperties:
-      '^.+$':
+      '^.+':
         oneOf:
           - type: object
             additionalProperties: false
