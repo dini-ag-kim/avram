@@ -13,10 +13,6 @@ properties:
   uri:
     type: string
     format: uri
-  profile:
-    type: string
-    format: uri
-    $comment: deprecated
   family:
     $ref: '#/definitions/non-empty-string'
   $schema:
@@ -95,8 +91,6 @@ definitions:
             type: string
             pattern: '^[0-9]+(-[0-9]+)?$'
           description:
-            type: string
-          comment:
             type: string
           examples:
             type: array
@@ -228,8 +222,6 @@ definitions:
           label:
             type: string
           description:
-            type: string
-          comment:
             type: string
           examples:
             type: array

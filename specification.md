@@ -301,7 +301,6 @@ The field definition MAY further contain keys:
 * `counter` with the [field counter] of the field
 * `url` with an URL link to documentation of the field
 * `description` with a description of the field
-* `comment` with an additional comment about the field
 * `indicator1` with first [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
 * `indicator2` with second [indicator definition] or `null` as placeholder for `{"codes":{" ":{}}}`
 * `pica3` with corresponding Pica3 number
@@ -470,7 +469,6 @@ The subfield definition MAY further contain keys:
 * `rules` with [external validation rules](#external-validation-rules)
 * `url` with an URL link to documentation
 * `description` with a description of the subfield
-* `comment` with an additional comment about the subfield
 * `pica3` with a corresponding Pica3 syntax definition
 * `created` with a timestamp when this subfield was introduced
 * `modified` with a timestamp when this subfield was updated
@@ -887,7 +885,6 @@ for comments, code and contributions.
 #### 0.9.7 - work in progress
 
 - Add code key `url`
-- Add field and subfield key `comment`
 - Rename schema key `profile` to `uri`
 - Add key `categories` and custom keys to (sub)field definition
 - Fully remove key `order`
