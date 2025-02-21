@@ -1,0 +1,8 @@
+{
+  "fields": {},
+  "codelists": {
+    "mycodes": {
+      "code": {"unknown": 1}
+    } 
+  }
+}

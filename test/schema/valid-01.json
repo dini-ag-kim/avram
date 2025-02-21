@@ -1,0 +1,34 @@
+{
+  "fields": {
+    "a fixed field with codes": {
+      "codes":{
+        " ": {
+          "label": "No specified type"
+        },
+        "a": {
+          "label": "Archival",
+          "created": "2022"
+        },
+        "x": {
+          "code": "x"
+        }
+      }
+    }
+  },
+  "title": "a title",
+  "description": "a description",
+  "url": "http://example.org",
+  "family": "a family",
+  "profile": "uri:i",
+  "language": "und",
+  "$schema": "http://example.org/schema.json",
+  "codelists": {
+    "http://id.loc.gov/vocabulary/languages": {
+      "title": "languages",
+      "codes": {
+        "eng": { "label": "English", "code": "eng" },
+        "fre": { "label": "French", "code": "fre" }
+      }
+    }
+  }
+}

@@ -9,7 +9,8 @@
     "url": "https://github.com/dini-ag-kim/avram/issues"
   },
   "scripts": {
-    "schema.json": "js-yaml schema.yaml > schema.json"
+    "schema.json": "js-yaml schema.yaml > schema.json",
+    "test": "mocha"
   },
   "homepage": "https://github.com/dini-ag-kim/avram#readme",
   "devDependencies": {
