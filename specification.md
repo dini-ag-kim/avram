@@ -319,6 +319,8 @@ The field definition MAY further contain keys:
 * `types` with a JSON object that maps record types to typed field definitons.
 * `categories` with [categories]
 
+The field definition MAY also contain custom keys starting with an underscore (`_`).
+
 A **typed field definition** is a JSON object with optional keys `positions`, `pattern`, `groups`, `codes`, `label`, `description`, and `url`, each defined identical to keys of same name allowed in a field definition (see [validation with record types]).
 
 If a field definition is given in a [field schedule], each of `tag`, `occurrence` and `counter` MUST either be missing or have same value as used to construct the corresponding [field identifier].
@@ -477,9 +479,7 @@ The subfield definition MAY further contain keys:
 * `records` with a non-negative integer to indicate the number of records this subfield has been found in
 * `categories` with [categories](#categories)
 
-The subfield definition MAY but SHOULD NOT contain an additional, deprecated key
-
-* `order` with a non-negative integer used to specify a partial or complete order of subfields
+The field definition MAY also contain custom keys starting with an underscore (`_`).
 
 ##### Example
 
@@ -888,7 +888,9 @@ for comments, code and contributions.
 
 - Add code key `url`
 - Add field and subfield key `comment`
-- Rename schema field `profile` to `uri`
+- Rename schema key `profile` to `uri`
+- Add key `categories` and custom keys to (sub)field definition
+- Fully remove key `order`
 
 #### 0.9.6 - 2024-01-19
 

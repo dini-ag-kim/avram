@@ -13,13 +13,15 @@
           "code": "x"
         }
       },
-      "categories": ["a"]
+      "categories": ["a"],
+      "_custom": 42
     },
     "field-with-subfields": {
       "subfields": {
         "#": {
           "code": "#",
-          "categories": ["y","z"]
+          "categories": ["y","z"],
+          "_": 42
         }
       }
     }

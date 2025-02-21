@@ -140,10 +140,11 @@ definitions:
             type: object
             patternProperties:
               '^.+':
-                type: object
                 $ref: '#/definitions/typed-field-definition'
           categories:
             $ref: '#/definitions/category'
+        patternProperties:
+          '^_.*': {}
   regex:
     $ref: '#/definitions/non-empty-string'
   typed-field-definition:
@@ -220,6 +221,7 @@ definitions:
     patternProperties:
       '^.*':
         type: object
+        additionalProperties: false
         properties:
           code:
             type: string
@@ -241,9 +243,6 @@ definitions:
             type: boolean
           url:
             $ref: '#/definitions/url'
-          order:
-            type: integer
-            description: 'deprecated since 0.9.2'
           positions:
             $ref: '#/definitions/positions'
           codes:
@@ -262,6 +261,8 @@ definitions:
             $ref: '#/definitions/rules'
           categories:
             $ref: '#/definitions/category'
+        patternProperties:
+          '^_.*': {}
   indicator:
     oneOf:
       - type: 'null'
