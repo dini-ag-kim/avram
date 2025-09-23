@@ -383,6 +383,7 @@ The data element definition MAY further contain keys:
 * `flags` with a [codelist] with codes of same length being a proper divisor of the length of the character position range
 * `pattern` with a regular expression
 * `groups` with [pattern groups](#pattern-groups) of the regular expression
+* custom keys starting with an underscore (`_`)
 
 Character positions of a positions object MUST NOT overlap. Two character positions overlap if there is a string that matches both of them.
 
