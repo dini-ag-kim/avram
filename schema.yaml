@@ -221,36 +221,40 @@ definitions:
             type: string
           label:
             type: string
-          description:
-            type: string
-          examples:
-            type: array
-            items:
-              type: string
           repeatable:
             type: boolean
           required:
             type: boolean
-          deprecated:
-            type: boolean
-          url:
-            $ref: '#/definitions/url'
+          pattern:
+            $ref: '#/definitions/regex'
+          groups:
+            $ref: '#/definitions/groups'
           positions:
             $ref: '#/definitions/positions'
           codes:
             $ref: '#/definitions/codelist'
+          rules:
+            $ref: '#/definitions/rules'
+          url:
+            $ref: '#/definitions/url'
+          description:
+            type: string
+          examples: # TODO: not included in spec?!
+            type: array
+            items:
+              type: string
           pica3:
             type: string
           created:
             $ref: '#/definitions/timestamp'
           modified:
             $ref: '#/definitions/timestamp'
+          deprecated:
+            type: boolean
           total:
             $ref: '#/definitions/non-negative-integer'
           records:
             $ref: '#/definitions/non-negative-integer'
-          rules:
-            $ref: '#/definitions/rules'
           categories:
             $ref: '#/definitions/category'
         patternProperties:
