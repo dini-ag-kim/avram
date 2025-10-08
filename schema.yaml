@@ -13,6 +13,10 @@ properties:
   uri:
     type: string
     format: uri
+  profile:
+    type: string
+    format: uri
+    $comment: "Deprecated, use uri instead!"
   family:
     $ref: '#/definitions/non-empty-string'
   $schema:
