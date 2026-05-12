@@ -6,6 +6,8 @@ This git repository contains the specification of **Avram** Schema Language.
 
 The specification is published at <https://format.gbv.de/schema/avram/specification>. See repository <https://github.com/gbv/format.gbv.de/> for additional sources.
 
+![](avram-logo.png)
+
 ## Source files
 
 - `specification.md` - Avram specification in Markdown format
